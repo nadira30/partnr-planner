@@ -10,7 +10,7 @@ defaults:
 
 agent_asymmetry: True
 world_model:
-  partial_obs: True
+  partial_obs: False
 
 evaluation:
   agents:

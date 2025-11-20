@@ -1,0 +1,28 @@
+# insert this after line 305 in planner_demo to get ids of object and position in the environment:
+# --- 1. Get rigid objects (non-articulated) ---
+rigid_mgr = sim.get_rigid_object_manager()
+rigid_handles = rigid_mgr.get_object_handles()
+print("\nRigid objects in the scene:")
+for handle in rigid_handles:
+    obj = rigid_mgr.get_object_by_handle(handle)
+    if obj is not None:
+        print(f"{handle}: position={obj.translation}")
+
+# --- 2. Get articulated objects (like doors, drawers, fridges) ---
+art_mgr = sim.get_articulated_object_manager()
+art_handles = art_mgr.get_object_handles()
+print("\nArticulated objects in the scene:")
+for handle in art_handles:
+    obj = art_mgr.get_object_by_handle(handle)
+    if obj is not None:
+        print(f"{handle}: position={obj.translation}")
+
+# --- 3. (Optional) Print receptacles ---
+if hasattr(sim, "_receptacles"):
+    print("\nReceptacles in the scene:")
+    for name, recep in sim._receptacles.items():
+        print(f"{name}: {recep}")
+
+# list of object by room
+print(env_interface.full_world_graph.get_all_objects())
+print(env_interface.full_world_graph.get_world_descr())

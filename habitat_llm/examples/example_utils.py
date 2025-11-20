@@ -110,7 +110,7 @@ class DebugVideoUtil:
         :param play: Whether or not to play the video immediately.
         :param postfix: An optional postfix for the video file name.
         """
-        out_file = f"{self.output_dir}/videos/video-{postfix}.mp4"
+        out_file = f"{self.output_dir}/videos/video.mp4"  # -{postfix}
         print(f"Saving video to {out_file}")
         os.makedirs(f"{self.output_dir}/videos", exist_ok=True)
         writer = imageio.get_writer(

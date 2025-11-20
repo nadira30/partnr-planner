@@ -1,0 +1,39 @@
+prompt: |-
+  - Overview:
+    You are controlling Agent_0 and Agent_1 in a house. The goal is to collaboratively complete a task that involves moving, picking, and placing objects. Each agent can take **one action at a time**. Your objective is to assign optimal actions to both agents simultaneously, ensuring they **do not interfere** with each other and maximize task efficiency.
+
+  - Instructions:
+    1. Consider the current task, object locations, and each agent's state.
+    2. Assign exactly **one action per agent**.
+    3. Avoid assigning tasks to an agent that the other agent is already performing.
+    4. Actions include: `Explore[room_name]`, `Rearrange[object, on, receptacle, next_to, object_ref]`, `Pick[object]`, `Place[object, receptacle]`, `Wait[]`.
+    5. If an agent has no immediate action, assign `Wait[]`.
+
+  - Example:
+    Task: Put the plant saucer and toy airplane on the bedroom table. Put the phone stand and kettle on the kitchen counter.
+
+    House description:
+    bedroom_0: table_0, bed_0, chair_0
+    kitchen_0: counter_0, fridge_0, cabinet_0
+    living_room_0: couch_0, table_1, chair_1
+
+    Objects found in the house so far:
+    plant_saucer_0: living_room_0
+    toy_airplane_0: bedroom_0
+    phone_stand_0: living_room_0
+    kettle_0: kitchen_0
+
+    Task progress:
+    Agent 0 is walking in the bedroom.
+    Agent 1 is waiting in the kitchen.
+
+    Your agent's observations of the last executed action (if available):
+
+    Thought: Agent 0 can move the toy_airplane_0 to the bedroom table, while Agent 1 can pick up the kettle_0 and move it to the kitchen counter. Both agents can act simultaneously without interfering.
+
+    Agent_0_Action: Rearrange[toy_airplane_0, on, table_0, None, None]
+    Agent_1_Action: Rearrange[kettle_0, on, counter_0, None, None]
+    Assigned!
+
+Stopword: "Assigned!"
+End expression: "Final Thought:"

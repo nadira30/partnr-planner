@@ -228,6 +228,89 @@ class PropositionResolver:
 
         return agent_actions
 
+    # # leona script
+    # def assign_dag(
+    #     self, prop_groups, prop_indices, constraints_agent_assignment, num_agents=2
+    # ):
+    #     """
+    #     Modified: All robot actions (agent 0) are appended to human agent's (agent 1) action list.
+    #     Agent 0's list is only 'Wait' actions.
+    #     """
+    #     agent_actions = {ind: [] for ind in range(num_agents)}
+    #     robot_actions = []
+    #     human_actions = []
+    #     for prop_grp_ind, prop_group in enumerate(prop_groups):
+    #         for ind, action in enumerate(prop_group):
+    #             prop_ind = prop_indices[prop_grp_ind][ind]
+    #             assigned_agent = self.random.choice(
+    #                 constraints_agent_assignment[prop_ind]
+    #             )
+    #             # Collect actions for robot and human
+    #             if assigned_agent == 0:
+    #                 if type(action) == list:
+    #                     robot_actions += action
+    #                 else:
+    #                     robot_actions.append(action)
+    #             else:
+    #                 if type(action) == list:
+    #                     human_actions += action
+    #                 else:
+    #                     human_actions.append(action)
+    #         # Add Wait actions for both agents at the end of each group
+    #         if num_agents > 1:
+    #             robot_actions.append(f"Wait {prop_grp_ind}")
+    #             human_actions.append(f"Wait {prop_grp_ind}")
+    #     # Append all robot actions to human actions
+    #     agent_actions[0] = [f"Wait {i}" for i in range(len(prop_groups))]
+    #     agent_actions[1] = human_actions + robot_actions
+    #     return agent_actions
+
+    # def assign_dag(self, prop_groups, prop_indices, constraints_agent_assignment, num_agents=2):
+    #     """
+    #     Modified: Human (agent_0) executes all action groups.
+    #     Robot (agent_1) waits during each group.
+    #     After each group, both agents perform a synchronized Wait.
+    #     """
+    #     agent_actions = {ind: [] for ind in range(num_agents)}
+
+    #     for prop_grp_ind, prop_group in enumerate(prop_groups):
+    #         # Track actions for synchronization
+    #         max_steps_in_group = len(prop_group)
+    #         actions_by_agent = {ind: [] for ind in range(num_agents)}
+
+    #         for ind, action in enumerate(prop_group):
+    #             prop_ind = prop_indices[prop_grp_ind][ind]
+
+    #             # Get which agents can execute this action
+    #             allowed_agents = constraints_agent_assignment.get(prop_ind, [0])  # Changed to [0]
+
+    #             # Assign to human (agent 0) if allowed, otherwise to first allowed agent
+    #             if 0 in allowed_agents:  # Changed from 1 to 0
+    #                 assigned_agent = 0  # Changed from 1 to 0
+    #             else:
+    #                 assigned_agent = allowed_agents[0] if allowed_agents else 0  # Changed from 1 to 0
+
+    #             # Add action to assigned agent
+    #             if isinstance(action, list):
+    #                 actions_by_agent[assigned_agent] += action
+    #             else:
+    #                 actions_by_agent[assigned_agent].append(action)
+
+    #             # Other agents wait
+    #             for agent_id in range(num_agents):
+    #                 if agent_id != assigned_agent:
+    #                     actions_by_agent[agent_id].append(("Wait", f"group_{prop_grp_ind}_step_{ind}", ""))
+
+    #         # Add all actions from this group to the main action lists
+    #         for agent_id in range(num_agents):
+    #             agent_actions[agent_id] += actions_by_agent[agent_id]
+
+    #         # Add synchronized wait at end of group for robot only
+    #         if num_agents > 1:
+    #             agent_actions[1].append(("Wait", f"group_{prop_grp_ind}_end", ""))  # Changed from 0 to 1
+
+    #     return agent_actions
+
     def get_list_actions_from_rearrange(
         self,
         rearrange_action,
@@ -1327,6 +1410,14 @@ class ScriptedCentralizedPlanner(Planner):
             low_level_actions, responses = self.process_high_level_actions(
                 high_level_actions, observations
             )
+            #####
+            # For waiting agents, manually add Wait response without LLM call
+            for agent_id, action in high_level_actions.items():
+                if action[0].lower() == "wait":
+                    low_level_actions[agent_id] = None  # or appropriate wait action
+                    responses[agent_id] = ""  # No response needed
+                    self.next_skill_agents[agent_id] = True
+
             for agent_id, resp in responses.items():
                 self.next_skill_agents[int(agent_id)] = len(resp) > 0
 

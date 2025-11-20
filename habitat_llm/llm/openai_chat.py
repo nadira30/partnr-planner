@@ -8,7 +8,6 @@ import os
 from typing import Dict, List, Optional
 
 from omegaconf import DictConfig, OmegaConf
-from openai import AzureOpenAI
 
 from habitat_llm.llm.base_llm import BaseLLM, Prompt
 
@@ -39,21 +38,36 @@ class OpenAIChat(BaseLLM):
         """
         self.llm_conf = conf
         self.generation_params = self.llm_conf.generation_params
-        try:
-            api_key = os.getenv("OPENAI_API_KEY")
-            assert len(api_key) > 0, ValueError("No OPENAI_API_KEY keys provided")
-        except Exception:
-            raise ValueError("No OPENAI API keys provided")
-        try:
+        if os.getenv("OPENAI_ENDPOINT"):
+            from openai import AzureOpenAI
+
             endpoint = os.getenv("OPENAI_ENDPOINT")
-            assert len(endpoint) > 0, ValueError("No OPENAI_ENDPOINT keys provided")
-        except Exception:
-            raise ValueError("No OPENAI endpoint keys provided")
-        self.client = AzureOpenAI(
-            api_version="2024-06-01",
-            api_key=api_key,
-            azure_endpoint=f"https://{endpoint}",
-        )
+            self.client = AzureOpenAI(
+                api_version="2024-06-01",
+                api_key=os.getenv("OPENAI_API_KEY"),
+                azure_endpoint=f"https://{endpoint}",
+            )
+        else:
+            from openai import OpenAI
+
+            self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+        # try:
+        #     api_key = os.getenv("OPENAI_API_KEY")
+        #     assert len(api_key) > 0, ValueError("No OPENAI_API_KEY keys provided")
+        # except Exception:
+        #     raise ValueError("No OPENAI API keys provided")
+        # try:
+        #     endpoint = os.getenv("OPENAI_ENDPOINT")
+        #     assert len(endpoint) > 0, ValueError("No OPENAI_ENDPOINT keys provided")
+        # except Exception:
+        #     raise ValueError("No OPENAI endpoint keys provided")
+
+        # self.client = AzureOpenAI(
+        # api_version="2024-06-01",
+        # api_key=api_key,
+        # azure_endpoint=f"https://{endpoint}",
+        # )
         self._validate_conf()
         self.verbose = self.llm_conf.verbose
         self.verbose = True
