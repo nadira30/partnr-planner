@@ -1,0 +1,5 @@
+
+plan_config: "Empty"
+_target_: 'habitat_llm.planner.timed_observation_planner.TimedObservationPlanner'
+_recursive_: True
+_partial_: True

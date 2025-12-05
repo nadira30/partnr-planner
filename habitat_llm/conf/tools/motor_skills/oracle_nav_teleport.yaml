@@ -14,9 +14,9 @@ oracle_nav:
 
     dist_thresh                : 0.2
     turn_thresh                : 0.45
-    forward_velocity           : 100.0      #original 10.0
-    turn_velocity              : 100.0        #10.0
+    teleport                   : True      # Enable instant teleportation for robot
     sim_freq                   : 120 # Hz
     enable_backing_up          : False
-    # Disable exploration
-    enable_exploration         : False
+    nav_to_skill               : True
+    lin_speed                  : 10.0
+    ang_speed                  : 10.0

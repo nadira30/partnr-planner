@@ -75,9 +75,7 @@ def test_get_neighbors():
             continue
         graph.add_edge(test_nodes[-1], test_nodes[0], "test_edge")
 
-    assert graph.get_neighbors(test_nodes[0]) == {
-        tnode: None for tnode in test_nodes[1:-1]
-    }
+    assert graph.get_neighbors(test_nodes[0]) == dict.fromkeys(test_nodes[1:-1])
     assert graph.get_neighbors(test_nodes[1]) == {test_nodes[0]: "test_edge"}
     assert graph.get_neighbors(test_nodes[2]) == {test_nodes[0]: "test_edge"}
     assert graph.get_neighbors(test_nodes[3]) == {test_nodes[0]: "test_edge"}

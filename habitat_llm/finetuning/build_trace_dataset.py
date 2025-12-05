@@ -106,7 +106,7 @@ def process_file(pkl_file: str, args):
     all_actions: List[ActionHistoryElement] = sum(action_history.values(), [])
 
     all_actions.sort(key=lambda x: (x.timestamp, x.info["log_time"]))
-    agent_done = {agent_id: False for agent_id in action_history}
+    agent_done = dict.fromkeys(action_history, False)
 
     if len(all_actions) == 0:
         print("skipping empty: ", pkl_file)

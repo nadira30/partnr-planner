@@ -122,7 +122,7 @@ def plot_ambiguity(
     )
 
     labels = list(range(2, max(soln_space_distribution) + 1))
-    counts = {l: 0 for l in labels}
+    counts = dict.fromkeys(labels, 0)
     for i in soln_space_distribution:
         counts[i] += 1
     sorted_counts = [x[1] for x in sorted(counts.items(), key=lambda x: x[0])]
@@ -156,7 +156,7 @@ def plot_temporal_groups(
         autopct="%1.0f%%",
     )
     labels = list(range(1, max(soln_space_distribution) + 1))
-    counts = {l: 0 for l in labels}
+    counts = dict.fromkeys(labels, 0)
     for i in soln_space_distribution:
         counts[i] += 1
     sorted_counts = [x[1] for x in sorted(counts.items(), key=lambda x: x[0])]
@@ -573,9 +573,7 @@ def object_furniture_room_analysis(
     Distribution of objects, rooms, and furniture referenced by the evaluation functions.
     """
     obj_cat_distribution: Dict[str, int] = defaultdict(int)
-    recep_cat_distribution: Dict[str, int] = {
-        k: 0 for k in metadata["receptacle_classes"]
-    }
+    recep_cat_distribution: Dict[str, int] = dict.fromkeys(metadata["receptacle_classes"], 0)
     room_cat_distribution: Dict[str, int] = defaultdict(int)
 
     for ep in dataset["episodes"]:

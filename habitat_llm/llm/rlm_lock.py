@@ -87,7 +87,7 @@ class RemotePoolLanguageModel(RemoteLanguageModel):
         with filelock.FileLock(lockfilelock):
             if not os.path.isfile(lockfile):
                 with open(lockfile, "w+") as f:
-                    lock_contents = {addr: 0 for addr in self.addresses}
+                    lock_contents = dict.fromkeys(self.addresses, 0)
                     f.write(json.dumps(lock_contents))
         # Get the llm with fewer calls
         self.address = self.get_address_with_shortest_queue()

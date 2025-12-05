@@ -14,8 +14,8 @@ oracle_nav:
 
     dist_thresh                : 0.2
     turn_thresh                : 0.45
-    forward_velocity           : 100.0      #original 10.0
-    turn_velocity              : 100.0        #10.0
+    forward_velocity           : 0.5      # Much slower than human (human uses 100.0)
+    turn_velocity              : 0.5      # Much slower than human (human uses 100.0)
     sim_freq                   : 120 # Hz
     enable_backing_up          : False
     # Disable exploration

@@ -150,7 +150,7 @@ class Planner:
         agent_indices = self.agent_indices
         if not hl_actions:
             response = "No actions were assigned. Please assign action to this agent."
-            responses = {agent_ind: response for agent_ind in agent_indices}
+            responses = dict.fromkeys(agent_indices, response)
             return {}, responses
 
         # Declare containers for responses and low level actions

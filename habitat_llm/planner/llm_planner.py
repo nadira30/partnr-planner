@@ -692,47 +692,6 @@ class LLMPlanner(Planner):
                 self.agents, llm_response, self.params
             )
 
-            # --- HUMAN FORCE ---
-            human_action = high_level_actions.get(1, None)
-
-            # Extract the human’s target room
-            def extract_target_room(action):
-                """
-                Safely extract the human's target room from an action tuple.
-                Action format is usually: (verb, obj, loc)
-                But may contain None or syntax-error strings from the LLM parser.
-                """
-                if action is None:
-                    return None
-
-                # action must be a 3-tuple
-                if not isinstance(action, (list, tuple)) or len(action) != 3:
-                    return None
-
-                verb, obj, loc = action
-                # 1. Skip invalid/syntax-error directives
-                if verb is None or isinstance(verb, str) is False:
-                    return None
-                if isinstance(loc, str) and "SyntaxError" in loc:
-                    return None
-
-                room = obj if verb.lower() == "navigate" else loc
-
-                return room
-
-            target_room = extract_target_room(human_action)
-            print(f"Target room:{target_room}")
-
-            # --- ROBOT FOLLOW: override agent 0 high-level action ---
-            if target_room is not None:
-                high_level_actions[0] = ("Navigate", target_room, "")
-            else:
-                high_level_actions[0] = ("Wait", "", "")
-
-            print(f"\n\n[DEBUG] Now Executing: {high_level_actions}\n\n")
-
-            # print(self.get_agent_collisions(), self.get_last_agent_positions())
-
             # Get low level actions and/or responses
             low_level_actions, responses = self.process_high_level_actions(
                 high_level_actions, observations

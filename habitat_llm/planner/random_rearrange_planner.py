@@ -36,7 +36,7 @@ class RandomRearrangePlanner(Planner):
         """
         for agent in self._agents:
             agent.reset()
-        self.last_high_level_actions = {agent_id: None for agent_id in self._agents}
+        self.last_high_level_actions = dict.fromkeys(self._agents)
 
     def get_next_action(
         self,

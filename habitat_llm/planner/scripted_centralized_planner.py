@@ -19,7 +19,7 @@ from habitat_llm.agent.env.evaluation.evaluation_functions import (
 )
 from habitat_llm.planner.planner import Planner
 from habitat_llm.utils.sim import is_open
-from habitat_llm.world_model import Floor, Furniture
+from habitat_llm.world_model import Floor, Furniture, Room
 
 # This class distributes skills across two agents using the eval function.
 # It works by looking at every node in a DAG and distributing at random the
@@ -432,22 +432,21 @@ class PropositionResolver:
                 raise Exception(
                     "This predicate should not have been considered here, it is part of the room predicates"
                 )
-            else:
-                all_rooms = environment_graph.get_all_rooms()
+            all_rooms = environment_graph.get_all_rooms()
 
-                receptacles = []
+            receptacles = []
 
-                # The object should go in the floor of this room
-                for room in all_rooms:
-                    edges_contains = [
-                        edge
-                        for edge, value in environment_graph.graph[room].items()
-                        if value == "contains"
-                    ]
-                    receptacles += [
-                        rec.name for rec in edges_contains if type(rec) is Floor
-                    ]
-                same_rec = False
+            # The object should go in the floor of this room
+            for room in all_rooms:
+                edges_contains = [
+                    edge
+                    for edge, value in environment_graph.graph[room].items()
+                    if value == "contains"
+                ]
+                receptacles += [
+                    rec.name for rec in edges_contains if type(rec) is Floor
+                ]
+            same_rec = False
         # Convert objects and receptacles to nodes in graph
         target_objects = [
             self.sim_handle_to_name[objname] for objname in target_objects
@@ -1000,6 +999,7 @@ class PropositionResolver:
         prop_dependencies,
         environment_graph,
         env_interface,
+        force_human_only=False,
     ):
         """
         Given a list of propositions coming from the eval functions, returns a set of rearrange skills
@@ -1008,6 +1008,7 @@ class PropositionResolver:
         where Wait is a deadlock.
         :propositions: A list of EvaluationPropositions.
         :constraints: The evaluation constraints
+        :force_human_only: If True, force all evaluation tasks to agent_1 (human only)
         :prop_dependencies: The proposition dependencies
         :environment_graph: The environmentGraph
         :return: dictionary from agent to skills
@@ -1083,7 +1084,7 @@ class PropositionResolver:
             == "KinematicHumanoid"
         ]
         all_agent_ids = list(range(num_agents))
-        ## HEREEE
+
         constraints_agent_assignment = {}
 
         objects_navigated = []
@@ -1094,7 +1095,11 @@ class PropositionResolver:
             if type(rearrange_action) is ChangeStateAction:
                 constraints_agent_assignment[prop_ind] = human_agent_ids
             else:
-                constraints_agent_assignment[prop_ind] = all_agent_ids
+                # If force_human_only is True, assign all tasks to human only
+                if force_human_only:
+                    constraints_agent_assignment[prop_ind] = human_agent_ids
+                else:
+                    constraints_agent_assignment[prop_ind] = all_agent_ids
 
             proposition_map[prop_ind].append(
                 self.get_list_actions_from_rearrange(
@@ -1155,7 +1160,7 @@ class ScriptedCentralizedPlanner(Planner):
         self.plan_indx = [-1 for _ in range(num_agents)]
         self.is_waiting = [False for _ in range(num_agents)]
 
-        self.next_skill_agents = {ind: True for ind in range(num_agents)}
+        self.next_skill_agents = dict.fromkeys(range(num_agents), True)
         self.actions_per_agent = None
         self.move_next_skill = True
         self.curr_hist = ""
@@ -1177,6 +1182,10 @@ class ScriptedCentralizedPlanner(Planner):
         prop_dependencies = curr_episode.evaluation_proposition_dependencies
         propositions = curr_episode.evaluation_propositions
 
+        # ALWAYS enable robot observation mode - robot will observe while human executes tasks
+        # This means robot doesn't participate in task execution, only navigates to observation points
+        has_robot_nav = True
+
         # For every proposition, store the object and target so that we can use in future constraints
         self.actions_per_agent = self.prop_res.solve_dag(
             propositions,
@@ -1184,7 +1193,183 @@ class ScriptedCentralizedPlanner(Planner):
             prop_dependencies,
             self.env_interface.full_world_graph,
             self.env_interface,
+            force_human_only=has_robot_nav,  # Force all eval tasks to human, robot only observes
         )
+
+        # Create Navigate actions for agent_0 (robot) based on where human is working
+        if has_robot_nav:
+            # Get all human (agent_1) actions to determine rooms
+            human_actions = self.actions_per_agent.get(1, [])
+
+            print(f"Human actions ({len(human_actions)} total):")
+            for i, act in enumerate(human_actions):
+                print(f"  {i}: {act}")
+
+            # Define predefined observation furniture for each room
+            room_observation_furniture = {
+                "bedroom_1": "chair_16",
+                "bathroom_1": "chair_23",
+                "living_room_1": "stand_55",
+                "bedroom_2": "table_13",
+                "bathroom_2": "unknown_14",
+                "kitchen_1": "counter_19",
+                "laundryroom_1": "washer_dryer_11",
+                "entryway_1": "bench_51",
+                "hallway_1": "table_30",
+            }
+
+            # Extract navigation targets from human actions
+            # Track Navigate actions and Place target furniture to determine which rooms human visits
+            human_locations = []
+            for action in human_actions:
+                if isinstance(action, tuple) and len(action) >= 2:
+                    action_type, target, _ = (
+                        action[0],
+                        action[1],
+                        action[2] if len(action) > 2 else "",
+                    )
+                    if action_type == "Navigate":
+                        # Navigation target tells us where human is going
+                        if target:
+                            human_locations.append(target)
+                    elif action_type == "Place":
+                        # Place target format: "object, on, furniture, none, none"
+                        # Extract the furniture where object is being placed
+                        if target and "," in target:
+                            parts = target.split(",")
+                            if len(parts) >= 3:
+                                placement_furniture = parts[2].strip()
+                                human_locations.append(placement_furniture)
+
+            # Get world graph to determine which room each location belongs to
+            world_graph = self.env_interface.full_world_graph
+
+            # Get initial object-to-furniture mapping from simulator
+            sim = self.env_interface.env.env.env._env.sim
+            object_to_furniture = {}
+            if hasattr(sim, "ep_info") and hasattr(sim.ep_info, "name_to_receptacle"):
+                sim_handle_to_name = self.env_interface.perception.sim_handle_to_name
+                for obj_handle, fur_handle in sim.ep_info.name_to_receptacle.items():
+                    # Convert handles to names using sim_handle_to_name
+                    if obj_handle in sim_handle_to_name:
+                        obj_name = sim_handle_to_name[obj_handle]
+                        if fur_handle in sim_handle_to_name:
+                            fur_name = sim_handle_to_name[fur_handle]
+                            object_to_furniture[obj_name] = fur_name
+                        elif "floor" in fur_handle:
+                            # Object is on floor, extract room from floor handle
+                            object_to_furniture[obj_name] = fur_handle
+
+            # Build robot actions synchronized with human actions
+            # Robot should navigate BEFORE human navigates to new room (to be ready to observe)
+            robot_actions = []
+
+            # First pass: determine room for each human action
+            action_rooms = []
+            for i, action in enumerate(human_actions):
+                room = None
+                if isinstance(action, str):
+                    action_rooms.append(None)
+                    continue
+
+                action_type = action[0]
+                target = action[1]
+                location = None
+
+                if action_type == "Navigate":
+                    location = target
+                elif action_type == "Place" and "," in target:
+                    parts = target.split(",")
+                    if len(parts) >= 3:
+                        location = parts[2].strip()
+
+                # Find room for this location
+                if location:
+                    try:
+                        location_node = world_graph.get_node_from_name(location)
+                        if location_node in world_graph.graph:
+                            neighbors = world_graph.graph[location_node]
+
+                            for neighbor_node, edge_label in neighbors.items():
+                                if edge_label == "inside" and isinstance(
+                                    neighbor_node, Room
+                                ):
+                                    room = neighbor_node.name
+                                    break
+
+                            if not room and location in object_to_furniture:
+                                furniture_name = object_to_furniture[location]
+                                if "floor" in furniture_name:
+                                    room = furniture_name.replace("floor_", "")
+                                elif furniture_name.startswith("rec_"):
+                                    base_furniture_name = furniture_name[4:].rsplit(
+                                        "_", 1
+                                    )[0]
+                                    try:
+                                        furniture_node = world_graph.get_node_from_name(
+                                            base_furniture_name
+                                        )
+                                        if furniture_node in world_graph.graph:
+                                            for (
+                                                room_neighbor,
+                                                room_edge,
+                                            ) in world_graph.graph[
+                                                furniture_node
+                                            ].items():
+                                                if (
+                                                    room_edge == "inside"
+                                                    and isinstance(room_neighbor, Room)
+                                                ):
+                                                    room = room_neighbor.name
+                                                    break
+                                    except ValueError:
+                                        pass
+                    except ValueError:
+                        pass
+
+                action_rooms.append(room)
+
+            # Second pass: generate robot actions
+            # Robot should navigate when human Navigate actions change rooms
+            # NOTE: Human Navigate actions get expanded to 2 Navigate steps during execution
+            # But robot Navigate actions complete in 1 step
+            for i, action in enumerate(human_actions):
+                room = action_rooms[i]
+                action_type = None
+                if isinstance(action, tuple) and len(action) > 0:
+                    action_type = action[0]
+
+                if (
+                    action_type == "Navigate"
+                    and room
+                    and room in room_observation_furniture
+                ):
+                    observation_furniture = room_observation_furniture[room]
+                    # Robot Navigate completes in 1 step
+                    robot_actions.append(("Navigate", observation_furniture, ""))
+                    # Human Navigate takes 2 steps, so add another Navigate to same location for synchronization
+                    robot_actions.append(("Navigate", observation_furniture, ""))
+                elif action_type == "Navigate":
+                    # Human Navigate that doesn't trigger robot action - add 2 Waits
+                    robot_actions.append(("Wait", "", ""))
+                    robot_actions.append(("Wait", "", ""))
+                else:
+                    # Non-Navigate actions don't expand, so just 1 Wait
+                    # robot_actions.append(("Wait", "", ""))
+                    continue
+
+            # Assign robot (agent_0) actions
+            self.actions_per_agent[0] = robot_actions
+            print(
+                f"Robot will perform {len(robot_actions)} actions, Human will perform {len(self.actions_per_agent[1])} actions"
+            )
+            print("\nAction sequence:")
+            for i, (robot_act, human_act) in enumerate(
+                zip(robot_actions, self.actions_per_agent[1])
+            ):
+                print(
+                    f"  Step {i}: Robot={robot_act[0]}[{robot_act[1]}], Human={human_act[0] if isinstance(human_act, tuple) else human_act}[{human_act[1] if isinstance(human_act, tuple) and len(human_act) > 1 else ''}]"
+                )
 
     def actions_parser(self, next_skill_agents):
         """
@@ -1288,7 +1473,7 @@ class ScriptedCentralizedPlanner(Planner):
             self.curr_hist += f"Furniture:\n{fur_list}\n"
             self.curr_hist += f"Objects:\n{obj_list}\n"
 
-        planner_info = {"replanned": {agent_id: False for agent_id in replan_required}}
+        planner_info = {"replanned": dict.fromkeys(replan_required, False)}
         print_str = ""
 
         replanned = copy.deepcopy(self.next_skill_agents)
@@ -1327,14 +1512,6 @@ class ScriptedCentralizedPlanner(Planner):
             low_level_actions, responses = self.process_high_level_actions(
                 high_level_actions, observations
             )
-            #####
-            # For waiting agents, manually add Wait response without LLM call
-            for agent_id, action in high_level_actions.items():
-                if action[0].lower() == "wait":
-                    low_level_actions[agent_id] = None  # or appropriate wait action
-                    responses[agent_id] = ""  # No response needed
-                    self.next_skill_agents[agent_id] = True
-
             for agent_id, resp in responses.items():
                 self.next_skill_agents[int(agent_id)] = len(resp) > 0
 

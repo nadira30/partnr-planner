@@ -3,3 +3,15 @@
 defaults:
   - /examples/centralized_full_obs
   - override /planner@evaluation.planner: dag_centralized_planner
+  - override /agent/@agents.agent_0.config: oracle_rearrange_agent_slow
+
+# Override the base velocity action to slow down the robot
+habitat:
+  task:
+    actions:
+      agent_0_base_velocity:
+        lin_speed: 6.0
+        ang_speed: 6.0
+      agent_1_base_velocity:
+        lin_speed: 8.0
+        ang_speed: 8.0

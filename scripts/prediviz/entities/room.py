@@ -61,8 +61,7 @@ class Room:
                 else:
                     if o.object_id in self.object_to_recep:
                         continue
-                    else:
-                        object_widths += o.width
+                    object_widths += o.width
 
             min_width = max(min_width, object_widths * self.config.min_width_per_object)
 

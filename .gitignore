@@ -118,3 +118,12 @@ dmypy.json
 
 # ignore rlm logs
 rlm/
+habitat_llm/episode descripttion.txt
+list_objects_on_furniture.py
+.gitignore
+print_objects_by_room.py
+quick_object_info.py
+run_parallel_demo.py
+show_episode_layout.py
+show_furniture_by_room.py
+show_objects_by_room.py

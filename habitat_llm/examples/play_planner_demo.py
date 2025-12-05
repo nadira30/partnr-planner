@@ -335,6 +335,9 @@ def run_planner(config, dataset: CollaborationDatasetV0 = None, conn=None):
     # cprint(f"LLM model: {config.planner.llm.llm._target_}", "blue")
     cprint(f"Partial Observability: {config.world_model.partial_obs}", "blue")
     cprint("---------------------------------------\n", "blue")
+    # print world graph in red
+    cprint("World Graph:", "red")
+    cprint(env_interface.full_world_graph.get_world_descr(), "red")
 
     os.makedirs(config.paths.results_dir, exist_ok=True)
 
@@ -396,7 +399,19 @@ def run_planner(config, dataset: CollaborationDatasetV0 = None, conn=None):
 
                 # Get instruction
                 instruction = env_interface.env.env.env._env.current_episode.instruction
-                print("\n\nEpisode", episode_id)
+
+                # Enhance robot instruction if it's too vague
+                if "Robot: Navigate to various room" in instruction:
+                    # Extract human part
+                    parts = instruction.split("Robot:")
+                    human_part = parts[0].strip()
+                    # Create more specific robot instruction
+                    enhanced_instruction = f"{human_part} Robot: Systematically explore all rooms in the house - start with kitchen_1, then move to bedroom_2, explore living_room_1, check bathroom_1, and continue navigating between different rooms. Take active exploration actions and avoid waiting."
+                    instruction = enhanced_instruction
+                    print(f"\n\nEpisode {episode_id}")
+                    print(f"Enhanced instruction: {instruction}")
+                else:
+                    print(f"\n\nEpisode {episode_id}")
 
                 try:
                     info = eval_runner.run_instruction(
