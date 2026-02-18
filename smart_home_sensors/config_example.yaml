@@ -1,0 +1,18 @@
+# Example configuration for enabling smart home motion sensors
+# Add this to your planner config files to enable sensor tracking
+
+# Smart home motion sensor configuration
+smart_home_sensors:
+  # Enable/disable sensor tracking
+  enabled: True
+  
+  # Output directory for sensor logs (relative to project root)
+  output_dir: "outputs/smart_home_sensors"
+  
+  # How often to print sensor status (every N simulation steps)
+  log_frequency: 20
+  
+  # Additional options (optional)
+  # save_detailed_logs: True      # Save detailed per-step logs
+  # track_all_agents: True        # Track all agents vs just main agents
+  # sensor_detection_radius: 2.5  # Override default detection radius

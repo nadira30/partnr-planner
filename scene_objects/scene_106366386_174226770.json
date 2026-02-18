@@ -1,0 +1,5043 @@
+{
+  "scene_id": "106366386_174226770",
+  "num_episodes": 126,
+  "episode_ids": [
+    "42",
+    "43",
+    "44",
+    "45",
+    "46",
+    "47",
+    "48",
+    "49",
+    "50",
+    "51",
+    "52",
+    "53",
+    "54",
+    "55",
+    "56",
+    "57",
+    "58",
+    "59",
+    "60",
+    "61",
+    "62",
+    "63",
+    "64",
+    "65",
+    "66",
+    "67",
+    "68",
+    "69",
+    "70",
+    "71",
+    "72",
+    "73",
+    "74",
+    "75",
+    "76",
+    "77",
+    "78",
+    "79",
+    "80",
+    "81",
+    "82",
+    "83",
+    "84",
+    "124",
+    "125",
+    "126",
+    "127",
+    "128",
+    "129",
+    "130",
+    "131",
+    "132",
+    "133",
+    "134",
+    "135",
+    "136",
+    "137",
+    "138",
+    "139",
+    "140",
+    "141",
+    "142",
+    "143",
+    "144",
+    "145",
+    "146",
+    "147",
+    "148",
+    "149",
+    "150",
+    "151",
+    "152",
+    "153",
+    "154",
+    "155",
+    "156",
+    "157",
+    "158",
+    "159",
+    "160",
+    "161",
+    "308",
+    "309",
+    "310",
+    "311",
+    "312",
+    "313",
+    "314",
+    "315",
+    "316",
+    "317",
+    "318",
+    "319",
+    "320",
+    "321",
+    "322",
+    "323",
+    "324",
+    "325",
+    "326",
+    "327",
+    "328",
+    "329",
+    "330",
+    "331",
+    "332",
+    "333",
+    "334",
+    "335",
+    "336",
+    "337",
+    "338",
+    "339",
+    "340",
+    "341",
+    "342",
+    "343",
+    "344",
+    "345",
+    "346",
+    "347",
+    "348",
+    "349",
+    "350",
+    "351",
+    "352"
+  ],
+  "entities": [
+    {
+      "id": 0,
+      "category": "Object",
+      "class_name": "toy_vehicle",
+      "prefab_name": "toy_vehicle_0",
+      "handle": "Thomas_Friends_Wooden_Railway_Porter_5JzRhMm3a9o_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -0.92602,
+        "y": 0.66004,
+        "z": -0.40645
+      },
+      "on_furniture": "chest_of_drawers_1",
+      "on_furniture_handle": "31653c084558e1ecb286adf63a305d914aa3c98b_:0001"
+    },
+    {
+      "id": 1,
+      "category": "Object",
+      "class_name": "toy_vehicle",
+      "prefab_name": "toy_vehicle_1",
+      "handle": "Thomas_Friends_Wooden_Railway_Talking_Thomas_z7yi7UFHJRj_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -1.03645,
+        "y": 0.13258,
+        "z": -0.18247
+      },
+      "on_furniture": "chest_of_drawers_1",
+      "on_furniture_handle": "31653c084558e1ecb286adf63a305d914aa3c98b_:0001"
+    },
+    {
+      "id": 2,
+      "category": "Object",
+      "class_name": "toy_animal",
+      "prefab_name": "toy_animal_0",
+      "handle": "BUNNY_RACER_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -1.18823,
+        "y": 0.16318,
+        "z": -0.40704
+      },
+      "on_furniture": "chest_of_drawers_1",
+      "on_furniture_handle": "31653c084558e1ecb286adf63a305d914aa3c98b_:0001"
+    },
+    {
+      "id": 3,
+      "category": "Object",
+      "class_name": "toy_construction_set",
+      "prefab_name": "toy_construction_set_0",
+      "handle": "CREATIVE_BLOCKS_35_MM_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": 2.44649,
+        "y": 1.00308,
+        "z": -1.40355
+      },
+      "on_furniture": "chest_of_drawers_2",
+      "on_furniture_handle": "389665158df393b0a2ac6fccc69babfd7a17f306_:0000"
+    },
+    {
+      "id": 4,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_0",
+      "handle": "60694c8715acc814e456629b6a2861b840ae5ffb_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -7.49252,
+        "y": 0.96009,
+        "z": 1.42037
+      },
+      "on_furniture": "table_3",
+      "on_furniture_handle": "65a418ed96d1ba38f05feecf299e1db81b1587de_:0000"
+    },
+    {
+      "id": 5,
+      "category": "Rooms",
+      "class_name": "bedroom",
+      "prefab_name": "bedroom_0",
+      "properties": [],
+      "states": []
+    },
+    {
+      "id": 6,
+      "category": "Furniture",
+      "class_name": "chest_of_drawers",
+      "prefab_name": "chest_of_drawers_1",
+      "handle": "31653c084558e1ecb286adf63a305d914aa3c98b_:0001",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": []
+    },
+    {
+      "id": 7,
+      "category": "Furniture",
+      "class_name": "chest_of_drawers",
+      "prefab_name": "chest_of_drawers_2",
+      "handle": "389665158df393b0a2ac6fccc69babfd7a17f306_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": []
+    },
+    {
+      "id": 8,
+      "category": "Furniture",
+      "class_name": "table",
+      "prefab_name": "table_3",
+      "handle": "65a418ed96d1ba38f05feecf299e1db81b1587de_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE",
+        "SURFACES"
+      ],
+      "states": []
+    },
+    {
+      "id": 9,
+      "category": "Object",
+      "class_name": "cellphone",
+      "prefab_name": "cellphone_0",
+      "handle": "Cellphone_7_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.7079,
+        "y": 0.52493,
+        "z": -6.71483
+      },
+      "on_furniture": "table_1",
+      "on_furniture_handle": "1a4841c613e9f5c2ba492107fb6aff4692c564a4_:0000"
+    },
+    {
+      "id": 10,
+      "category": "Object",
+      "class_name": "phone_stand",
+      "prefab_name": "phone_stand_0",
+      "handle": "B01IJ5A0PC_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.51793,
+        "y": 0.55613,
+        "z": -6.59579
+      },
+      "on_furniture": "table_1",
+      "on_furniture_handle": "1a4841c613e9f5c2ba492107fb6aff4692c564a4_:0000"
+    },
+    {
+      "id": 11,
+      "category": "Object",
+      "class_name": "candle",
+      "prefab_name": "candle_0",
+      "handle": "b30e6297b98aba4d59324fc88a4f2e74a863261e_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.59207,
+        "y": 0.5782,
+        "z": -6.8777
+      },
+      "on_furniture": "table_1",
+      "on_furniture_handle": "1a4841c613e9f5c2ba492107fb6aff4692c564a4_:0000"
+    },
+    {
+      "id": 12,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_0",
+      "handle": "30414cd6c4eeac82960afb6163bace31f880343e_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -5.78263,
+        "y": 0.34179,
+        "z": -7.51004
+      },
+      "on_furniture": "couch_0",
+      "on_furniture_handle": "72c768666c398f91a5e4755d569f4d7097acc297_:0000"
+    },
+    {
+      "id": 13,
+      "category": "Rooms",
+      "class_name": "living room",
+      "prefab_name": "living_room_0",
+      "properties": [],
+      "states": []
+    },
+    {
+      "id": 14,
+      "category": "Furniture",
+      "class_name": "table",
+      "prefab_name": "table_1",
+      "handle": "1a4841c613e9f5c2ba492107fb6aff4692c564a4_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE",
+        "SURFACES"
+      ],
+      "states": []
+    },
+    {
+      "id": 15,
+      "category": "Furniture",
+      "class_name": "couch",
+      "prefab_name": "couch_0",
+      "handle": "72c768666c398f91a5e4755d569f4d7097acc297_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE",
+        "SURFACES",
+        "SITTABLE",
+        "LIEABLE"
+      ],
+      "states": []
+    },
+    {
+      "id": 16,
+      "category": "Object",
+      "class_name": "cellphone",
+      "prefab_name": "cellphone_0",
+      "handle": "Cellphone_2_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -12.21083,
+        "y": 0.78178,
+        "z": -6.57999
+      },
+      "on_furniture": "table_4",
+      "on_furniture_handle": "c39181c455b8df6ac1b8112a8d2d7bc4a493d8e7_:0000"
+    },
+    {
+      "id": 17,
+      "category": "Object",
+      "class_name": "backpack",
+      "prefab_name": "backpack_0",
+      "handle": "Olive_Kids_Dinosaur_Land_Lunch_Box_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.25627,
+        "y": 0.57504,
+        "z": -7.36767
+      },
+      "on_furniture": "chair_5",
+      "on_furniture_handle": "d16a9e9691ca82f2d658d18cc064101337a6a0aa_:0000"
+    },
+    {
+      "id": 18,
+      "category": "Object",
+      "class_name": "basketball",
+      "prefab_name": "basketball_0",
+      "handle": "Basketball_1_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.45643,
+        "y": 0.58181,
+        "z": -7.29222
+      },
+      "on_furniture": "chair_5",
+      "on_furniture_handle": "d16a9e9691ca82f2d658d18cc064101337a6a0aa_:0000"
+    },
+    {
+      "id": 19,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_0",
+      "handle": "c1a07c25aef6562d3459a2d1bfbbc4e3265b0fab_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": 2.09588,
+        "y": 0.50555,
+        "z": -2.19163
+      },
+      "on_furniture": "cc75c57d650ebbdbe15542f83666b417d24f9ae4_:0001",
+      "on_furniture_handle": "cc75c57d650ebbdbe15542f83666b417d24f9ae4_:0001"
+    },
+    {
+      "id": 20,
+      "category": "Rooms",
+      "class_name": "entryway/foyer/lobby",
+      "prefab_name": "entryway/foyer/lobby_0",
+      "properties": [],
+      "states": []
+    },
+    {
+      "id": 21,
+      "category": "Furniture",
+      "class_name": "table",
+      "prefab_name": "table_4",
+      "handle": "c39181c455b8df6ac1b8112a8d2d7bc4a493d8e7_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE",
+        "SURFACES"
+      ],
+      "states": []
+    },
+    {
+      "id": 22,
+      "category": "Furniture",
+      "class_name": "cc75c57d650ebbdbe15542f83666b417d24f9ae4",
+      "prefab_name": "cc75c57d650ebbdbe15542f83666b417d24f9ae4_:0001",
+      "handle": "cc75c57d650ebbdbe15542f83666b417d24f9ae4_:0001",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": []
+    },
+    {
+      "id": 23,
+      "category": "Furniture",
+      "class_name": "chair",
+      "prefab_name": "chair_5",
+      "handle": "chair_5",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE",
+        "SURFACES",
+        "SITTABLE"
+      ],
+      "states": []
+    },
+    {
+      "id": 24,
+      "category": "Object",
+      "class_name": "plate",
+      "prefab_name": "plate_0",
+      "handle": "8cd9b448815a904b8b3b5817c742620729fe4a7c_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -14.2396,
+        "y": 0.91416,
+        "z": -1.45062
+      },
+      "on_furniture": "cabinet_0",
+      "on_furniture_handle": "0db565d684b7c6ca584a63184869a4077bbd7155_:0000"
+    },
+    {
+      "id": 25,
+      "category": "Object",
+      "class_name": "plate",
+      "prefab_name": "plate_1",
+      "handle": "Plate_23_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -14.03894,
+        "y": 0.90784,
+        "z": -1.68758
+      },
+      "on_furniture": "cabinet_0",
+      "on_furniture_handle": "0db565d684b7c6ca584a63184869a4077bbd7155_:0000"
+    },
+    {
+      "id": 26,
+      "category": "Object",
+      "class_name": "plate",
+      "prefab_name": "plate_2",
+      "handle": "Plate_7_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -14.27863,
+        "y": 0.90784,
+        "z": -1.14009
+      },
+      "on_furniture": "cabinet_0",
+      "on_furniture_handle": "0db565d684b7c6ca584a63184869a4077bbd7155_:0000"
+    },
+    {
+      "id": 27,
+      "category": "Object",
+      "class_name": "plate",
+      "prefab_name": "plate_3",
+      "handle": "Plate_1_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -13.94498,
+        "y": 0.90754,
+        "z": -1.41735
+      },
+      "on_furniture": "cabinet_0",
+      "on_furniture_handle": "0db565d684b7c6ca584a63184869a4077bbd7155_:0000"
+    },
+    {
+      "id": 28,
+      "category": "Object",
+      "class_name": "glass",
+      "prefab_name": "glass_0",
+      "handle": "f737d0e07f2927d7b4f43abb3a7267adfa5e3cf9_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -14.30622,
+        "y": 0.97482,
+        "z": -0.00244
+      },
+      "on_furniture": "cabinet_1",
+      "on_furniture_handle": "db74ce14813eb0d5c54c8992806b22fb846ee34c_:0000"
+    },
+    {
+      "id": 29,
+      "category": "Object",
+      "class_name": "glass",
+      "prefab_name": "glass_1",
+      "handle": "342e1b341104c33d7043365732480ff3a895c86e_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -14.40721,
+        "y": 0.97766,
+        "z": -0.42541
+      },
+      "on_furniture": "cabinet_1",
+      "on_furniture_handle": "db74ce14813eb0d5c54c8992806b22fb846ee34c_:0000"
+    },
+    {
+      "id": 30,
+      "category": "Object",
+      "class_name": "glass",
+      "prefab_name": "glass_2",
+      "handle": "Cup_23_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -14.61497,
+        "y": 0.96356,
+        "z": -0.8247
+      },
+      "on_furniture": "cabinet_1",
+      "on_furniture_handle": "db74ce14813eb0d5c54c8992806b22fb846ee34c_:0000"
+    },
+    {
+      "id": 31,
+      "category": "Object",
+      "class_name": "glass",
+      "prefab_name": "glass_3",
+      "handle": "705123a0be38cef21403a7f373db0c73b1d49ab6_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -14.4656,
+        "y": 1.02494,
+        "z": 0.1834
+      },
+      "on_furniture": "cabinet_1",
+      "on_furniture_handle": "db74ce14813eb0d5c54c8992806b22fb846ee34c_:0000"
+    },
+    {
+      "id": 32,
+      "category": "Object",
+      "class_name": "fork",
+      "prefab_name": "fork_0",
+      "handle": "Fork_1_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -14.57423,
+        "y": 0.91193,
+        "z": 0.43373
+      },
+      "on_furniture": "cabinet_2",
+      "on_furniture_handle": "edd29c09710bf64c66065b6d884f573bc48682f5_:0000"
+    },
+    {
+      "id": 33,
+      "category": "Object",
+      "class_name": "spray bottle 5",
+      "prefab_name": "spray bottle 5_0",
+      "handle": "Spray_Bottle_5_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -10.54436,
+        "y": 0.60715,
+        "z": -2.76386
+      },
+      "on_furniture": "a3adcc07e1656ec5f67c332587ad30ce080a3e89_:0000",
+      "on_furniture_handle": "a3adcc07e1656ec5f67c332587ad30ce080a3e89_:0000"
+    },
+    {
+      "id": 34,
+      "category": "Rooms",
+      "class_name": "kitchen",
+      "prefab_name": "kitchen_0",
+      "properties": [],
+      "states": []
+    },
+    {
+      "id": 35,
+      "category": "Furniture",
+      "class_name": "cabinet",
+      "prefab_name": "cabinet_0",
+      "handle": "0db565d684b7c6ca584a63184869a4077bbd7155_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE",
+        "SURFACES"
+      ],
+      "states": []
+    },
+    {
+      "id": 36,
+      "category": "Furniture",
+      "class_name": "a3adcc07e1656ec5f67c332587ad30ce080a3e89",
+      "prefab_name": "a3adcc07e1656ec5f67c332587ad30ce080a3e89_:0000",
+      "handle": "a3adcc07e1656ec5f67c332587ad30ce080a3e89_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": []
+    },
+    {
+      "id": 37,
+      "category": "Furniture",
+      "class_name": "cabinet",
+      "prefab_name": "cabinet_1",
+      "handle": "cabinet_1",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE",
+        "SURFACES"
+      ],
+      "states": []
+    },
+    {
+      "id": 38,
+      "category": "Furniture",
+      "class_name": "cabinet",
+      "prefab_name": "cabinet_2",
+      "handle": "cabinet_2",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE",
+        "SURFACES"
+      ],
+      "states": []
+    },
+    {
+      "id": 39,
+      "category": "Object",
+      "class_name": "cellphone",
+      "prefab_name": "cellphone_0",
+      "handle": "Cellphone_6_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -12.18525,
+        "y": 0.77844,
+        "z": -6.86723
+      },
+      "on_furniture": "table_4",
+      "on_furniture_handle": "c39181c455b8df6ac1b8112a8d2d7bc4a493d8e7_:0000"
+    },
+    {
+      "id": 40,
+      "category": "Object",
+      "class_name": "watch",
+      "prefab_name": "watch_0",
+      "handle": "Watch_1_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -12.29164,
+        "y": 0.79404,
+        "z": -7.26984
+      },
+      "on_furniture": "table_4",
+      "on_furniture_handle": "c39181c455b8df6ac1b8112a8d2d7bc4a493d8e7_:0000"
+    },
+    {
+      "id": 41,
+      "category": "Object",
+      "class_name": "keychain",
+      "prefab_name": "keychain_0",
+      "handle": "Keychain_1_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -12.30387,
+        "y": 0.78007,
+        "z": -7.04053
+      },
+      "on_furniture": "table_4",
+      "on_furniture_handle": "c39181c455b8df6ac1b8112a8d2d7bc4a493d8e7_:0000"
+    },
+    {
+      "id": 42,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_0",
+      "handle": "0198c423ae08bf04bb03b16238b34407d6ab4ecf_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -1.04723,
+        "y": 0.146,
+        "z": -0.44941
+      },
+      "on_furniture": "chest_of_drawers_1",
+      "on_furniture_handle": "31653c084558e1ecb286adf63a305d914aa3c98b_:0001"
+    },
+    {
+      "id": 43,
+      "category": "Object",
+      "class_name": "sushi_mat",
+      "prefab_name": "sushi_mat_0",
+      "handle": "Sushi_Mat_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -5.84198,
+        "y": 0.74391,
+        "z": 1.22915
+      },
+      "on_furniture": "table_3",
+      "on_furniture_handle": "65a418ed96d1ba38f05feecf299e1db81b1587de_:0000"
+    },
+    {
+      "id": 44,
+      "category": "Object",
+      "class_name": "spatula",
+      "prefab_name": "spatula_0",
+      "handle": "Spatula_1_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -7.61808,
+        "y": 0.74525,
+        "z": 0.73389
+      },
+      "on_furniture": "table_3",
+      "on_furniture_handle": "65a418ed96d1ba38f05feecf299e1db81b1587de_:0000"
+    },
+    {
+      "id": 45,
+      "category": "Object",
+      "class_name": "bowl",
+      "prefab_name": "bowl_0",
+      "handle": "Bowl_1_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -8.17973,
+        "y": 0.7792,
+        "z": 1.17856
+      },
+      "on_furniture": "table_3",
+      "on_furniture_handle": "65a418ed96d1ba38f05feecf299e1db81b1587de_:0000"
+    },
+    {
+      "id": 46,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_0",
+      "handle": "90985e208bb85b15efb2bbab8a171e283cf95e39_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.15744,
+        "y": 0.85254,
+        "z": 1.00662
+      },
+      "on_furniture": "chest_of_drawers_1",
+      "on_furniture_handle": "612bd96482db881c089aa26e4a5a3c34ed702955_:0002"
+    },
+    {
+      "id": 47,
+      "category": "Object",
+      "class_name": "candle 5",
+      "prefab_name": "candle 5_0",
+      "handle": "Candle_5_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -10.25858,
+        "y": 1.20311,
+        "z": -4.07198
+      },
+      "on_furniture": "a3adcc07e1656ec5f67c332587ad30ce080a3e89_:0003",
+      "on_furniture_handle": "a3adcc07e1656ec5f67c332587ad30ce080a3e89_:0003"
+    },
+    {
+      "id": 48,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_1",
+      "handle": "952ee2c654a116614574c4407d8182a3d2af656a_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -10.60946,
+        "y": 0.20261,
+        "z": -3.57667
+      },
+      "on_furniture": "chest_of_drawers_0",
+      "on_furniture_handle": "a3adcc07e1656ec5f67c332587ad30ce080a3e89_:0001"
+    },
+    {
+      "id": 49,
+      "category": "Rooms",
+      "class_name": "dining room",
+      "prefab_name": "dining_room_0",
+      "properties": [],
+      "states": []
+    },
+    {
+      "id": 50,
+      "category": "Furniture",
+      "class_name": "chest_of_drawers",
+      "prefab_name": "chest_of_drawers_0",
+      "handle": "a3adcc07e1656ec5f67c332587ad30ce080a3e89_:0001",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": []
+    },
+    {
+      "id": 51,
+      "category": "Furniture",
+      "class_name": "a3adcc07e1656ec5f67c332587ad30ce080a3e89",
+      "prefab_name": "a3adcc07e1656ec5f67c332587ad30ce080a3e89_:0003",
+      "handle": "a3adcc07e1656ec5f67c332587ad30ce080a3e89_:0003",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": []
+    },
+    {
+      "id": 52,
+      "category": "Object",
+      "class_name": "electric_kettle",
+      "prefab_name": "electric_kettle_0",
+      "handle": "b9eeb2332833946d5678b0c4a8d9209c6add31a6_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -12.07586,
+        "y": 0.94682,
+        "z": 0.93781
+      },
+      "on_furniture": "table_0",
+      "on_furniture_handle": "de47820f2dc539102408f43243369f2a952b7b2f_:0000"
+    },
+    {
+      "id": 53,
+      "category": "Object",
+      "class_name": "lamp",
+      "prefab_name": "lamp_0",
+      "handle": "B07HK83QRB_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -5.17955,
+        "y": 0.44779,
+        "z": -5.73966
+      },
+      "on_furniture": "chair_4",
+      "on_furniture_handle": "138009a6121d7ebb8c3b78e3a411b4e33c388efb_:0000"
+    },
+    {
+      "id": 54,
+      "category": "Object",
+      "class_name": "candle",
+      "prefab_name": "candle_0",
+      "handle": "b012e7b6b46475fdee5e0d64dfbb5b359e1c7e5b_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -12.14121,
+        "y": 0.8495,
+        "z": -7.17868
+      },
+      "on_furniture": "table_4",
+      "on_furniture_handle": "c39181c455b8df6ac1b8112a8d2d7bc4a493d8e7_:0000"
+    },
+    {
+      "id": 55,
+      "category": "Object",
+      "class_name": "breyer horse of the year 2015",
+      "prefab_name": "breyer horse of the year 2015_0",
+      "handle": "Breyer_Horse_Of_The_Year_2015_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -12.50876,
+        "y": 0.50036,
+        "z": -3.8972
+      },
+      "on_furniture": "cc75c57d650ebbdbe15542f83666b417d24f9ae4_:0000",
+      "on_furniture_handle": "cc75c57d650ebbdbe15542f83666b417d24f9ae4_:0000"
+    },
+    {
+      "id": 56,
+      "category": "Object",
+      "class_name": "asus z97iplus motherboard mini itx lga1150 socket",
+      "prefab_name": "asus z97iplus motherboard mini itx lga1150 socket_0",
+      "handle": "Asus_Z97IPLUS_Motherboard_Mini_ITX_LGA1150_Socket_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -0.47685,
+        "y": 0.66591,
+        "z": 1.83345
+      },
+      "on_furniture": "counter_0",
+      "on_furniture_handle": "66e7f21c0db6af483f36d2d9f73044c0995a1d07_:0000"
+    },
+    {
+      "id": 57,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_0",
+      "handle": "e7840601d8b63a3391abde3a4c1f4983bd60f7ab_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -10.57186,
+        "y": 0.21579,
+        "z": -2.79146
+      },
+      "on_furniture": "a3adcc07e1656ec5f67c332587ad30ce080a3e89_:0000",
+      "on_furniture_handle": "a3adcc07e1656ec5f67c332587ad30ce080a3e89_:0000"
+    },
+    {
+      "id": 58,
+      "category": "Object",
+      "class_name": "apple 19",
+      "prefab_name": "apple 19_0",
+      "handle": "Apple_19_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.21996,
+        "y": 0.5136,
+        "z": -6.09585
+      },
+      "on_furniture": "d16a9e9691ca82f2d658d18cc064101337a6a0aa_:0001",
+      "on_furniture_handle": "d16a9e9691ca82f2d658d18cc064101337a6a0aa_:0001"
+    },
+    {
+      "id": 59,
+      "category": "Object",
+      "class_name": "box 1",
+      "prefab_name": "box 1_0",
+      "handle": "Box_1_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": 0.48958,
+        "y": 0.67743,
+        "z": 1.80327
+      },
+      "on_furniture": "counter_0",
+      "on_furniture_handle": "66e7f21c0db6af483f36d2d9f73044c0995a1d07_:0000"
+    },
+    {
+      "id": 60,
+      "category": "Furniture",
+      "class_name": "chair",
+      "prefab_name": "chair_4",
+      "handle": "138009a6121d7ebb8c3b78e3a411b4e33c388efb_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE",
+        "SURFACES",
+        "SITTABLE"
+      ],
+      "states": []
+    },
+    {
+      "id": 61,
+      "category": "Furniture",
+      "class_name": "counter",
+      "prefab_name": "counter_0",
+      "handle": "66e7f21c0db6af483f36d2d9f73044c0995a1d07_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE",
+        "SURFACES"
+      ],
+      "states": []
+    },
+    {
+      "id": 62,
+      "category": "Furniture",
+      "class_name": "cc75c57d650ebbdbe15542f83666b417d24f9ae4",
+      "prefab_name": "cc75c57d650ebbdbe15542f83666b417d24f9ae4_:0000",
+      "handle": "cc75c57d650ebbdbe15542f83666b417d24f9ae4_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": []
+    },
+    {
+      "id": 63,
+      "category": "Furniture",
+      "class_name": "d16a9e9691ca82f2d658d18cc064101337a6a0aa",
+      "prefab_name": "d16a9e9691ca82f2d658d18cc064101337a6a0aa_:0001",
+      "handle": "d16a9e9691ca82f2d658d18cc064101337a6a0aa_:0001",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": []
+    },
+    {
+      "id": 64,
+      "category": "Furniture",
+      "class_name": "table",
+      "prefab_name": "table_0",
+      "handle": "de47820f2dc539102408f43243369f2a952b7b2f_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE",
+        "SURFACES"
+      ],
+      "states": []
+    },
+    {
+      "id": 65,
+      "category": "Object",
+      "class_name": "toy_fruits",
+      "prefab_name": "toy_fruits_0",
+      "handle": "Fruity_Friends_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": 2.33875,
+        "y": 0.57429,
+        "z": 2.23538
+      },
+      "on_furniture": "table_2",
+      "on_furniture_handle": "44f35b8477fdbc61ed4c0ec40297b03d636d19b2_:0000"
+    },
+    {
+      "id": 66,
+      "category": "Object",
+      "class_name": "spoon",
+      "prefab_name": "spoon_0",
+      "handle": "Spoon_1_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": 1.93252,
+        "y": 0.49266,
+        "z": 2.28055
+      },
+      "on_furniture": "table_2",
+      "on_furniture_handle": "44f35b8477fdbc61ed4c0ec40297b03d636d19b2_:0000"
+    },
+    {
+      "id": 67,
+      "category": "Object",
+      "class_name": "soap bottle 15",
+      "prefab_name": "soap bottle 15_0",
+      "handle": "Soap_Bottle_15_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": 2.60373,
+        "y": 0.99148,
+        "z": -1.44647
+      },
+      "on_furniture": "chest_of_drawers_2",
+      "on_furniture_handle": "389665158df393b0a2ac6fccc69babfd7a17f306_:0000"
+    },
+    {
+      "id": 68,
+      "category": "Object",
+      "class_name": "b07m6pk8qn",
+      "prefab_name": "b07m6pk8qn_0",
+      "handle": "B07M6PK8QN_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -6.061,
+        "y": 0.38903,
+        "z": -7.49224
+      },
+      "on_furniture": "couch_0",
+      "on_furniture_handle": "72c768666c398f91a5e4755d569f4d7097acc297_:0000"
+    },
+    {
+      "id": 69,
+      "category": "Furniture",
+      "class_name": "table",
+      "prefab_name": "table_2",
+      "handle": "44f35b8477fdbc61ed4c0ec40297b03d636d19b2_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE",
+        "SURFACES"
+      ],
+      "states": []
+    },
+    {
+      "id": 70,
+      "category": "Object",
+      "class_name": "ramekin",
+      "prefab_name": "ramekin_0",
+      "handle": "45oz_RAMEKIN_ASST_DEEP_COLORS_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.71186,
+        "y": 0.53922,
+        "z": -6.85841
+      },
+      "on_furniture": "table_1",
+      "on_furniture_handle": "1a4841c613e9f5c2ba492107fb6aff4692c564a4_:0000"
+    },
+    {
+      "id": 71,
+      "category": "Object",
+      "class_name": "toy_vehicle",
+      "prefab_name": "toy_vehicle_0",
+      "handle": "COAST_GUARD_BOAT_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.59233,
+        "y": 0.55461,
+        "z": -6.96664
+      },
+      "on_furniture": "table_1",
+      "on_furniture_handle": "1a4841c613e9f5c2ba492107fb6aff4692c564a4_:0000"
+    },
+    {
+      "id": 72,
+      "category": "Object",
+      "class_name": "xxxx5c7e6e1fx622fx41c1x8138x6fb9d7764061",
+      "prefab_name": "xxxx5c7e6e1fx622fx41c1x8138x6fb9d7764061_0",
+      "handle": "xxxx5c7e6e1fx622fx41c1x8138x6fb9d7764061_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.00674,
+        "y": 0.58027,
+        "z": -6.12217
+      },
+      "on_furniture": "d16a9e9691ca82f2d658d18cc064101337a6a0aa_:0001",
+      "on_furniture_handle": "d16a9e9691ca82f2d658d18cc064101337a6a0aa_:0001"
+    },
+    {
+      "id": 73,
+      "category": "Object",
+      "class_name": "cup 29",
+      "prefab_name": "cup 29_0",
+      "handle": "Cup_29_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -4.28137,
+        "y": 0.57145,
+        "z": -3.21513
+      },
+      "on_furniture": "7a6def1426f562d3c426c0aa5531b0470cb5fb7a_:0000",
+      "on_furniture_handle": "7a6def1426f562d3c426c0aa5531b0470cb5fb7a_:0000"
+    },
+    {
+      "id": 74,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_0",
+      "handle": "7c4abfaad6caa34008cf4aac249adcba013ad51b_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -10.56628,
+        "y": 0.1365,
+        "z": -2.90033
+      },
+      "on_furniture": "a3adcc07e1656ec5f67c332587ad30ce080a3e89_:0000",
+      "on_furniture_handle": "a3adcc07e1656ec5f67c332587ad30ce080a3e89_:0000"
+    },
+    {
+      "id": 75,
+      "category": "Furniture",
+      "class_name": "7a6def1426f562d3c426c0aa5531b0470cb5fb7a_:0000",
+      "prefab_name": "7a6def1426f562d3c426c0aa5531b0470cb5fb7a_:0000",
+      "handle": "7a6def1426f562d3c426c0aa5531b0470cb5fb7a_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": []
+    },
+    {
+      "id": 76,
+      "category": "Object",
+      "class_name": "tape",
+      "prefab_name": "tape_0",
+      "handle": "Shurtape_Tape_Purple_CP28_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.40814,
+        "y": 0.54281,
+        "z": -6.666
+      },
+      "on_furniture": "table_1",
+      "on_furniture_handle": "1a4841c613e9f5c2ba492107fb6aff4692c564a4_:0000"
+    },
+    {
+      "id": 77,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_0",
+      "handle": "9bffa4820132a4933b3296739b9f1437857ddb7e_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.18874,
+        "y": 0.82596,
+        "z": 1.46954
+      },
+      "on_furniture": "612bd96482db881c089aa26e4a5a3c34ed702955_:0000",
+      "on_furniture_handle": "612bd96482db881c089aa26e4a5a3c34ed702955_:0000"
+    },
+    {
+      "id": 78,
+      "category": "Object",
+      "class_name": "bowl 14",
+      "prefab_name": "bowl 14_0",
+      "handle": "Bowl_14_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": 2.51273,
+        "y": 0.84472,
+        "z": -4.74473
+      },
+      "on_furniture": "c2cbb4677994a6d2fbd4796360fe7538d9189eda_:0000",
+      "on_furniture_handle": "c2cbb4677994a6d2fbd4796360fe7538d9189eda_:0000"
+    },
+    {
+      "id": 79,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_1",
+      "handle": "cb99e067e7b29c10b0dd4af17b50969a94e1796c_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.1393,
+        "y": 0.84274,
+        "z": 0.91855
+      },
+      "on_furniture": "chest_of_drawers_1",
+      "on_furniture_handle": "612bd96482db881c089aa26e4a5a3c34ed702955_:0002"
+    },
+    {
+      "id": 80,
+      "category": "Furniture",
+      "class_name": "612bd96482db881c089aa26e4a5a3c34ed702955_:0000",
+      "prefab_name": "612bd96482db881c089aa26e4a5a3c34ed702955_:0000",
+      "handle": "612bd96482db881c089aa26e4a5a3c34ed702955_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": []
+    },
+    {
+      "id": 81,
+      "category": "Furniture",
+      "class_name": "c2cbb4677994a6d2fbd4796360fe7538d9189eda",
+      "prefab_name": "c2cbb4677994a6d2fbd4796360fe7538d9189eda_:0000",
+      "handle": "c2cbb4677994a6d2fbd4796360fe7538d9189eda_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": []
+    },
+    {
+      "id": 82,
+      "category": "Object",
+      "class_name": "toy_animal",
+      "prefab_name": "toy_animal_0",
+      "handle": "DANCING_ALLIGATOR_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -1.13913,
+        "y": 0.14283,
+        "z": -0.56893
+      },
+      "on_furniture": "chest_of_drawers_1",
+      "on_furniture_handle": "31653c084558e1ecb286adf63a305d914aa3c98b_:0001"
+    },
+    {
+      "id": 83,
+      "category": "Object",
+      "class_name": "spray bottle 2",
+      "prefab_name": "spray bottle 2_0",
+      "handle": "Spray_Bottle_2_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": 1.90675,
+        "y": 0.62478,
+        "z": -2.03056
+      },
+      "on_furniture": "cc75c57d650ebbdbe15542f83666b417d24f9ae4_:0001",
+      "on_furniture_handle": "cc75c57d650ebbdbe15542f83666b417d24f9ae4_:0001"
+    },
+    {
+      "id": 84,
+      "category": "Object",
+      "class_name": "shoe",
+      "prefab_name": "shoe_0",
+      "handle": "CLIMACOOL_BOAT_BREEZE_IE6CyqSaDwN_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.13168,
+        "y": 0.52445,
+        "z": -7.19951
+      },
+      "on_furniture": "chair_5",
+      "on_furniture_handle": "d16a9e9691ca82f2d658d18cc064101337a6a0aa_:0000"
+    },
+    {
+      "id": 85,
+      "category": "Object",
+      "class_name": "file_sorter",
+      "prefab_name": "file_sorter_0",
+      "handle": "Poppin_File_Sorter_Pink_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": 2.29962,
+        "y": 0.56696,
+        "z": 2.34432
+      },
+      "on_furniture": "table_2",
+      "on_furniture_handle": "44f35b8477fdbc61ed4c0ec40297b03d636d19b2_:0000"
+    },
+    {
+      "id": 86,
+      "category": "Object",
+      "class_name": "cup 24",
+      "prefab_name": "cup 24_0",
+      "handle": "Cup_24_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -1.20567,
+        "y": 0.21111,
+        "z": -0.25706
+      },
+      "on_furniture": "chest_of_drawers_1",
+      "on_furniture_handle": "31653c084558e1ecb286adf63a305d914aa3c98b_:0001"
+    },
+    {
+      "id": 87,
+      "category": "Object",
+      "class_name": "office depot hp 2 remanufactured ink cartridges color cyan magenta yellow 3 count",
+      "prefab_name": "office depot hp 2 remanufactured ink cartridges color cyan magenta yellow 3 count_0",
+      "handle": "Office_Depot_HP_2_Remanufactured_Ink_Cartridges_Color_Cyan_Magenta_Yellow_3_count_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -0.60738,
+        "y": 0.62324,
+        "z": 0.06977
+      },
+      "on_furniture": "counter_0",
+      "on_furniture_handle": "66e7f21c0db6af483f36d2d9f73044c0995a1d07_:0000"
+    },
+    {
+      "id": 88,
+      "category": "Object",
+      "class_name": "tetris link game",
+      "prefab_name": "tetris link game_0",
+      "handle": "Tetris_Link_Game_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -12.17489,
+        "y": 0.9095,
+        "z": -6.98385
+      },
+      "on_furniture": "table_4",
+      "on_furniture_handle": "c39181c455b8df6ac1b8112a8d2d7bc4a493d8e7_:0000"
+    },
+    {
+      "id": 89,
+      "category": "Object",
+      "class_name": "kettle",
+      "prefab_name": "kettle_0",
+      "handle": "6d3e6501fd91b94bedb34344757d43b8c5f8facf_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.59839,
+        "y": 0.94489,
+        "z": 1.52991
+      },
+      "on_furniture": "table_0",
+      "on_furniture_handle": "de47820f2dc539102408f43243369f2a952b7b2f_:0000"
+    },
+    {
+      "id": 90,
+      "category": "Object",
+      "class_name": "electric_kettle",
+      "prefab_name": "electric_kettle_0",
+      "handle": "577ab6846773c22e68a1ead745bba0ac6e60d8b2_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.46946,
+        "y": 0.95562,
+        "z": 0.46257
+      },
+      "on_furniture": "table_0",
+      "on_furniture_handle": "de47820f2dc539102408f43243369f2a952b7b2f_:0000"
+    },
+    {
+      "id": 91,
+      "category": "Object",
+      "class_name": "toy_vehicle",
+      "prefab_name": "toy_vehicle_0",
+      "handle": "Thomas_Friends_Woodan_Railway_Henry_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -1.08486,
+        "y": 0.66026,
+        "z": -0.57702
+      },
+      "on_furniture": "chest_of_drawers_1",
+      "on_furniture_handle": "31653c084558e1ecb286adf63a305d914aa3c98b_:0001"
+    },
+    {
+      "id": 92,
+      "category": "Object",
+      "class_name": "action_figure",
+      "prefab_name": "action_figure_0",
+      "handle": "Nintendo_Mario_Action_Figure_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -0.95496,
+        "y": 0.15859,
+        "z": -0.59817
+      },
+      "on_furniture": "chest_of_drawers_1",
+      "on_furniture_handle": "31653c084558e1ecb286adf63a305d914aa3c98b_:0001"
+    },
+    {
+      "id": 93,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_0",
+      "handle": "72a1da1ecef422dbf6ba0c505c3e1cf86a11f70e_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -6.9265,
+        "y": 0.33987,
+        "z": -5.5213
+      },
+      "on_furniture": "couch_0",
+      "on_furniture_handle": "72c768666c398f91a5e4755d569f4d7097acc297_:0000"
+    },
+    {
+      "id": 94,
+      "category": "Object",
+      "class_name": "mug 1",
+      "prefab_name": "mug 1_0",
+      "handle": "Mug_1_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": 2.8655,
+        "y": 0.41363,
+        "z": 2.14788
+      },
+      "on_furniture": "table_4",
+      "on_furniture_handle": "56bfa51970d9b0d40a50956f3d594873435f6ed7_:0000"
+    },
+    {
+      "id": 95,
+      "category": "Object",
+      "class_name": "potato 10",
+      "prefab_name": "potato 10_0",
+      "handle": "Potato_10_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -9.95103,
+        "y": 0.16476,
+        "z": -2.30618
+      },
+      "on_furniture": "a3adcc07e1656ec5f67c332587ad30ce080a3e89_:0002",
+      "on_furniture_handle": "a3adcc07e1656ec5f67c332587ad30ce080a3e89_:0002"
+    },
+    {
+      "id": 96,
+      "category": "Furniture",
+      "class_name": "a3adcc07e1656ec5f67c332587ad30ce080a3e89",
+      "prefab_name": "a3adcc07e1656ec5f67c332587ad30ce080a3e89_:0002",
+      "handle": "a3adcc07e1656ec5f67c332587ad30ce080a3e89_:0002",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": []
+    },
+    {
+      "id": 97,
+      "category": "Object",
+      "class_name": "toy_animal",
+      "prefab_name": "toy_animal_0",
+      "handle": "Schleich_S_Bayala_Unicorn_70432_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -0.97669,
+        "y": 0.68585,
+        "z": -0.2888
+      },
+      "on_furniture": "chest_of_drawers_1",
+      "on_furniture_handle": "31653c084558e1ecb286adf63a305d914aa3c98b_:0001"
+    },
+    {
+      "id": 98,
+      "category": "Object",
+      "class_name": "top ten hi",
+      "prefab_name": "top ten hi_0",
+      "handle": "TOP_TEN_HI_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -9.98118,
+        "y": 1.23596,
+        "z": -4.23006
+      },
+      "on_furniture": "a3adcc07e1656ec5f67c332587ad30ce080a3e89_:0003",
+      "on_furniture_handle": "a3adcc07e1656ec5f67c332587ad30ce080a3e89_:0003"
+    },
+    {
+      "id": 99,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_0",
+      "handle": "03758534dd2a3a8303e742cf4fc10fedd4c48843_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": 2.1702,
+        "y": 0.54664,
+        "z": -2.39499
+      },
+      "on_furniture": "cc75c57d650ebbdbe15542f83666b417d24f9ae4_:0001",
+      "on_furniture_handle": "cc75c57d650ebbdbe15542f83666b417d24f9ae4_:0001"
+    },
+    {
+      "id": 100,
+      "category": "Object",
+      "class_name": "office depot canon pgi5bk remanufactured ink cartridge black",
+      "prefab_name": "office depot canon pgi5bk remanufactured ink cartridge black_0",
+      "handle": "Office_Depot_Canon_PGI5BK_Remanufactured_Ink_Cartridge_Black_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": 2.73495,
+        "y": 0.41556,
+        "z": 2.15971
+      },
+      "on_furniture": "table_4",
+      "on_furniture_handle": "56bfa51970d9b0d40a50956f3d594873435f6ed7_:0000"
+    },
+    {
+      "id": 101,
+      "category": "Object",
+      "class_name": "asus x99deluxe motherboard atx lga2011v3 socket",
+      "prefab_name": "asus x99deluxe motherboard atx lga2011v3 socket_0",
+      "handle": "Asus_X99Deluxe_Motherboard_ATX_LGA2011v3_Socket_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -12.53911,
+        "y": 0.56584,
+        "z": -3.83724
+      },
+      "on_furniture": "cc75c57d650ebbdbe15542f83666b417d24f9ae4_:0000",
+      "on_furniture_handle": "cc75c57d650ebbdbe15542f83666b417d24f9ae4_:0000"
+    },
+    {
+      "id": 102,
+      "category": "Object",
+      "class_name": "tomato 27",
+      "prefab_name": "tomato 27_0",
+      "handle": "Tomato_27_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -13.29412,
+        "y": 1.00601,
+        "z": -1.61288
+      },
+      "on_furniture": "c294ee4dd27985e94399a647c6431420ad3749d9_:0000",
+      "on_furniture_handle": "c294ee4dd27985e94399a647c6431420ad3749d9_:0000"
+    },
+    {
+      "id": 103,
+      "category": "Furniture",
+      "class_name": "c294ee4dd27985e94399a647c6431420ad3749d9",
+      "prefab_name": "c294ee4dd27985e94399a647c6431420ad3749d9_:0000",
+      "handle": "c294ee4dd27985e94399a647c6431420ad3749d9_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": []
+    },
+    {
+      "id": 104,
+      "category": "Object",
+      "class_name": "bowl",
+      "prefab_name": "bowl_0",
+      "handle": "694889dda7ff371417c7fb85da4ce6973be3c8aa_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -14.30145,
+        "y": 0.92483,
+        "z": -0.01992
+      },
+      "on_furniture": "cabinet_1",
+      "on_furniture_handle": "db74ce14813eb0d5c54c8992806b22fb846ee34c_:0000"
+    },
+    {
+      "id": 105,
+      "category": "Object",
+      "class_name": "bowl",
+      "prefab_name": "bowl_1",
+      "handle": "ec97c8297cfd755ee3ab2a1d8476d60d0afe84eb_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -14.49241,
+        "y": 0.94987,
+        "z": -0.6053
+      },
+      "on_furniture": "cabinet_1",
+      "on_furniture_handle": "db74ce14813eb0d5c54c8992806b22fb846ee34c_:0000"
+    },
+    {
+      "id": 106,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_0",
+      "handle": "438c5d36069bba7af2248c42349e99c1a69547ff_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -12.70466,
+        "y": 0.46478,
+        "z": -3.95989
+      },
+      "on_furniture": "cc75c57d650ebbdbe15542f83666b417d24f9ae4_:0000",
+      "on_furniture_handle": "cc75c57d650ebbdbe15542f83666b417d24f9ae4_:0000"
+    },
+    {
+      "id": 107,
+      "category": "Object",
+      "class_name": "b076yrswgw",
+      "prefab_name": "b076yrswgw_0",
+      "handle": "B076YRSWGW_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -10.03152,
+        "y": 1.1604,
+        "z": -4.26784
+      },
+      "on_furniture": "a3adcc07e1656ec5f67c332587ad30ce080a3e89_:0003",
+      "on_furniture_handle": "a3adcc07e1656ec5f67c332587ad30ce080a3e89_:0003"
+    },
+    {
+      "id": 108,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_1",
+      "handle": "572e2f04cf9e17424557ecc4f449e6122a9cae95_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.15763,
+        "y": 0.7634,
+        "z": 0.86327
+      },
+      "on_furniture": "chest_of_drawers_1",
+      "on_furniture_handle": "612bd96482db881c089aa26e4a5a3c34ed702955_:0002"
+    },
+    {
+      "id": 109,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_0",
+      "handle": "247538767e1fde11b53e2b41edcf5b066cf0126c_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -7.90867,
+        "y": 0.7782,
+        "z": 1.70564
+      },
+      "on_furniture": "0f5071c46d79d10cdc0783e1abf514c3bfa94ba2_:0001",
+      "on_furniture_handle": "0f5071c46d79d10cdc0783e1abf514c3bfa94ba2_:0001"
+    },
+    {
+      "id": 110,
+      "category": "Furniture",
+      "class_name": "0f5071c46d79d10cdc0783e1abf514c3bfa94ba2_:0001",
+      "prefab_name": "0f5071c46d79d10cdc0783e1abf514c3bfa94ba2_:0001",
+      "handle": "0f5071c46d79d10cdc0783e1abf514c3bfa94ba2_:0001",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": []
+    },
+    {
+      "id": 111,
+      "category": "Object",
+      "class_name": "bowl",
+      "prefab_name": "bowl_0",
+      "handle": "23f37264ac6b7a445a6c1be53d464660b8c8b2ec_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -12.51021,
+        "y": 0.84424,
+        "z": 1.34775
+      },
+      "on_furniture": "table_0",
+      "on_furniture_handle": "de47820f2dc539102408f43243369f2a952b7b2f_:0000"
+    },
+    {
+      "id": 112,
+      "category": "Object",
+      "class_name": "black and decker pbj2000 fusionblade blender jars",
+      "prefab_name": "black and decker pbj2000 fusionblade blender jars_0",
+      "handle": "Black_and_Decker_PBJ2000_FusionBlade_Blender_Jars_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -7.01251,
+        "y": 0.45064,
+        "z": -5.13077
+      },
+      "on_furniture": "couch_0",
+      "on_furniture_handle": "72c768666c398f91a5e4755d569f4d7097acc297_:0000"
+    },
+    {
+      "id": 113,
+      "category": "Object",
+      "class_name": "candle",
+      "prefab_name": "candle_0",
+      "handle": "36f46c7b967c8101325848bcf43db07589ae2cc1_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -5.07077,
+        "y": 0.33861,
+        "z": -6.08316
+      },
+      "on_furniture": "chair_4",
+      "on_furniture_handle": "138009a6121d7ebb8c3b78e3a411b4e33c388efb_:0000"
+    },
+    {
+      "id": 114,
+      "category": "Object",
+      "class_name": "vase",
+      "prefab_name": "vase_0",
+      "handle": "9ec28866f43e42093f181e656ef1c89923945808_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -5.41143,
+        "y": 0.4562,
+        "z": -6.0602
+      },
+      "on_furniture": "chair_4",
+      "on_furniture_handle": "138009a6121d7ebb8c3b78e3a411b4e33c388efb_:0000"
+    },
+    {
+      "id": 115,
+      "category": "Object",
+      "class_name": "plant_container",
+      "prefab_name": "plant_container_0",
+      "handle": "Cole_Hardware_Orchid_Pot_85_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -5.48693,
+        "y": 0.38752,
+        "z": -5.61305
+      },
+      "on_furniture": "chair_4",
+      "on_furniture_handle": "138009a6121d7ebb8c3b78e3a411b4e33c388efb_:0000"
+    },
+    {
+      "id": 116,
+      "category": "Object",
+      "class_name": "apple 3",
+      "prefab_name": "apple 3_0",
+      "handle": "Apple_3_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -12.58805,
+        "y": 0.4943,
+        "z": -4.13609
+      },
+      "on_furniture": "cc75c57d650ebbdbe15542f83666b417d24f9ae4_:0000",
+      "on_furniture_handle": "cc75c57d650ebbdbe15542f83666b417d24f9ae4_:0000"
+    },
+    {
+      "id": 117,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_0",
+      "handle": "83f4e46c232371f134fd0159b06e658c6641fc7d_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": 2.03821,
+        "y": 0.57051,
+        "z": -2.41796
+      },
+      "on_furniture": "cc75c57d650ebbdbe15542f83666b417d24f9ae4_:0001",
+      "on_furniture_handle": "cc75c57d650ebbdbe15542f83666b417d24f9ae4_:0001"
+    },
+    {
+      "id": 118,
+      "category": "Object",
+      "class_name": "soap bottle 8",
+      "prefab_name": "soap bottle 8_0",
+      "handle": "Soap_Bottle_8_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.26123,
+        "y": 0.8237,
+        "z": 0.52826
+      },
+      "on_furniture": "612bd96482db881c089aa26e4a5a3c34ed702955_:0001",
+      "on_furniture_handle": "612bd96482db881c089aa26e4a5a3c34ed702955_:0001"
+    },
+    {
+      "id": 119,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_1",
+      "handle": "29f5f19c75693ea64781c0cc39b788e3c70c3442_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -14.29502,
+        "y": 1.10981,
+        "z": 0.27286
+      },
+      "on_furniture": "cabinet_2",
+      "on_furniture_handle": "edd29c09710bf64c66065b6d884f573bc48682f5_:0000"
+    },
+    {
+      "id": 120,
+      "category": "Furniture",
+      "class_name": "612bd96482db881c089aa26e4a5a3c34ed702955_:0001",
+      "prefab_name": "612bd96482db881c089aa26e4a5a3c34ed702955_:0001",
+      "handle": "612bd96482db881c089aa26e4a5a3c34ed702955_:0001",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": []
+    },
+    {
+      "id": 121,
+      "category": "Object",
+      "class_name": "kettle",
+      "prefab_name": "kettle_0",
+      "handle": "6982c7794384aecaa6134b600d473e98d812b8be_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -12.42607,
+        "y": 0.9063,
+        "z": 0.42274
+      },
+      "on_furniture": "table_0",
+      "on_furniture_handle": "de47820f2dc539102408f43243369f2a952b7b2f_:0000"
+    },
+    {
+      "id": 122,
+      "category": "Object",
+      "class_name": "teapot",
+      "prefab_name": "teapot_0",
+      "handle": "303b98fac9e22c364d2e7770ef586f9c963df7e8_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -14.31179,
+        "y": 1.01512,
+        "z": -0.30335
+      },
+      "on_furniture": "cabinet_1",
+      "on_furniture_handle": "db74ce14813eb0d5c54c8992806b22fb846ee34c_:0000"
+    },
+    {
+      "id": 123,
+      "category": "Object",
+      "class_name": "candle",
+      "prefab_name": "candle_0",
+      "handle": "xxxx3713898ex0dd8x429fx84c4x1b6f912a2eba_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -5.57949,
+        "y": 0.39386,
+        "z": -5.79602
+      },
+      "on_furniture": "chair_4",
+      "on_furniture_handle": "138009a6121d7ebb8c3b78e3a411b4e33c388efb_:0000"
+    },
+    {
+      "id": 124,
+      "category": "Object",
+      "class_name": "cushion",
+      "prefab_name": "cushion_0",
+      "handle": "8e3475560ee256b292f00b50fea28fd9248988ad_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -7.17688,
+        "y": 0.5061,
+        "z": -6.79334
+      },
+      "on_furniture": "couch_0",
+      "on_furniture_handle": "72c768666c398f91a5e4755d569f4d7097acc297_:0000"
+    },
+    {
+      "id": 125,
+      "category": "Object",
+      "class_name": "toy_bee",
+      "prefab_name": "toy_bee_0",
+      "handle": "Fisher_price_Classic_Toys_Buzzy_Bee_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": 2.16438,
+        "y": 0.96274,
+        "z": -1.66684
+      },
+      "on_furniture": "chest_of_drawers_2",
+      "on_furniture_handle": "389665158df393b0a2ac6fccc69babfd7a17f306_:0000"
+    },
+    {
+      "id": 126,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_0",
+      "handle": "11a27304451d7af4d398303cccdfea4d8c26ebb9_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": 2.04272,
+        "y": 0.5307,
+        "z": 2.26673
+      },
+      "on_furniture": "table_2",
+      "on_furniture_handle": "44f35b8477fdbc61ed4c0ec40297b03d636d19b2_:0000"
+    },
+    {
+      "id": 127,
+      "category": "Object",
+      "class_name": "brother ink cartridge magenta lc75m",
+      "prefab_name": "brother ink cartridge magenta lc75m_0",
+      "handle": "Brother_Ink_Cartridge_Magenta_LC75M_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -12.56612,
+        "y": 0.87822,
+        "z": 2.51204
+      },
+      "on_furniture": "table_0",
+      "on_furniture_handle": "de47820f2dc539102408f43243369f2a952b7b2f_:0000"
+    },
+    {
+      "id": 128,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_1",
+      "handle": "f172324eef47eb930d2d10f6ddce5852d6e44941_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -4.21137,
+        "y": 0.61328,
+        "z": -3.53047
+      },
+      "on_furniture": "7a6def1426f562d3c426c0aa5531b0470cb5fb7a_:0000",
+      "on_furniture_handle": "7a6def1426f562d3c426c0aa5531b0470cb5fb7a_:0000"
+    },
+    {
+      "id": 129,
+      "category": "Object",
+      "class_name": "top ten hi 60klbrbdoja",
+      "prefab_name": "top ten hi 60klbrbdoja_0",
+      "handle": "TOP_TEN_HI_60KlbRbdoJA_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -8.53475,
+        "y": 0.75881,
+        "z": 0.89132
+      },
+      "on_furniture": "chair_0",
+      "on_furniture_handle": "0f5071c46d79d10cdc0783e1abf514c3bfa94ba2_:0000"
+    },
+    {
+      "id": 130,
+      "category": "Furniture",
+      "class_name": "chair",
+      "prefab_name": "chair_0",
+      "handle": "0f5071c46d79d10cdc0783e1abf514c3bfa94ba2_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE",
+        "SURFACES",
+        "SITTABLE"
+      ],
+      "states": []
+    },
+    {
+      "id": 131,
+      "category": "Object",
+      "class_name": "toy_fire_truck",
+      "prefab_name": "toy_fire_truck_0",
+      "handle": "FIRE_ENGINE_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": 2.00083,
+        "y": 0.95512,
+        "z": -1.70158
+      },
+      "on_furniture": "chest_of_drawers_2",
+      "on_furniture_handle": "389665158df393b0a2ac6fccc69babfd7a17f306_:0000"
+    },
+    {
+      "id": 132,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_0",
+      "handle": "320f797f7f3936b01c7fb659ddd56c63cc52f85f_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": 2.05786,
+        "y": 0.61473,
+        "z": 2.01992
+      },
+      "on_furniture": "table_2",
+      "on_furniture_handle": "44f35b8477fdbc61ed4c0ec40297b03d636d19b2_:0000"
+    },
+    {
+      "id": 133,
+      "category": "Object",
+      "class_name": "toy_animal",
+      "prefab_name": "toy_animal_0",
+      "handle": "Schleich_Bald_Eagle_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -1.13264,
+        "y": 0.67997,
+        "z": -0.30352
+      },
+      "on_furniture": "chest_of_drawers_1",
+      "on_furniture_handle": "31653c084558e1ecb286adf63a305d914aa3c98b_:0001"
+    },
+    {
+      "id": 134,
+      "category": "Object",
+      "class_name": "stuffed_toy",
+      "prefab_name": "stuffed_toy_0",
+      "handle": "963d58e321de1039c6404fd25b9fe470b7217979_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": 2.75907,
+        "y": 1.13047,
+        "z": -1.45852
+      },
+      "on_furniture": "chest_of_drawers_2",
+      "on_furniture_handle": "389665158df393b0a2ac6fccc69babfd7a17f306_:0000"
+    },
+    {
+      "id": 135,
+      "category": "Object",
+      "class_name": "toy_animal",
+      "prefab_name": "toy_animal_0",
+      "handle": "Schleich_African_Black_Rhino_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.4775,
+        "y": 0.54326,
+        "z": -6.91524
+      },
+      "on_furniture": "table_1",
+      "on_furniture_handle": "1a4841c613e9f5c2ba492107fb6aff4692c564a4_:0000"
+    },
+    {
+      "id": 136,
+      "category": "Object",
+      "class_name": "stuffed_toy",
+      "prefab_name": "stuffed_toy_0",
+      "handle": "70bf9f997babb17d77bafb5cc9cfc30e32a02403_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.43291,
+        "y": 0.55959,
+        "z": -7.30563
+      },
+      "on_furniture": "chair_5",
+      "on_furniture_handle": "d16a9e9691ca82f2d658d18cc064101337a6a0aa_:0000"
+    },
+    {
+      "id": 137,
+      "category": "Object",
+      "class_name": "cup 2",
+      "prefab_name": "cup 2_0",
+      "handle": "Cup_2_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -10.42941,
+        "y": 0.88276,
+        "z": -2.44617
+      },
+      "on_furniture": "a3adcc07e1656ec5f67c332587ad30ce080a3e89_:0000",
+      "on_furniture_handle": "a3adcc07e1656ec5f67c332587ad30ce080a3e89_:0000"
+    },
+    {
+      "id": 138,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_0",
+      "handle": "99843575975c6fcf087647c77f56bce970b7902a_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.2437,
+        "y": 0.72495,
+        "z": 1.07377
+      },
+      "on_furniture": "chest_of_drawers_1",
+      "on_furniture_handle": "612bd96482db881c089aa26e4a5a3c34ed702955_:0002"
+    },
+    {
+      "id": 139,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_1",
+      "handle": "87a34af23efddf90b6267768647fbedcbf846827_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -0.05031,
+        "y": 0.57327,
+        "z": 1.6448
+      },
+      "on_furniture": "counter_0",
+      "on_furniture_handle": "66e7f21c0db6af483f36d2d9f73044c0995a1d07_:0000"
+    },
+    {
+      "id": 140,
+      "category": "Object",
+      "class_name": "fyw division",
+      "prefab_name": "fyw division_0",
+      "handle": "FYW_DIVISION_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -12.57348,
+        "y": 0.51093,
+        "z": -3.84845
+      },
+      "on_furniture": "cc75c57d650ebbdbe15542f83666b417d24f9ae4_:0000",
+      "on_furniture_handle": "cc75c57d650ebbdbe15542f83666b417d24f9ae4_:0000"
+    },
+    {
+      "id": 141,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_2",
+      "handle": "00258bed0c6e87a14e33c3eebffc48c898135698_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": 2.16991,
+        "y": 0.60531,
+        "z": -2.07993
+      },
+      "on_furniture": "cc75c57d650ebbdbe15542f83666b417d24f9ae4_:0001",
+      "on_furniture_handle": "cc75c57d650ebbdbe15542f83666b417d24f9ae4_:0001"
+    },
+    {
+      "id": 142,
+      "category": "Object",
+      "class_name": "toy_animal",
+      "prefab_name": "toy_animal_0",
+      "handle": "Schleich_Hereford_Bull_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": 2.65251,
+        "y": 0.94759,
+        "z": -1.44215
+      },
+      "on_furniture": "chest_of_drawers_2",
+      "on_furniture_handle": "389665158df393b0a2ac6fccc69babfd7a17f306_:0000"
+    },
+    {
+      "id": 143,
+      "category": "Object",
+      "class_name": "toy_animal",
+      "prefab_name": "toy_animal_1",
+      "handle": "DANCING_ALLIGATOR_zoWBjc0jbTs_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": 2.06534,
+        "y": 0.9505,
+        "z": -1.43273
+      },
+      "on_furniture": "chest_of_drawers_2",
+      "on_furniture_handle": "389665158df393b0a2ac6fccc69babfd7a17f306_:0000"
+    },
+    {
+      "id": 144,
+      "category": "Object",
+      "class_name": "stuffed_toy",
+      "prefab_name": "stuffed_toy_0",
+      "handle": "a3fce687e16c92cce0a801e92c7705a20ac74525_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": 2.75086,
+        "y": 1.01678,
+        "z": -1.64188
+      },
+      "on_furniture": "chest_of_drawers_2",
+      "on_furniture_handle": "389665158df393b0a2ac6fccc69babfd7a17f306_:0000"
+    },
+    {
+      "id": 145,
+      "category": "Object",
+      "class_name": "potato",
+      "prefab_name": "potato_1",
+      "handle": "Potato_18_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -12.36729,
+        "y": 0.8378,
+        "z": 2.26304
+      },
+      "on_furniture": "table_0",
+      "on_furniture_handle": "de47820f2dc539102408f43243369f2a952b7b2f_:0000"
+    },
+    {
+      "id": 146,
+      "category": "Object",
+      "class_name": "big dot aqua pencil case",
+      "prefab_name": "big dot aqua pencil case_0",
+      "handle": "Big_Dot_Aqua_Pencil_Case_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -0.99997,
+        "y": 0.15549,
+        "z": 2.16554
+      },
+      "on_furniture": "chest_of_drawers_0",
+      "on_furniture_handle": "31653c084558e1ecb286adf63a305d914aa3c98b_:0000"
+    },
+    {
+      "id": 147,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_1",
+      "handle": "7fad97a0f7c563828f974d210b9e02ccd5a7dfda_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -10.29389,
+        "y": 0.24551,
+        "z": -2.19371
+      },
+      "on_furniture": "a3adcc07e1656ec5f67c332587ad30ce080a3e89_:0002",
+      "on_furniture_handle": "a3adcc07e1656ec5f67c332587ad30ce080a3e89_:0002"
+    },
+    {
+      "id": 148,
+      "category": "Object",
+      "class_name": "california navy tieks italian leather ballet flats",
+      "prefab_name": "california navy tieks italian leather ballet flats_0",
+      "handle": "California_Navy_Tieks_Italian_Leather_Ballet_Flats_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -6.6556,
+        "y": 0.34167,
+        "z": -6.97109
+      },
+      "on_furniture": "couch_0",
+      "on_furniture_handle": "72c768666c398f91a5e4755d569f4d7097acc297_:0000"
+    },
+    {
+      "id": 149,
+      "category": "Object",
+      "class_name": "stuffed_toy",
+      "prefab_name": "stuffed_toy_0",
+      "handle": "567ba453e60735e7667f25ea6d09377be18bda66_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": 2.3735,
+        "y": 1.02731,
+        "z": -1.6487
+      },
+      "on_furniture": "chest_of_drawers_2",
+      "on_furniture_handle": "389665158df393b0a2ac6fccc69babfd7a17f306_:0000"
+    },
+    {
+      "id": 150,
+      "category": "Object",
+      "class_name": "canon pixma ink cartridge 8 red",
+      "prefab_name": "canon pixma ink cartridge 8 red_0",
+      "handle": "Canon_Pixma_Ink_Cartridge_8_Red_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -1.00677,
+        "y": 0.69232,
+        "z": 2.23675
+      },
+      "on_furniture": "chest_of_drawers_0",
+      "on_furniture_handle": "31653c084558e1ecb286adf63a305d914aa3c98b_:0000"
+    },
+    {
+      "id": 151,
+      "category": "Object",
+      "class_name": "stuffed_toy",
+      "prefab_name": "stuffed_toy_0",
+      "handle": "a8e2f442d0f6e5d86d27aa23aac71392f332addf_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.48501,
+        "y": 0.55091,
+        "z": -7.32658
+      },
+      "on_furniture": "chair_5",
+      "on_furniture_handle": "d16a9e9691ca82f2d658d18cc064101337a6a0aa_:0000"
+    },
+    {
+      "id": 152,
+      "category": "Object",
+      "class_name": "toy_vehicle",
+      "prefab_name": "toy_vehicle_0",
+      "handle": "Thomas_Friends_Wooden_Railway_Deluxe_Track_Accessory_Pack_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.0888,
+        "y": 0.50066,
+        "z": -7.32209
+      },
+      "on_furniture": "chair_5",
+      "on_furniture_handle": "d16a9e9691ca82f2d658d18cc064101337a6a0aa_:0000"
+    },
+    {
+      "id": 153,
+      "category": "Object",
+      "class_name": "toy_animal",
+      "prefab_name": "toy_animal_0",
+      "handle": "Schleich_Lion_Action_Figure_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -1.26702,
+        "y": 0.14263,
+        "z": -0.15344
+      },
+      "on_furniture": "chest_of_drawers_1",
+      "on_furniture_handle": "31653c084558e1ecb286adf63a305d914aa3c98b_:0001"
+    },
+    {
+      "id": 154,
+      "category": "Object",
+      "class_name": "nestle nesquik chocolate powder flavored milk additive 109 oz canister",
+      "prefab_name": "nestle nesquik chocolate powder flavored milk additive 109 oz canister_0",
+      "handle": "Nestle_Nesquik_Chocolate_Powder_Flavored_Milk_Additive_109_Oz_Canister_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -10.4064,
+        "y": 1.22036,
+        "z": -3.86311
+      },
+      "on_furniture": "chest_of_drawers_0",
+      "on_furniture_handle": "a3adcc07e1656ec5f67c332587ad30ce080a3e89_:0001"
+    },
+    {
+      "id": 155,
+      "category": "Object",
+      "class_name": "soap bottle 19",
+      "prefab_name": "soap bottle 19_0",
+      "handle": "Soap_Bottle_19_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -10.16902,
+        "y": 0.92877,
+        "z": -4.19697
+      },
+      "on_furniture": "a3adcc07e1656ec5f67c332587ad30ce080a3e89_:0003",
+      "on_furniture_handle": "a3adcc07e1656ec5f67c332587ad30ce080a3e89_:0003"
+    },
+    {
+      "id": 156,
+      "category": "Object",
+      "class_name": "folic acid",
+      "prefab_name": "folic acid_0",
+      "handle": "Folic_Acid_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -14.60991,
+        "y": 0.77897,
+        "z": 1.33777
+      },
+      "on_furniture": "cabinet_2",
+      "on_furniture_handle": "edd29c09710bf64c66065b6d884f573bc48682f5_:0000"
+    },
+    {
+      "id": 157,
+      "category": "Object",
+      "class_name": "office depot hp 71 remanufactured ink cartridge black",
+      "prefab_name": "office depot hp 71 remanufactured ink cartridge black_0",
+      "handle": "Office_Depot_HP_71_Remanufactured_Ink_Cartridge_Black_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -10.41228,
+        "y": 0.87324,
+        "z": -3.47583
+      },
+      "on_furniture": "chest_of_drawers_0",
+      "on_furniture_handle": "a3adcc07e1656ec5f67c332587ad30ce080a3e89_:0001"
+    },
+    {
+      "id": 158,
+      "category": "Object",
+      "class_name": "stuffed_toy",
+      "prefab_name": "stuffed_toy_0",
+      "handle": "d5cbf59bbda4034360222434bd46e2e7b9d448c9_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": 2.66365,
+        "y": 0.4578,
+        "z": 2.17187
+      },
+      "on_furniture": "table_4",
+      "on_furniture_handle": "56bfa51970d9b0d40a50956f3d594873435f6ed7_:0000"
+    },
+    {
+      "id": 159,
+      "category": "Object",
+      "class_name": "toy_food",
+      "prefab_name": "toy_food_0",
+      "handle": "Squirt_Strain_Fruit_Basket_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": 2.79106,
+        "y": 0.96318,
+        "z": -1.68074
+      },
+      "on_furniture": "chest_of_drawers_2",
+      "on_furniture_handle": "389665158df393b0a2ac6fccc69babfd7a17f306_:0000"
+    },
+    {
+      "id": 160,
+      "category": "Object",
+      "class_name": "stuffed_toy",
+      "prefab_name": "stuffed_toy_0",
+      "handle": "5149957d46a31be888657d1b041130d8dc7ed905_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": 2.82058,
+        "y": 0.97134,
+        "z": -1.42093
+      },
+      "on_furniture": "chest_of_drawers_2",
+      "on_furniture_handle": "389665158df393b0a2ac6fccc69babfd7a17f306_:0000"
+    },
+    {
+      "id": 161,
+      "category": "Object",
+      "class_name": "cup 7",
+      "prefab_name": "cup 7_0",
+      "handle": "Cup_7_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -10.35562,
+        "y": 0.8821,
+        "z": -4.18767
+      },
+      "on_furniture": "a3adcc07e1656ec5f67c332587ad30ce080a3e89_:0003",
+      "on_furniture_handle": "a3adcc07e1656ec5f67c332587ad30ce080a3e89_:0003"
+    },
+    {
+      "id": 162,
+      "category": "Object",
+      "class_name": "baby car",
+      "prefab_name": "baby car_0",
+      "handle": "BABY_CAR_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -1.13561,
+        "y": 0.14372,
+        "z": -0.54162
+      },
+      "on_furniture": "chest_of_drawers_1",
+      "on_furniture_handle": "31653c084558e1ecb286adf63a305d914aa3c98b_:0001"
+    },
+    {
+      "id": 163,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_0",
+      "handle": "22c78acc789ce802af372af9dca938a1c08c5f16_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -12.10266,
+        "y": 0.93989,
+        "z": -7.21804
+      },
+      "on_furniture": "table_4",
+      "on_furniture_handle": "c39181c455b8df6ac1b8112a8d2d7bc4a493d8e7_:0000"
+    },
+    {
+      "id": 164,
+      "category": "Object",
+      "class_name": "kettle",
+      "prefab_name": "kettle_0",
+      "handle": "5a2d4315640f464391c6a256818c3c11fdd8f4f6_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -12.25311,
+        "y": 0.95951,
+        "z": 1.22798
+      },
+      "on_furniture": "table_0",
+      "on_furniture_handle": "de47820f2dc539102408f43243369f2a952b7b2f_:0000"
+    },
+    {
+      "id": 165,
+      "category": "Object",
+      "class_name": "stuffed_toy",
+      "prefab_name": "stuffed_toy_0",
+      "handle": "42df49592ce3c646bf92368203f520035f62a28f_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -8.50955,
+        "y": 0.72327,
+        "z": 1.13793
+      },
+      "on_furniture": "chair_0",
+      "on_furniture_handle": "0f5071c46d79d10cdc0783e1abf514c3bfa94ba2_:0000"
+    },
+    {
+      "id": 166,
+      "category": "Object",
+      "class_name": "toy_pineapple",
+      "prefab_name": "toy_pineapple_0",
+      "handle": "PINEAPPLE_MARACA_6_PCSSET_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -8.61646,
+        "y": 0.67551,
+        "z": 1.20509
+      },
+      "on_furniture": "chair_0",
+      "on_furniture_handle": "0f5071c46d79d10cdc0783e1abf514c3bfa94ba2_:0000"
+    },
+    {
+      "id": 167,
+      "category": "Object",
+      "class_name": "cellphone",
+      "prefab_name": "cellphone_0",
+      "handle": "Cellphone_8_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.43334,
+        "y": 0.52212,
+        "z": -6.70622
+      },
+      "on_furniture": "table_1",
+      "on_furniture_handle": "1a4841c613e9f5c2ba492107fb6aff4692c564a4_:0000"
+    },
+    {
+      "id": 168,
+      "category": "Object",
+      "class_name": "credit_card",
+      "prefab_name": "credit_card_0",
+      "handle": "CreditCard_1_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.45321,
+        "y": 0.5135,
+        "z": -6.76989
+      },
+      "on_furniture": "table_1",
+      "on_furniture_handle": "1a4841c613e9f5c2ba492107fb6aff4692c564a4_:0000"
+    },
+    {
+      "id": 169,
+      "category": "Object",
+      "class_name": "stuffed_toy",
+      "prefab_name": "stuffed_toy_1",
+      "handle": "Ortho_Forward_Facing_QCaor9ImJ2G_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -0.99679,
+        "y": 0.73278,
+        "z": 2.32333
+      },
+      "on_furniture": "chest_of_drawers_0",
+      "on_furniture_handle": "31653c084558e1ecb286adf63a305d914aa3c98b_:0000"
+    },
+    {
+      "id": 170,
+      "category": "Object",
+      "class_name": "toy_airplane",
+      "prefab_name": "toy_airplane_0",
+      "handle": "TURBOPROP_AIRPLANE_WITH_PILOT_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -1.03285,
+        "y": 0.13955,
+        "z": -0.18624
+      },
+      "on_furniture": "chest_of_drawers_1",
+      "on_furniture_handle": "31653c084558e1ecb286adf63a305d914aa3c98b_:0001"
+    },
+    {
+      "id": 171,
+      "category": "Object",
+      "class_name": "pan",
+      "prefab_name": "pan_0",
+      "handle": "Pan_10_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -14.6268,
+        "y": 0.92533,
+        "z": 0.57629
+      },
+      "on_furniture": "cabinet_2",
+      "on_furniture_handle": "edd29c09710bf64c66065b6d884f573bc48682f5_:0000"
+    },
+    {
+      "id": 172,
+      "category": "Object",
+      "class_name": "apple",
+      "prefab_name": "apple_0",
+      "handle": "Apple_24_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -12.36977,
+        "y": 0.86921,
+        "z": 1.6129
+      },
+      "on_furniture": "table_0",
+      "on_furniture_handle": "de47820f2dc539102408f43243369f2a952b7b2f_:0000"
+    },
+    {
+      "id": 173,
+      "category": "Object",
+      "class_name": "potato",
+      "prefab_name": "potato_0",
+      "handle": "Potato_5_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -12.21241,
+        "y": 0.84728,
+        "z": 0.45788
+      },
+      "on_furniture": "table_0",
+      "on_furniture_handle": "de47820f2dc539102408f43243369f2a952b7b2f_:0000"
+    },
+    {
+      "id": 174,
+      "category": "Object",
+      "class_name": "cellphone",
+      "prefab_name": "cellphone_0",
+      "handle": "Cellphone_5_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.55306,
+        "y": 0.5184,
+        "z": -6.65589
+      },
+      "on_furniture": "table_1",
+      "on_furniture_handle": "1a4841c613e9f5c2ba492107fb6aff4692c564a4_:0000"
+    },
+    {
+      "id": 175,
+      "category": "Object",
+      "class_name": "tape",
+      "prefab_name": "tape_0",
+      "handle": "3M_Antislip_Surfacing_Light_Duty_White_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.66553,
+        "y": 0.53247,
+        "z": -6.84892
+      },
+      "on_furniture": "table_1",
+      "on_furniture_handle": "1a4841c613e9f5c2ba492107fb6aff4692c564a4_:0000"
+    },
+    {
+      "id": 176,
+      "category": "Object",
+      "class_name": "cellphone",
+      "prefab_name": "cellphone_0",
+      "handle": "Cellphone_3_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.6735,
+        "y": 0.52143,
+        "z": -6.97398
+      },
+      "on_furniture": "table_1",
+      "on_furniture_handle": "1a4841c613e9f5c2ba492107fb6aff4692c564a4_:0000"
+    },
+    {
+      "id": 177,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_0",
+      "handle": "b09008488fdb3dc94b0be198e64f8577a32af1c6_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -10.44141,
+        "y": 0.88223,
+        "z": -3.2248
+      },
+      "on_furniture": "chest_of_drawers_0",
+      "on_furniture_handle": "a3adcc07e1656ec5f67c332587ad30ce080a3e89_:0001"
+    },
+    {
+      "id": 178,
+      "category": "Object",
+      "class_name": "b076yl2ctt",
+      "prefab_name": "b076yl2ctt_0",
+      "handle": "B076YL2CTT_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -10.33557,
+        "y": 0.14227,
+        "z": -2.99634
+      },
+      "on_furniture": "a3adcc07e1656ec5f67c332587ad30ce080a3e89_:0000",
+      "on_furniture_handle": "a3adcc07e1656ec5f67c332587ad30ce080a3e89_:0000"
+    },
+    {
+      "id": 179,
+      "category": "Object",
+      "class_name": "potato 13",
+      "prefab_name": "potato 13_0",
+      "handle": "Potato_13_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -14.38066,
+        "y": 0.93535,
+        "z": -1.32074
+      },
+      "on_furniture": "cabinet_0",
+      "on_furniture_handle": "0db565d684b7c6ca584a63184869a4077bbd7155_:0000"
+    },
+    {
+      "id": 180,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_0",
+      "handle": "7d38434695df81af30390db76c89bcc04529b406_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.79705,
+        "y": 1.01348,
+        "z": 0.04528
+      },
+      "on_furniture": "table_0",
+      "on_furniture_handle": "de47820f2dc539102408f43243369f2a952b7b2f_:0000"
+    },
+    {
+      "id": 181,
+      "category": "Object",
+      "class_name": "plate",
+      "prefab_name": "plate_0",
+      "handle": "Plate_22_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -14.16026,
+        "y": 0.90785,
+        "z": -1.35926
+      },
+      "on_furniture": "cabinet_0",
+      "on_furniture_handle": "0db565d684b7c6ca584a63184869a4077bbd7155_:0000"
+    },
+    {
+      "id": 182,
+      "category": "Object",
+      "class_name": "plate",
+      "prefab_name": "plate_1",
+      "handle": "91bfe2681a0d397e267e93e125924c872e6a2159_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -14.34418,
+        "y": 0.91428,
+        "z": -1.51418
+      },
+      "on_furniture": "cabinet_0",
+      "on_furniture_handle": "0db565d684b7c6ca584a63184869a4077bbd7155_:0000"
+    },
+    {
+      "id": 183,
+      "category": "Object",
+      "class_name": "plate",
+      "prefab_name": "plate_2",
+      "handle": "4087db7d03a368aeb48956f358eeee58e0edd7b3_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -14.34833,
+        "y": 0.90992,
+        "z": -1.1583
+      },
+      "on_furniture": "cabinet_0",
+      "on_furniture_handle": "0db565d684b7c6ca584a63184869a4077bbd7155_:0000"
+    },
+    {
+      "id": 184,
+      "category": "Object",
+      "class_name": "plate",
+      "prefab_name": "plate_3",
+      "handle": "7e067cafd8b96fae4671c0032317763fd9549b80_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -14.04739,
+        "y": 0.91035,
+        "z": -1.59022
+      },
+      "on_furniture": "cabinet_0",
+      "on_furniture_handle": "0db565d684b7c6ca584a63184869a4077bbd7155_:0000"
+    },
+    {
+      "id": 185,
+      "category": "Object",
+      "class_name": "glass",
+      "prefab_name": "glass_0",
+      "handle": "991bae3b8af2a9a110e32138d6a63ae1f038c0bc_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -14.27467,
+        "y": 0.9571,
+        "z": -0.56711
+      },
+      "on_furniture": "cabinet_1",
+      "on_furniture_handle": "db74ce14813eb0d5c54c8992806b22fb846ee34c_:0000"
+    },
+    {
+      "id": 186,
+      "category": "Object",
+      "class_name": "glass",
+      "prefab_name": "glass_1",
+      "handle": "cd31b4fdd82a4e828ef8d81df613750a7891b2c6_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -14.27919,
+        "y": 0.99334,
+        "z": -0.0465
+      },
+      "on_furniture": "cabinet_1",
+      "on_furniture_handle": "db74ce14813eb0d5c54c8992806b22fb846ee34c_:0000"
+    },
+    {
+      "id": 187,
+      "category": "Object",
+      "class_name": "glass",
+      "prefab_name": "glass_2",
+      "handle": "b8e358f78ada8bc52942ae23f7dbfbb40c754f74_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -14.61752,
+        "y": 0.9914,
+        "z": -0.63049
+      },
+      "on_furniture": "cabinet_1",
+      "on_furniture_handle": "db74ce14813eb0d5c54c8992806b22fb846ee34c_:0000"
+    },
+    {
+      "id": 188,
+      "category": "Object",
+      "class_name": "glass",
+      "prefab_name": "glass_3",
+      "handle": "1d8c68e142a88354b3f2122f55b0d0531a692822_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -14.58169,
+        "y": 1.0382,
+        "z": 0.0712
+      },
+      "on_furniture": "cabinet_1",
+      "on_furniture_handle": "db74ce14813eb0d5c54c8992806b22fb846ee34c_:0000"
+    },
+    {
+      "id": 189,
+      "category": "Object",
+      "class_name": "electric_kettle",
+      "prefab_name": "electric_kettle_0",
+      "handle": "b2b0e3b797bb3175caef3c32f61796aeab414201_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -12.19308,
+        "y": 0.95196,
+        "z": 1.10573
+      },
+      "on_furniture": "table_0",
+      "on_furniture_handle": "de47820f2dc539102408f43243369f2a952b7b2f_:0000"
+    },
+    {
+      "id": 190,
+      "category": "Object",
+      "class_name": "lamp",
+      "prefab_name": "lamp_0",
+      "handle": "B07HK3PNSK_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -5.38567,
+        "y": 0.47429,
+        "z": -6.06722
+      },
+      "on_furniture": "chair_4",
+      "on_furniture_handle": "138009a6121d7ebb8c3b78e3a411b4e33c388efb_:0000"
+    },
+    {
+      "id": 191,
+      "category": "Object",
+      "class_name": "candle",
+      "prefab_name": "candle_0",
+      "handle": "42b700c2f764ffffd3bba8d4851c12ef064c86d1_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -12.33036,
+        "y": 0.85031,
+        "z": -6.46754
+      },
+      "on_furniture": "table_4",
+      "on_furniture_handle": "c39181c455b8df6ac1b8112a8d2d7bc4a493d8e7_:0000"
+    },
+    {
+      "id": 192,
+      "category": "Object",
+      "class_name": "cup 17",
+      "prefab_name": "cup 17_0",
+      "handle": "Cup_17_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -10.29197,
+        "y": 0.88334,
+        "z": -4.28028
+      },
+      "on_furniture": "a3adcc07e1656ec5f67c332587ad30ce080a3e89_:0003",
+      "on_furniture_handle": "a3adcc07e1656ec5f67c332587ad30ce080a3e89_:0003"
+    },
+    {
+      "id": 193,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_0",
+      "handle": "6a16a8ab35222e408cc16e76ceb32d2b6daf3bd9_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -9.89555,
+        "y": 0.18339,
+        "z": -2.28158
+      },
+      "on_furniture": "a3adcc07e1656ec5f67c332587ad30ce080a3e89_:0002",
+      "on_furniture_handle": "a3adcc07e1656ec5f67c332587ad30ce080a3e89_:0002"
+    },
+    {
+      "id": 194,
+      "category": "Object",
+      "class_name": "tape",
+      "prefab_name": "tape_0",
+      "handle": "Cole_Hardware_Antislip_Surfacing_Material_White_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.52234,
+        "y": 0.56708,
+        "z": -6.73964
+      },
+      "on_furniture": "table_1",
+      "on_furniture_handle": "1a4841c613e9f5c2ba492107fb6aff4692c564a4_:0000"
+    },
+    {
+      "id": 195,
+      "category": "Object",
+      "class_name": "shoe",
+      "prefab_name": "shoe_0",
+      "handle": "Crazy_8_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.23889,
+        "y": 0.5751,
+        "z": -7.33587
+      },
+      "on_furniture": "chair_5",
+      "on_furniture_handle": "d16a9e9691ca82f2d658d18cc064101337a6a0aa_:0000"
+    },
+    {
+      "id": 196,
+      "category": "Object",
+      "class_name": "action_figure",
+      "prefab_name": "action_figure_0",
+      "handle": "Nickelodeon_Teenage_Mutant_Ninja_Turtles_Michelangelo_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -1.23646,
+        "y": 0.16455,
+        "z": -0.43011
+      },
+      "on_furniture": "chest_of_drawers_1",
+      "on_furniture_handle": "31653c084558e1ecb286adf63a305d914aa3c98b_:0001"
+    },
+    {
+      "id": 197,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_0",
+      "handle": "21527bf23974c98dc7bc88b44ba6b54ed32e676c_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -10.43853,
+        "y": 0.23059,
+        "z": -2.62682
+      },
+      "on_furniture": "a3adcc07e1656ec5f67c332587ad30ce080a3e89_:0000",
+      "on_furniture_handle": "a3adcc07e1656ec5f67c332587ad30ce080a3e89_:0000"
+    },
+    {
+      "id": 198,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_1",
+      "handle": "691f5a6ef6222b00e6d1954ecee5875aab7c404f_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -7.01537,
+        "y": 0.50729,
+        "z": -7.22591
+      },
+      "on_furniture": "couch_0",
+      "on_furniture_handle": "72c768666c398f91a5e4755d569f4d7097acc297_:0000"
+    },
+    {
+      "id": 199,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_2",
+      "handle": "4f1ca2fba51314af1ef27f27a2618eaa19529c2a_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": 1.95189,
+        "y": 0.63404,
+        "z": 2.27891
+      },
+      "on_furniture": "table_2",
+      "on_furniture_handle": "44f35b8477fdbc61ed4c0ec40297b03d636d19b2_:0000"
+    },
+    {
+      "id": 200,
+      "category": "Object",
+      "class_name": "bowl",
+      "prefab_name": "bowl_0",
+      "handle": "d45dd6a62736c91ccfeaa54ad57847589712d8cb_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -14.40404,
+        "y": 0.95662,
+        "z": -0.57013
+      },
+      "on_furniture": "cabinet_1",
+      "on_furniture_handle": "db74ce14813eb0d5c54c8992806b22fb846ee34c_:0000"
+    },
+    {
+      "id": 201,
+      "category": "Object",
+      "class_name": "bowl",
+      "prefab_name": "bowl_1",
+      "handle": "4df6a26c581ab5ed73699c38c45f990270b75533_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -14.54533,
+        "y": 0.94893,
+        "z": 0.1172
+      },
+      "on_furniture": "cabinet_1",
+      "on_furniture_handle": "db74ce14813eb0d5c54c8992806b22fb846ee34c_:0000"
+    },
+    {
+      "id": 202,
+      "category": "Object",
+      "class_name": "bowl",
+      "prefab_name": "bowl_0",
+      "handle": "647b37525fb5214528260ec0fb59ef2347d68ce0_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.68272,
+        "y": 0.84291,
+        "z": 1.47923
+      },
+      "on_furniture": "table_0",
+      "on_furniture_handle": "de47820f2dc539102408f43243369f2a952b7b2f_:0000"
+    },
+    {
+      "id": 203,
+      "category": "Object",
+      "class_name": "candle",
+      "prefab_name": "candle_0",
+      "handle": "edb1c6cfdba7c7a7f48e18db9194eb9efe0356a6_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -5.79095,
+        "y": 0.41753,
+        "z": -5.62269
+      },
+      "on_furniture": "chair_4",
+      "on_furniture_handle": "138009a6121d7ebb8c3b78e3a411b4e33c388efb_:0000"
+    },
+    {
+      "id": 204,
+      "category": "Object",
+      "class_name": "vase",
+      "prefab_name": "vase_0",
+      "handle": "01f076bf712f7a14ceed10f92a72948c05925858_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -5.23116,
+        "y": 0.53296,
+        "z": -5.73835
+      },
+      "on_furniture": "chair_4",
+      "on_furniture_handle": "138009a6121d7ebb8c3b78e3a411b4e33c388efb_:0000"
+    },
+    {
+      "id": 205,
+      "category": "Object",
+      "class_name": "candle",
+      "prefab_name": "candle_0",
+      "handle": "9dfbc1df2349093e0444dfabb8789296c83561cf_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -5.07055,
+        "y": 0.4151,
+        "z": -6.06531
+      },
+      "on_furniture": "chair_4",
+      "on_furniture_handle": "138009a6121d7ebb8c3b78e3a411b4e33c388efb_:0000"
+    },
+    {
+      "id": 206,
+      "category": "Object",
+      "class_name": "cushion",
+      "prefab_name": "cushion_0",
+      "handle": "2e5d3d800dc19b5ba0ec93213d413c53f9b6435d_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -6.65886,
+        "y": 0.46164,
+        "z": -5.85839
+      },
+      "on_furniture": "couch_0",
+      "on_furniture_handle": "72c768666c398f91a5e4755d569f4d7097acc297_:0000"
+    },
+    {
+      "id": 207,
+      "category": "Object",
+      "class_name": "potato 12",
+      "prefab_name": "potato 12_0",
+      "handle": "Potato_12_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -8.45995,
+        "y": 0.68317,
+        "z": 1.13494
+      },
+      "on_furniture": "chair_0",
+      "on_furniture_handle": "0f5071c46d79d10cdc0783e1abf514c3bfa94ba2_:0000"
+    },
+    {
+      "id": 208,
+      "category": "Object",
+      "class_name": "cup 6",
+      "prefab_name": "cup 6_0",
+      "handle": "Cup_6_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -7.18572,
+        "y": 0.34666,
+        "z": -6.73702
+      },
+      "on_furniture": "couch_0",
+      "on_furniture_handle": "72c768666c398f91a5e4755d569f4d7097acc297_:0000"
+    },
+    {
+      "id": 209,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_0",
+      "handle": "afc1f45e551314e36262c8c9caa341fec805e22f_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -8.63779,
+        "y": 0.69415,
+        "z": 1.06771
+      },
+      "on_furniture": "chair_0",
+      "on_furniture_handle": "0f5071c46d79d10cdc0783e1abf514c3bfa94ba2_:0000"
+    },
+    {
+      "id": 210,
+      "category": "Object",
+      "class_name": "stuffed_toy",
+      "prefab_name": "stuffed_toy_0",
+      "handle": "Ortho_Forward_Facing_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.11598,
+        "y": 0.56753,
+        "z": -7.33846
+      },
+      "on_furniture": "chair_5",
+      "on_furniture_handle": "d16a9e9691ca82f2d658d18cc064101337a6a0aa_:0000"
+    },
+    {
+      "id": 211,
+      "category": "Object",
+      "class_name": "potato",
+      "prefab_name": "potato_1",
+      "handle": "Potato_29_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -12.15153,
+        "y": 0.86378,
+        "z": 1.62766
+      },
+      "on_furniture": "table_0",
+      "on_furniture_handle": "de47820f2dc539102408f43243369f2a952b7b2f_:0000"
+    },
+    {
+      "id": 212,
+      "category": "Object",
+      "class_name": "stuffed_toy",
+      "prefab_name": "stuffed_toy_1",
+      "handle": "1a3ab8e3d8569a2a2e2b6f8510af417848b71c6a_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": 2.4813,
+        "y": 0.99815,
+        "z": -1.64995
+      },
+      "on_furniture": "chest_of_drawers_2",
+      "on_furniture_handle": "389665158df393b0a2ac6fccc69babfd7a17f306_:0000"
+    },
+    {
+      "id": 213,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_0",
+      "handle": "32c235017beb57dcbcc87e87871acbf68cd189ae_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -5.76106,
+        "y": 0.3875,
+        "z": -6.09515
+      },
+      "on_furniture": "chair_4",
+      "on_furniture_handle": "138009a6121d7ebb8c3b78e3a411b4e33c388efb_:0000"
+    },
+    {
+      "id": 214,
+      "category": "Object",
+      "class_name": "soap bottle 2",
+      "prefab_name": "soap bottle 2_0",
+      "handle": "Soap_Bottle_2_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -1.11596,
+        "y": 0.25364,
+        "z": 2.3632
+      },
+      "on_furniture": "chest_of_drawers_0",
+      "on_furniture_handle": "31653c084558e1ecb286adf63a305d914aa3c98b_:0000"
+    },
+    {
+      "id": 215,
+      "category": "Object",
+      "class_name": "stuffed_toy",
+      "prefab_name": "stuffed_toy_0",
+      "handle": "f8b01d51b06fcba41cd2a7fa3f3f3a358df0b6a5_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": 2.54922,
+        "y": 1.06167,
+        "z": -1.65426
+      },
+      "on_furniture": "chest_of_drawers_2",
+      "on_furniture_handle": "389665158df393b0a2ac6fccc69babfd7a17f306_:0000"
+    },
+    {
+      "id": 216,
+      "category": "Object",
+      "class_name": "potato",
+      "prefab_name": "potato_0",
+      "handle": "Potato_16_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -12.34828,
+        "y": 0.85552,
+        "z": 0.40148
+      },
+      "on_furniture": "table_0",
+      "on_furniture_handle": "de47820f2dc539102408f43243369f2a952b7b2f_:0000"
+    },
+    {
+      "id": 217,
+      "category": "Object",
+      "class_name": "stuffed_toy",
+      "prefab_name": "stuffed_toy_0",
+      "handle": "a33b4d0b2cf35e7f24e07b0a1dc3b8a2b52593fa_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -8.48847,
+        "y": 0.82396,
+        "z": 1.27561
+      },
+      "on_furniture": "chair_0",
+      "on_furniture_handle": "0f5071c46d79d10cdc0783e1abf514c3bfa94ba2_:0000"
+    },
+    {
+      "id": 218,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_0",
+      "handle": "021a0ba1300490e2e288221a21f4387ce626d1de_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -12.17831,
+        "y": 0.94588,
+        "z": -6.21776
+      },
+      "on_furniture": "table_4",
+      "on_furniture_handle": "c39181c455b8df6ac1b8112a8d2d7bc4a493d8e7_:0000"
+    },
+    {
+      "id": 219,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_1",
+      "handle": "98bda20462843fb446a678c0cfca18f2736f7060_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -14.26579,
+        "y": 0.98345,
+        "z": 0.97473
+      },
+      "on_furniture": "cabinet_2",
+      "on_furniture_handle": "edd29c09710bf64c66065b6d884f573bc48682f5_:0000"
+    },
+    {
+      "id": 220,
+      "category": "Object",
+      "class_name": "credit_card",
+      "prefab_name": "credit_card_0",
+      "handle": "CreditCard_2_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.69861,
+        "y": 0.51726,
+        "z": -6.80683
+      },
+      "on_furniture": "table_1",
+      "on_furniture_handle": "1a4841c613e9f5c2ba492107fb6aff4692c564a4_:0000"
+    },
+    {
+      "id": 221,
+      "category": "Object",
+      "class_name": "potato",
+      "prefab_name": "potato_0",
+      "handle": "Potato_3_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.58559,
+        "y": 0.85208,
+        "z": 0.97775
+      },
+      "on_furniture": "table_0",
+      "on_furniture_handle": "de47820f2dc539102408f43243369f2a952b7b2f_:0000"
+    },
+    {
+      "id": 222,
+      "category": "Object",
+      "class_name": "plate",
+      "prefab_name": "plate_0",
+      "handle": "5a0ac54dc91ce3d40e4351a0dcfb6b9ffa08fdc2_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -14.02178,
+        "y": 0.91252,
+        "z": -1.53802
+      },
+      "on_furniture": "cabinet_0",
+      "on_furniture_handle": "0db565d684b7c6ca584a63184869a4077bbd7155_:0000"
+    },
+    {
+      "id": 223,
+      "category": "Object",
+      "class_name": "plate",
+      "prefab_name": "plate_1",
+      "handle": "cc9929ee326793bba8cc58e9120ef2262f087ca4_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -14.32047,
+        "y": 0.91034,
+        "z": -1.27336
+      },
+      "on_furniture": "cabinet_0",
+      "on_furniture_handle": "0db565d684b7c6ca584a63184869a4077bbd7155_:0000"
+    },
+    {
+      "id": 224,
+      "category": "Object",
+      "class_name": "plate",
+      "prefab_name": "plate_3",
+      "handle": "Plate_3_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -14.32954,
+        "y": 0.91123,
+        "z": -1.53283
+      },
+      "on_furniture": "cabinet_0",
+      "on_furniture_handle": "0db565d684b7c6ca584a63184869a4077bbd7155_:0000"
+    },
+    {
+      "id": 225,
+      "category": "Object",
+      "class_name": "glass",
+      "prefab_name": "glass_0",
+      "handle": "3ce41cf0b912a259a5b352d5bf1141ee102640d9_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.59524,
+        "y": 0.85238,
+        "z": 1.98123
+      },
+      "on_furniture": "table_0",
+      "on_furniture_handle": "de47820f2dc539102408f43243369f2a952b7b2f_:0000"
+    },
+    {
+      "id": 226,
+      "category": "Object",
+      "class_name": "glass",
+      "prefab_name": "glass_1",
+      "handle": "xxxxf16549ddx025ax48bdxa70dx755da3ec8608_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.66209,
+        "y": 0.93612,
+        "z": 0.37596
+      },
+      "on_furniture": "table_0",
+      "on_furniture_handle": "de47820f2dc539102408f43243369f2a952b7b2f_:0000"
+    },
+    {
+      "id": 227,
+      "category": "Object",
+      "class_name": "glass",
+      "prefab_name": "glass_2",
+      "handle": "47a2abe797aaaf6798271125727058b33860f456_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.84992,
+        "y": 0.88761,
+        "z": 1.54741
+      },
+      "on_furniture": "table_0",
+      "on_furniture_handle": "de47820f2dc539102408f43243369f2a952b7b2f_:0000"
+    },
+    {
+      "id": 228,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_0",
+      "handle": "2503515e4e92100f8d9c1e8fc661c4ff7ba9496a_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -1.10655,
+        "y": 0.67527,
+        "z": 2.12972
+      },
+      "on_furniture": "chest_of_drawers_0",
+      "on_furniture_handle": "31653c084558e1ecb286adf63a305d914aa3c98b_:0000"
+    },
+    {
+      "id": 229,
+      "category": "Object",
+      "class_name": "apple 4",
+      "prefab_name": "apple 4_0",
+      "handle": "Apple_4_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -12.10257,
+        "y": 0.84228,
+        "z": -6.55335
+      },
+      "on_furniture": "table_4",
+      "on_furniture_handle": "c39181c455b8df6ac1b8112a8d2d7bc4a493d8e7_:0000"
+    },
+    {
+      "id": 230,
+      "category": "Object",
+      "class_name": "cole hardware dishtowel blue",
+      "prefab_name": "cole hardware dishtowel blue_0",
+      "handle": "Cole_Hardware_Dishtowel_Blue_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -0.13238,
+        "y": 0.57523,
+        "z": 0.3892
+      },
+      "on_furniture": "counter_0",
+      "on_furniture_handle": "66e7f21c0db6af483f36d2d9f73044c0995a1d07_:0000"
+    },
+    {
+      "id": 231,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_1",
+      "handle": "e3479ce73271171bdaa163968c50500719ed4d72_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -12.88446,
+        "y": 1.00159,
+        "z": -1.46738
+      },
+      "on_furniture": "c294ee4dd27985e94399a647c6431420ad3749d9_:0000",
+      "on_furniture_handle": "c294ee4dd27985e94399a647c6431420ad3749d9_:0000"
+    },
+    {
+      "id": 232,
+      "category": "Object",
+      "class_name": "candle",
+      "prefab_name": "candle_0",
+      "handle": "9c762323bc8e1c45b31ee978e21749a1cb218446_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.34206,
+        "y": 0.5524,
+        "z": -6.5969
+      },
+      "on_furniture": "table_1",
+      "on_furniture_handle": "1a4841c613e9f5c2ba492107fb6aff4692c564a4_:0000"
+    },
+    {
+      "id": 233,
+      "category": "Object",
+      "class_name": "keychain",
+      "prefab_name": "keychain_0",
+      "handle": "Keychain_2_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -12.25393,
+        "y": 0.78798,
+        "z": -6.33882
+      },
+      "on_furniture": "table_4",
+      "on_furniture_handle": "c39181c455b8df6ac1b8112a8d2d7bc4a493d8e7_:0000"
+    },
+    {
+      "id": 234,
+      "category": "Object",
+      "class_name": "bowl",
+      "prefab_name": "bowl_0",
+      "handle": "Threshold_Bead_Cereal_Bowl_White_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -6.51789,
+        "y": 0.77311,
+        "z": 0.77351
+      },
+      "on_furniture": "table_3",
+      "on_furniture_handle": "65a418ed96d1ba38f05feecf299e1db81b1587de_:0000"
+    },
+    {
+      "id": 235,
+      "category": "Object",
+      "class_name": "electric_kettle",
+      "prefab_name": "electric_kettle_0",
+      "handle": "20dbe8187f7e98eeb7e369e31c6879148f46fb50_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -12.17021,
+        "y": 0.95669,
+        "z": 1.81865
+      },
+      "on_furniture": "table_0",
+      "on_furniture_handle": "de47820f2dc539102408f43243369f2a952b7b2f_:0000"
+    },
+    {
+      "id": 236,
+      "category": "Object",
+      "class_name": "bowl",
+      "prefab_name": "bowl_0",
+      "handle": "Footed_Bowl_Sand_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": 1.95282,
+        "y": 0.5395,
+        "z": 2.03016
+      },
+      "on_furniture": "table_2",
+      "on_furniture_handle": "44f35b8477fdbc61ed4c0ec40297b03d636d19b2_:0000"
+    },
+    {
+      "id": 237,
+      "category": "Object",
+      "class_name": "plate",
+      "prefab_name": "plate_0",
+      "handle": "3b519761173617ee47ca61e25681279ae9fdaba9_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -14.43326,
+        "y": 0.91034,
+        "z": -1.42781
+      },
+      "on_furniture": "cabinet_0",
+      "on_furniture_handle": "0db565d684b7c6ca584a63184869a4077bbd7155_:0000"
+    },
+    {
+      "id": 238,
+      "category": "Object",
+      "class_name": "plate",
+      "prefab_name": "plate_1",
+      "handle": "c717fbe8f10ad354c83f9cfc7ce154ae2fcdf96c_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -14.37141,
+        "y": 0.9211,
+        "z": -1.12997
+      },
+      "on_furniture": "cabinet_0",
+      "on_furniture_handle": "0db565d684b7c6ca584a63184869a4077bbd7155_:0000"
+    },
+    {
+      "id": 239,
+      "category": "Object",
+      "class_name": "plate",
+      "prefab_name": "plate_2",
+      "handle": "7f5e4621caaeae9e3f4fbca6fc84779fa4b9c64f_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -14.07208,
+        "y": 0.91128,
+        "z": -1.38652
+      },
+      "on_furniture": "cabinet_0",
+      "on_furniture_handle": "0db565d684b7c6ca584a63184869a4077bbd7155_:0000"
+    },
+    {
+      "id": 240,
+      "category": "Object",
+      "class_name": "plate",
+      "prefab_name": "plate_3",
+      "handle": "Plate_19_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -14.15669,
+        "y": 0.90881,
+        "z": -1.68485
+      },
+      "on_furniture": "cabinet_0",
+      "on_furniture_handle": "0db565d684b7c6ca584a63184869a4077bbd7155_:0000"
+    },
+    {
+      "id": 241,
+      "category": "Object",
+      "class_name": "glass",
+      "prefab_name": "glass_0",
+      "handle": "038920896508242bee4ea865b8ece6c201e4d858_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.91549,
+        "y": 0.89497,
+        "z": 1.9578
+      },
+      "on_furniture": "table_0",
+      "on_furniture_handle": "de47820f2dc539102408f43243369f2a952b7b2f_:0000"
+    },
+    {
+      "id": 242,
+      "category": "Object",
+      "class_name": "glass",
+      "prefab_name": "glass_1",
+      "handle": "fd4b49e473ea5f9b0b4956c606d6079d21038065_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.96716,
+        "y": 0.84453,
+        "z": 2.16534
+      },
+      "on_furniture": "table_0",
+      "on_furniture_handle": "de47820f2dc539102408f43243369f2a952b7b2f_:0000"
+    },
+    {
+      "id": 243,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_0",
+      "handle": "5998b2343f9bd0da7fd75c77cca93bc84d735fbc_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -14.46703,
+        "y": 1.0,
+        "z": 0.14393
+      },
+      "on_furniture": "cabinet_1",
+      "on_furniture_handle": "db74ce14813eb0d5c54c8992806b22fb846ee34c_:0000"
+    },
+    {
+      "id": 244,
+      "category": "Object",
+      "class_name": "kettle",
+      "prefab_name": "kettle_0",
+      "handle": "6e35f1ab01230ea2687cade5e71e4a3abf07262e_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.46648,
+        "y": 0.93339,
+        "z": 0.77505
+      },
+      "on_furniture": "table_0",
+      "on_furniture_handle": "de47820f2dc539102408f43243369f2a952b7b2f_:0000"
+    },
+    {
+      "id": 245,
+      "category": "Object",
+      "class_name": "action_figure",
+      "prefab_name": "action_figure_0",
+      "handle": "Playmates_Industrial_CoSplinter_Teenage_Mutant_Ninja_Turtle_Action_Figure_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -1.21821,
+        "y": 0.16926,
+        "z": -0.34429
+      },
+      "on_furniture": "chest_of_drawers_1",
+      "on_furniture_handle": "31653c084558e1ecb286adf63a305d914aa3c98b_:0001"
+    },
+    {
+      "id": 246,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_0",
+      "handle": "3bd1652a8ee18e0dc0985011fef96125f46b1ac4_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": 1.93385,
+        "y": 1.04687,
+        "z": -1.55629
+      },
+      "on_furniture": "chest_of_drawers_2",
+      "on_furniture_handle": "389665158df393b0a2ac6fccc69babfd7a17f306_:0000"
+    },
+    {
+      "id": 247,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_1",
+      "handle": "557a40dc33710de63f7694b1b61bfeed6e8169c8_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": 1.7873,
+        "y": 0.98178,
+        "z": -1.4987
+      },
+      "on_furniture": "chest_of_drawers_2",
+      "on_furniture_handle": "389665158df393b0a2ac6fccc69babfd7a17f306_:0000"
+    },
+    {
+      "id": 248,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_2",
+      "handle": "713f7728ff51839ceb2fe0e3a42afd5abc78a21f_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.14491,
+        "y": 0.78786,
+        "z": 0.97537
+      },
+      "on_furniture": "chest_of_drawers_1",
+      "on_furniture_handle": "612bd96482db881c089aa26e4a5a3c34ed702955_:0002"
+    },
+    {
+      "id": 249,
+      "category": "Object",
+      "class_name": "bowl",
+      "prefab_name": "bowl_0",
+      "handle": "7aec926807a58f4ec2071758b4e6d46f91de9d08_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -14.48736,
+        "y": 0.92488,
+        "z": -0.34471
+      },
+      "on_furniture": "cabinet_1",
+      "on_furniture_handle": "db74ce14813eb0d5c54c8992806b22fb846ee34c_:0000"
+    },
+    {
+      "id": 250,
+      "category": "Object",
+      "class_name": "bowl",
+      "prefab_name": "bowl_1",
+      "handle": "Neat_Solutions_Character_Bib_2_pack_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -14.24369,
+        "y": 0.93829,
+        "z": -0.5898
+      },
+      "on_furniture": "cabinet_1",
+      "on_furniture_handle": "db74ce14813eb0d5c54c8992806b22fb846ee34c_:0000"
+    },
+    {
+      "id": 251,
+      "category": "Object",
+      "class_name": "bowl",
+      "prefab_name": "bowl_0",
+      "handle": "e102c85032933084b9cf7af4a75c9f33ba6ccf3b_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -12.18564,
+        "y": 0.83938,
+        "z": 2.03218
+      },
+      "on_furniture": "table_0",
+      "on_furniture_handle": "de47820f2dc539102408f43243369f2a952b7b2f_:0000"
+    },
+    {
+      "id": 252,
+      "category": "Object",
+      "class_name": "candle",
+      "prefab_name": "candle_0",
+      "handle": "Candle_1_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -5.83427,
+        "y": 0.35238,
+        "z": -6.35183
+      },
+      "on_furniture": "chair_4",
+      "on_furniture_handle": "138009a6121d7ebb8c3b78e3a411b4e33c388efb_:0000"
+    },
+    {
+      "id": 253,
+      "category": "Object",
+      "class_name": "vase",
+      "prefab_name": "vase_0",
+      "handle": "0d61b723728d6d5ac05ac53e07372bcc7ff676ce_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -5.59734,
+        "y": 0.46327,
+        "z": -5.89426
+      },
+      "on_furniture": "chair_4",
+      "on_furniture_handle": "138009a6121d7ebb8c3b78e3a411b4e33c388efb_:0000"
+    },
+    {
+      "id": 254,
+      "category": "Object",
+      "class_name": "plant_container",
+      "prefab_name": "plant_container_0",
+      "handle": "Ecoforms_Plant_Pot_GP9AAvocado_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -5.01454,
+        "y": 0.35891,
+        "z": -5.82419
+      },
+      "on_furniture": "chair_4",
+      "on_furniture_handle": "138009a6121d7ebb8c3b78e3a411b4e33c388efb_:0000"
+    },
+    {
+      "id": 255,
+      "category": "Object",
+      "class_name": "teapot",
+      "prefab_name": "teapot_0",
+      "handle": "3e991a6cc8ed46bb9f3b9641e7062ce627fe7ca9_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -14.33969,
+        "y": 0.99579,
+        "z": -0.03773
+      },
+      "on_furniture": "cabinet_1",
+      "on_furniture_handle": "db74ce14813eb0d5c54c8992806b22fb846ee34c_:0000"
+    },
+    {
+      "id": 256,
+      "category": "Object",
+      "class_name": "cushion",
+      "prefab_name": "cushion_0",
+      "handle": "B07JM1XVHS_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -6.25887,
+        "y": 0.54981,
+        "z": -7.10758
+      },
+      "on_furniture": "couch_0",
+      "on_furniture_handle": "72c768666c398f91a5e4755d569f4d7097acc297_:0000"
+    },
+    {
+      "id": 257,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_0",
+      "handle": "2667ff4f698140233c3a3ab06686f2bc973d842b_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.16322,
+        "y": 0.98887,
+        "z": 1.43174
+      },
+      "on_furniture": "612bd96482db881c089aa26e4a5a3c34ed702955_:0000",
+      "on_furniture_handle": "612bd96482db881c089aa26e4a5a3c34ed702955_:0000"
+    },
+    {
+      "id": 258,
+      "category": "Object",
+      "class_name": "final fantasy xiv a realm reborn 60day subscription",
+      "prefab_name": "final fantasy xiv a realm reborn 60day subscription_0",
+      "handle": "Final_Fantasy_XIV_A_Realm_Reborn_60Day_Subscription_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -5.36343,
+        "y": 0.414,
+        "z": -5.71461
+      },
+      "on_furniture": "chair_4",
+      "on_furniture_handle": "138009a6121d7ebb8c3b78e3a411b4e33c388efb_:0000"
+    },
+    {
+      "id": 259,
+      "category": "Object",
+      "class_name": "potato",
+      "prefab_name": "potato_0",
+      "handle": "Potato_8_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.47458,
+        "y": 0.85205,
+        "z": 1.44186
+      },
+      "on_furniture": "table_0",
+      "on_furniture_handle": "de47820f2dc539102408f43243369f2a952b7b2f_:0000"
+    },
+    {
+      "id": 260,
+      "category": "Object",
+      "class_name": "potato",
+      "prefab_name": "potato_1",
+      "handle": "Potato_6_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -12.52807,
+        "y": 0.84532,
+        "z": 1.15543
+      },
+      "on_furniture": "table_0",
+      "on_furniture_handle": "de47820f2dc539102408f43243369f2a952b7b2f_:0000"
+    },
+    {
+      "id": 261,
+      "category": "Object",
+      "class_name": "stuffed_toy",
+      "prefab_name": "stuffed_toy_0",
+      "handle": "b3e8be210978ec373be6eb5fcffec36c6a9712e6_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": 3.10007,
+        "y": 0.11253,
+        "z": -0.71975
+      },
+      "on_furniture": "floor",
+      "on_furniture_handle": "floor"
+    },
+    {
+      "id": 262,
+      "category": "Object",
+      "class_name": "stuffed_toy",
+      "prefab_name": "stuffed_toy_1",
+      "handle": "af58f8524168dbb36acdfd66ef3d4f4c9d0906c0_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": 1.37367,
+        "y": 0.11681,
+        "z": -0.90649
+      },
+      "on_furniture": "floor",
+      "on_furniture_handle": "floor"
+    },
+    {
+      "id": 263,
+      "category": "Furniture",
+      "class_name": "floor",
+      "prefab_name": "floor",
+      "handle": "floor",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": []
+    },
+    {
+      "id": 264,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_0",
+      "handle": "08c6d474cc07b00fe01be5120f2ed108a0968b29_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -7.03567,
+        "y": 0.36111,
+        "z": -5.69818
+      },
+      "on_furniture": "couch_0",
+      "on_furniture_handle": "72c768666c398f91a5e4755d569f4d7097acc297_:0000"
+    },
+    {
+      "id": 265,
+      "category": "Object",
+      "class_name": "phone_stand",
+      "prefab_name": "phone_stand_0",
+      "handle": "B01IJ5A2UA_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -5.32958,
+        "y": 0.3548,
+        "z": -5.98105
+      },
+      "on_furniture": "chair_4",
+      "on_furniture_handle": "138009a6121d7ebb8c3b78e3a411b4e33c388efb_:0000"
+    },
+    {
+      "id": 266,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_0",
+      "handle": "80b1ffbe7ec9e1a52084d11a4ed6881f0a6c45bb_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -11.84508,
+        "y": 0.89944,
+        "z": 2.02314
+      },
+      "on_furniture": "table_0",
+      "on_furniture_handle": "de47820f2dc539102408f43243369f2a952b7b2f_:0000"
+    },
+    {
+      "id": 267,
+      "category": "Object",
+      "class_name": "toy_airplane",
+      "prefab_name": "toy_airplane_0",
+      "handle": "Air_Hogs_Wind_Flyers_Set_Airplane_Red_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -0.95219,
+        "y": 0.13253,
+        "z": -0.35116
+      },
+      "on_furniture": "chest_of_drawers_1",
+      "on_furniture_handle": "31653c084558e1ecb286adf63a305d914aa3c98b_:0001"
+    },
+    {
+      "id": 268,
+      "category": "Object",
+      "class_name": "pan",
+      "prefab_name": "pan_0",
+      "handle": "Pan_1_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -14.57378,
+        "y": 0.95279,
+        "z": 0.33882
+      },
+      "on_furniture": "cabinet_2",
+      "on_furniture_handle": "edd29c09710bf64c66065b6d884f573bc48682f5_:0000"
+    },
+    {
+      "id": 269,
+      "category": "Object",
+      "class_name": "apple",
+      "prefab_name": "apple_0",
+      "handle": "Apple_25_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -12.23424,
+        "y": 0.87077,
+        "z": 2.18064
+      },
+      "on_furniture": "table_0",
+      "on_furniture_handle": "de47820f2dc539102408f43243369f2a952b7b2f_:0000"
+    },
+    {
+      "id": 270,
+      "category": "Object",
+      "class_name": "kettle",
+      "prefab_name": "kettle_0",
+      "handle": "Kettle_1_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -12.03453,
+        "y": 0.8947,
+        "z": 1.99551
+      },
+      "on_furniture": "table_0",
+      "on_furniture_handle": "de47820f2dc539102408f43243369f2a952b7b2f_:0000"
+    }
+  ]
+}

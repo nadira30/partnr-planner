@@ -1,0 +1,47 @@
+llm:
+  _target_    : habitat_llm.llm.ollama_model.OllamaModel
+  _partial_   : True
+
+# Ollama inference mode
+inference_mode: ollama
+
+# Ollama handles chat templates internally, so we don't need special tokens in prompts
+# Leave these empty to avoid double-tokenization
+system_tag : ""
+user_tag : ""
+assistant_tag : ""
+eot_tag : ""
+
+generation_params:
+  # Model name in Ollama (e.g., "llama3", "llama3.1", "mistral")
+  engine: "llama3"
+
+  # The maximum number of tokens to generate in the completion
+  max_tokens: 250
+
+  # Temperature for sampling (0.0 = deterministic, higher = more random)
+  temperature: 0.7
+
+  # Stop sequences
+  stop: ["\n\n", "Thought:", "Action:"]
+
+  # Number of tokens to predict (-1 for unlimited within max_tokens)
+  n: 1
+
+  # Beam search (not used by Ollama, kept for compatibility)
+  best_of: 1
+
+  # Top-k sampling
+  top_k: 40
+
+  # Top-p (nucleus) sampling
+  top_p: 0.9
+
+  # Repetition penalty
+  repetition_penalty: 1.1
+
+  # Whether to use sampling
+  do_sample: true
+
+  # Whether to return batch response
+  batch_response: false

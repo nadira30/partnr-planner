@@ -1,0 +1,170 @@
+{
+  "episode_id": "42",
+  "scene_id": "106366386_174226770",
+  "instruction": "Help me tidy up the bedroom. Move one of the toy vehicles and the toy animal to the other chest of drawers. Leave the toy construction set where it is.",
+  "entities": [
+    {
+      "id": 0,
+      "category": "Object",
+      "class_name": "toy_vehicle",
+      "prefab_name": "toy_vehicle_0",
+      "handle": "Thomas_Friends_Wooden_Railway_Porter_5JzRhMm3a9o_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -0.92602,
+        "y": 0.66004,
+        "z": -0.40645
+      },
+      "on_furniture": "chest_of_drawers_1",
+      "on_furniture_handle": "31653c084558e1ecb286adf63a305d914aa3c98b_:0001"
+    },
+    {
+      "id": 1,
+      "category": "Object",
+      "class_name": "toy_vehicle",
+      "prefab_name": "toy_vehicle_1",
+      "handle": "Thomas_Friends_Wooden_Railway_Talking_Thomas_z7yi7UFHJRj_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -1.03645,
+        "y": 0.13258,
+        "z": -0.18247
+      },
+      "on_furniture": "chest_of_drawers_1",
+      "on_furniture_handle": "31653c084558e1ecb286adf63a305d914aa3c98b_:0001"
+    },
+    {
+      "id": 2,
+      "category": "Object",
+      "class_name": "toy_animal",
+      "prefab_name": "toy_animal_0",
+      "handle": "BUNNY_RACER_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -1.18823,
+        "y": 0.16318,
+        "z": -0.40704
+      },
+      "on_furniture": "chest_of_drawers_1",
+      "on_furniture_handle": "31653c084558e1ecb286adf63a305d914aa3c98b_:0001"
+    },
+    {
+      "id": 3,
+      "category": "Object",
+      "class_name": "toy_construction_set",
+      "prefab_name": "toy_construction_set_0",
+      "handle": "CREATIVE_BLOCKS_35_MM_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": 2.44649,
+        "y": 1.00308,
+        "z": -1.40355
+      },
+      "on_furniture": "chest_of_drawers_2",
+      "on_furniture_handle": "389665158df393b0a2ac6fccc69babfd7a17f306_:0000"
+    },
+    {
+      "id": 4,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_0",
+      "handle": "60694c8715acc814e456629b6a2861b840ae5ffb_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -7.49252,
+        "y": 0.96009,
+        "z": 1.42037
+      },
+      "on_furniture": "65a418ed96d1ba38f05feecf299e1db81b1587de_:0000",
+      "on_furniture_handle": "65a418ed96d1ba38f05feecf299e1db81b1587de_:0000"
+    },
+    {
+      "id": 5,
+      "category": "Rooms",
+      "class_name": "bedroom",
+      "prefab_name": "bedroom_0",
+      "properties": [],
+      "states": []
+    },
+    {
+      "id": 6,
+      "category": "Furniture",
+      "class_name": "chest_of_drawers",
+      "prefab_name": "chest_of_drawers_1",
+      "handle": "31653c084558e1ecb286adf63a305d914aa3c98b_:0001",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": []
+    },
+    {
+      "id": 7,
+      "category": "Furniture",
+      "class_name": "chest_of_drawers",
+      "prefab_name": "chest_of_drawers_2",
+      "handle": "389665158df393b0a2ac6fccc69babfd7a17f306_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": []
+    },
+    {
+      "id": 8,
+      "category": "Furniture",
+      "class_name": "65a418ed96d1ba38f05feecf299e1db81b1587de_:0000",
+      "prefab_name": "65a418ed96d1ba38f05feecf299e1db81b1587de_:0000",
+      "handle": "65a418ed96d1ba38f05feecf299e1db81b1587de_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": []
+    },
+    {
+      "id": 9,
+      "category": "Furniture",
+      "class_name": "chest_of_drawers",
+      "prefab_name": "chest_of_drawers_1",
+      "handle": "chest_of_drawers_1",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": []
+    },
+    {
+      "id": 10,
+      "category": "Furniture",
+      "class_name": "chest_of_drawers",
+      "prefab_name": "chest_of_drawers_2",
+      "handle": "chest_of_drawers_2",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": []
+    }
+  ]
+}

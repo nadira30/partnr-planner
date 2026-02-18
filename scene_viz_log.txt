@@ -1,0 +1,55 @@
+
+================================================================================
+SCENE VISUALIZATION SCRIPT
+================================================================================
+
+Loading dataset: data/datasets/partnr_episodes/v0_0/val_mini.json.gz
+
+Found 6 unique scenes
+Total episodes: 369
+
+
+[1/6] Processing Scene: 102344529
+  Episodes using this scene: 5
+  Sample instruction: Move the kettle and the jug from the dining room to the kitchen and fill the ket...
+  Visualizing episode 357...
+  Warning: No topdown image generated for episode 357
+
+[2/6] Processing Scene: 102816756
+  Episodes using this scene: 4
+  Sample instruction: Let's clean up the living room. Move all of the toys from the floor to the wardr...
+  Visualizing episode 362...
+  Warning: No topdown image generated for episode 362
+
+[3/6] Processing Scene: 102817140
+  Episodes using this scene: 115
+  Sample instruction: Human: Place the candle and candle holder on the white table in the living room....
+  Visualizing episode 0...
+  Warning: No topdown image generated for episode 0
+
+[4/6] Processing Scene: 103997895_171031182
+  Episodes using this scene: 4
+  Sample instruction: Let's move all the pans and kettles from the living room to the kitchen and scru...
+  Visualizing episode 353...
+  Warning: No topdown image generated for episode 353
+
+[5/6] Processing Scene: 106366386_174226770
+  Episodes using this scene: 126
+  Sample instruction: Help me tidy up the bedroom. Move one of the toy vehicles and the toy animal to ...
+  Visualizing episode 42...
+  Warning: No topdown image generated for episode 42
+
+[6/6] Processing Scene: 106366410_174226806
+  Episodes using this scene: 115
+  Sample instruction: Help me clean my workstation. Let's start by moving the laptop, monitor stand, c...
+  Visualizing episode 85...
+  Warning: No topdown image generated for episode 85
+
+================================================================================
+VISUALIZATION COMPLETE
+================================================================================
+
+All scene visualizations saved to: scene_visualizations/
+
+Scene folders created:
+

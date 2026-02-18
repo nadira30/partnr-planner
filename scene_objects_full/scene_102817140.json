@@ -1,0 +1,237 @@
+{
+  "episode_id": "0",
+  "scene_id": "102817140",
+  "instruction": "Human: Place the candle and candle holder on the white table in the living room. Move the plant to the same table.",
+  "entities": [
+    {
+      "id": 0,
+      "category": "Object",
+      "class_name": "candle",
+      "prefab_name": "candle_0",
+      "handle": "9dfbc1df2349093e0444dfabb8789296c83561cf_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -10.64718,
+        "y": 0.88529,
+        "z": -4.17653
+      },
+      "on_furniture": "8d97968066d74649237e6afe846f1f33a4c67571_:0000"
+    },
+    {
+      "id": 1,
+      "category": "Object",
+      "class_name": "candle_holder",
+      "prefab_name": "candle_holder_0",
+      "handle": "B075HR7LD2_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -10.82157,
+        "y": 0.91085,
+        "z": -3.92844
+      },
+      "on_furniture": "8d97968066d74649237e6afe846f1f33a4c67571_:0000"
+    },
+    {
+      "id": 2,
+      "category": "Object",
+      "class_name": "plant_container",
+      "prefab_name": "plant_container_0",
+      "handle": "Ecoforms_Plant_Pot_GP9AAvocado_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -10.49787,
+        "y": 0.8309,
+        "z": -4.19628
+      },
+      "on_furniture": "8d97968066d74649237e6afe846f1f33a4c67571_:0000"
+    },
+    {
+      "id": 3,
+      "category": "Object",
+      "class_name": "box 15",
+      "prefab_name": "box 15_0",
+      "handle": "Box_15_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -4.75159,
+        "y": 1.17916,
+        "z": -8.76595
+      },
+      "on_furniture": "1c19a987e1bd8c206353d18066b117cc0b21e841_:0001"
+    },
+    {
+      "id": 4,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_0",
+      "handle": "79590e37b261153df0b50a05e90edf40bc4f13c0_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -19.56309,
+        "y": 0.53923,
+        "z": -6.54868
+      },
+      "on_furniture": "7d8617011c72509329256bd40de9ec5547688286_:0000"
+    },
+    {
+      "id": 5,
+      "category": "Object",
+      "class_name": "office depot canon cli 8y ink cartridge yellow 0623b002",
+      "prefab_name": "office depot canon cli 8y ink cartridge yellow 0623b002_0",
+      "handle": "Office_Depot_Canon_CLI_8Y_Ink_Cartridge_Yellow_0623B002_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -1.21804,
+        "y": 0.57601,
+        "z": -0.88918
+      },
+      "on_furniture": "d886d10e71a0365a725abcf139142223409f7b4f_:0000"
+    },
+    {
+      "id": 6,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_1",
+      "handle": "dfc9026e1433b4f18ee76e7c6784e9406489a8c3_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -13.609,
+        "y": 0.60297,
+        "z": -6.95054
+      },
+      "on_furniture": "3f7e151179b654ffc659bc49f5f4c16cb1142a15_:0001"
+    },
+    {
+      "id": 7,
+      "category": "Object",
+      "class_name": "clutter_object",
+      "prefab_name": "clutter_object_2",
+      "handle": "b5a2e303c9a5cfa54fb5b257cd82926b194e1e26_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "position": {
+        "x": -18.44685,
+        "y": 1.036,
+        "z": -8.57395
+      },
+      "on_furniture": "2d677064b6bd4a3ba262cd510fd03c58efb57533_:0000"
+    },
+    {
+      "id": 8,
+      "category": "Rooms",
+      "class_name": "hallway",
+      "prefab_name": "hallway_0",
+      "properties": [],
+      "states": []
+    },
+    {
+      "id": 9,
+      "category": "Furniture",
+      "class_name": "1c19a987e1bd8c206353d18066b117cc0b21e841",
+      "prefab_name": "1c19a987e1bd8c206353d18066b117cc0b21e841_:0001",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": []
+    },
+    {
+      "id": 10,
+      "category": "Furniture",
+      "class_name": "2d677064b6bd4a3ba262cd510fd03c58efb57533",
+      "prefab_name": "2d677064b6bd4a3ba262cd510fd03c58efb57533_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": []
+    },
+    {
+      "id": 11,
+      "category": "Furniture",
+      "class_name": "3f7e151179b654ffc659bc49f5f4c16cb1142a15",
+      "prefab_name": "3f7e151179b654ffc659bc49f5f4c16cb1142a15_:0001",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": []
+    },
+    {
+      "id": 12,
+      "category": "Furniture",
+      "class_name": "7d8617011c72509329256bd40de9ec5547688286",
+      "prefab_name": "7d8617011c72509329256bd40de9ec5547688286_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": []
+    },
+    {
+      "id": 13,
+      "category": "Furniture",
+      "class_name": "8d97968066d74649237e6afe846f1f33a4c67571",
+      "prefab_name": "8d97968066d74649237e6afe846f1f33a4c67571_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": []
+    },
+    {
+      "id": 14,
+      "category": "Furniture",
+      "class_name": "d886d10e71a0365a725abcf139142223409f7b4f",
+      "prefab_name": "d886d10e71a0365a725abcf139142223409f7b4f_:0000",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": []
+    },
+    {
+      "id": 15,
+      "category": "Furniture",
+      "class_name": "table",
+      "prefab_name": "table_5",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE",
+        "SURFACES"
+      ],
+      "states": []
+    }
+  ]
+}

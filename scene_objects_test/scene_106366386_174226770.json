@@ -1,0 +1,53 @@
+{
+  "episode_id": "334",
+  "scene_id": "106366386_174226770",
+  "instruction": "First, move the phone and phone stand from the living room to the bedroom. Then, place them next to each other on the chair in the dining room.",
+  "entities": [
+    {
+      "id": 0,
+      "category": "Object",
+      "class_name": "cellphone",
+      "prefab_name": "cellphone_0",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "room": "living_room_0",
+      "on_furniture": "table_1"
+    },
+    {
+      "id": 1,
+      "category": "Object",
+      "class_name": "phone_stand",
+      "prefab_name": "phone_stand_0",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE"
+      ],
+      "states": [],
+      "room": "living_room_0",
+      "on_furniture": "table_1"
+    },
+    {
+      "id": 2,
+      "category": "Rooms",
+      "class_name": "living room",
+      "prefab_name": "living_room_0",
+      "properties": [],
+      "states": []
+    },
+    {
+      "id": 3,
+      "category": "Furniture",
+      "class_name": "table",
+      "prefab_name": "table_1",
+      "properties": [
+        "GRABBABLE",
+        "MOVABLE",
+        "SURFACES"
+      ],
+      "states": []
+    }
+  ]
+}
