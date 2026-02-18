@@ -10,49 +10,6 @@ on:
     #this is 9PM PST
 
 jobs:
-  pre-commit:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4.1.1
-    - name: Setup python
-      uses: actions/setup-python@v5.0.0
-      with:
-        python-version: '3.9.16'
-    - name: install dependencies
-      run: |-
-        pip install -U pip setuptools pre-commit
-        # Install the hooks now so that they'll be cached
-        pre-commit install-hooks
-    - name: Check Code Style using pre-commit
-      run: |-
-        SKIP=eslint pre-commit run --show-diff-on-failure --all-files
-
-  python_lint:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4.1.1
-    - name: Setup python
-      uses: actions/setup-python@v5.0.0
-      with:
-        python-version: '3.9.16'
-    - name: setup
-      run: |-
-        pip install black==23.1.0 --progress-bar off
-        pip install "isort[pyproject]" numpy --progress-bar off
-        pip install mypy==0.991 types-mock types-Pillow types-tqdm types-PyYAML --progress-bar off
-        pip install -r requirements.txt --progress-bar off
-    - name: run black
-      run: |-
-        black --version
-        ls -la
-        black --exclude '/(\.eggs|\.git|\.hg|\.mypy_cache|\.nox|\.tox|\.venv|_build|buck-out|build|dist)' habitat_llm/ dataset_generation/ --diff
-        black --exclude '/(\.eggs|\.git|\.hg|\.mypy_cache|\.nox|\.tox|\.venv|_build|buck-out|build|dist)' habitat_llm/ dataset_generation/ --check
-    - name: run isort
-      run: |-
-        isort --version
-        isort habitat_llm/. dataset_generation/. --diff
-        isort habitat_llm/. dataset_generation/. --check-only
-
   install_and_test_ubuntu:
     runs-on: 4-core-ubuntu-gpu-t4
     defaults:

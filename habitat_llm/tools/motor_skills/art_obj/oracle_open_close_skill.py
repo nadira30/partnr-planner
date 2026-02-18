@@ -68,6 +68,8 @@ class OracleOpenCloseSkill(SkillPolicy):
 
     def get_state_description(self):
         """Method to get a string describing the state for this tool"""
+        if self.target_handle is None:
+            return "Standing"
         # Following the try/except pattern used in other skills
         try:
             target_node = self.env.world_graph[self.agent_uid].get_node_from_sim_handle(

@@ -192,6 +192,21 @@ class PickSkillPolicy(NnSkillPolicy):
             )
             return "Standing"
 
+    def get_state_description(self):
+        """Method to get a string describing the state for this tool"""
+        if self.target_handle is None:
+            return "Standing"
+        try:
+            target_node = self.env.world_graph[self.agent_uid].get_node_from_sim_handle(
+                self.target_handle
+            )
+            return f"Picking {target_node.name}"
+        except Exception as e:
+            print(
+                f"WARNING: cannot get {self.target_handle} in graph due to {e}. Agent's state is standing"
+            )
+            return "Standing"
+
     def reset(self, batch_idxs):
         super().reset(batch_idxs)
         # Reset the internal flag

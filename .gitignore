@@ -127,3 +127,6 @@ run_parallel_demo.py
 show_episode_layout.py
 show_furniture_by_room.py
 show_objects_by_room.py
+
+results/
+scene_visualizations/

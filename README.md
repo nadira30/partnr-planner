@@ -29,6 +29,8 @@ Below are the details of various important directories and classes.
 - **scripts**
     - **hitl_analysis** : Contains scripts to analyze and replay human-in-the-loop traces.
     - **prediviz** : Contains visualization and annotation tools for PARTNR tasks.
+- **smart_home_sensors**
+    - Contains a smart home motion sensor simulation system with 3 sensors per room that detect person movement. See [smart_home_sensors/README.md](smart_home_sensors/README.md) for details.
 
 
 ## Information Flow

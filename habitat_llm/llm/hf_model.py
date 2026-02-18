@@ -10,6 +10,8 @@ from typing import Any, Dict, List, Optional, Tuple
 import torch
 from omegaconf import DictConfig
 
+from habitat_llm.llm.ollama_model import OllamaModel
+
 try:
     from rlm.llm import RemoteLanguageModel
 
@@ -35,6 +37,8 @@ class VLMHFModel(BaseLLM):
             self.init_local_model()
         elif self.inference_mode == "rlm":
             self.init_remote_model()
+        elif self.inference_mode == "ollama":
+            self.llm = OllamaModel
         else:
             print("HFModel does not support this inference mode")
             raise NotImplementedError

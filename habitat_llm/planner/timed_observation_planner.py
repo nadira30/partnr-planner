@@ -23,7 +23,7 @@ class TimedObservationPlanner(ScriptedCentralizedPlanner):
 
         # Action-based observation parameters (every N human actions)
         self.observation_interval_actions = (
-            3  # Navigate every 3 human actions (balanced frequency)
+            3  # Navigate every 5 human actions (balanced frequency)
         )
         self.human_actions_since_last_nav = 0
 

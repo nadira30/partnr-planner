@@ -148,6 +148,7 @@ def run_skills(config: omegaconf.DictConfig) -> None:
         "Pick": "Pick <agent_index> <entity_name>",
         # Place skill requires 5 arguments, comma separated, no spaces:
         "Place": "Place <agent_index> <entity_name_0,relation_0,entity_name_1,relation_1,entity_name_2>",
+        "Wait": "Wait <agent_index> <wait_time_seconds>",
     }
     exit_skill = "exit"
     help_skill = "help"

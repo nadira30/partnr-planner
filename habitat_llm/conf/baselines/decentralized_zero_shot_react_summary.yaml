@@ -20,16 +20,42 @@ evaluation:
     agent_0:
       planner:
         plan_config:
-          constrained_generation: True
-          objects_response: True
-          replanning_threshold: 50
           llm:
-            inference_mode: "rlm"
+            inference_mode: "ollama"
+            llm:
+              _target_: habitat_llm.llm.ollama_model.OllamaModel
+            generation_params:
+              engine: "llama3"
+              max_tokens: 256
+              temperature: 0.0
+
     agent_1:
       planner:
         plan_config:
-          constrained_generation: True
-          objects_response: True
-          replanning_threshold: 50
           llm:
-            inference_mode: "rlm"
+            inference_mode: "ollama"
+            llm:
+              _target_: habitat_llm.llm.ollama_model.OllamaModel
+            generation_params:
+              engine: "llama3"
+              max_tokens: 256
+              temperature: 0.0
+
+# evaluation:
+#   agents:
+#     agent_0:
+#       planner:
+#         plan_config:
+#           constrained_generation: True
+#           objects_response: True
+#           replanning_threshold: 50
+#           llm:
+#             inference_mode: "rlm"
+#     agent_1:
+#       planner:
+#         plan_config:
+#           constrained_generation: True
+#           objects_response: True
+#           replanning_threshold: 50
+#           llm:
+#             inference_mode: "rlm"

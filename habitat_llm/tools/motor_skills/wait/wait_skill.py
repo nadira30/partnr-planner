@@ -23,8 +23,7 @@ class WaitSkill(SkillPolicy):
         )
         self.env = env
         self.steps_elapsed = torch.zeros(self._batch_size)
-        # TODO: Revert from hardcoded thresh to specific in future.
-        # self.step_threshold = int(self._config.sim_freq) * self._config.default_wait_time * 60
+        # Default wait time is 5 seconds if not specified
         self.step_threshold = int(self._config.sim_freq) * 5
 
         # Get articulated agent
@@ -36,15 +35,28 @@ class WaitSkill(SkillPolicy):
         super().reset(batch_idxs)
         self.steps = 0
         self.steps_elapsed = torch.zeros(self._batch_size)
-        # TODO: Revert from hardcoded thresh to specific in future.
-        # self.step_threshold = int(self._config.sim_freq) * self._config.default_wait_time * 60
+        # Reset to default 5 seconds
         self.step_threshold = int(self._config.sim_freq) * 5
         return
 
     def set_target(self, wait_time, env):
-        # TODO: Revert from hardcoded thresh to specific in future.
-        # self.step_threshold = int(self._config.sim_freq) * self.get_number(wait_time) * 60
-        self.step_threshold = int(self._config.sim_freq) * 5
+        """
+        Set custom wait duration.
+        Args:
+            wait_time: String containing wait time in seconds (e.g., "10", "5", "3.5")
+                      If empty or "0", uses default 5 seconds
+            env: Environment object
+        """
+        if wait_time and wait_time != "0":
+            try:
+                duration_seconds = float(wait_time)
+                self.step_threshold = int(self._config.sim_freq * duration_seconds)
+            except (ValueError, TypeError):
+                # Fallback to default if parsing fails
+                self.step_threshold = int(self._config.sim_freq) * 5
+        else:
+            # Default to 5 seconds
+            self.step_threshold = int(self._config.sim_freq) * 5
         return
 
     def get_number(self, string):
@@ -96,4 +108,4 @@ class WaitSkill(SkillPolicy):
 
     @property
     def argument_types(self) -> List[str]:
-        return []
+        return ["wait_time"]
