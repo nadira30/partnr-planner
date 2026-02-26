@@ -246,6 +246,72 @@ def add_object(episode_id):
         return jsonify({'error': str(e)}), 500
 
 
+@app.route('/api/episode/<episode_id>/export-config', methods=['GET'])
+def export_config(episode_id):
+    """
+    API endpoint to export added objects as a NEW separate config file.
+    
+    IMPORTANT: This creates a NEW file with ONLY the added objects.
+    It does NOT modify the original episode config file.
+    The output is an ADDITION that can be used alongside the original.
+    """
+    try:
+        added_objs = _added_objects.get(episode_id, [])
+        
+        if not added_objs:
+            return jsonify({'error': 'No objects added to export'}), 400
+        
+        # Group objects by room and furniture
+        config_items = []
+        
+        # Create a dict to group by (room, furniture, object_category)
+        grouped = {}
+        for obj in added_objs:
+            key = (obj['room'], obj['furniture'], obj['object_category'])
+            if key not in grouped:
+                grouped[key] = []
+            grouped[key].append(obj)
+        
+        # Convert to initial_state format
+        for (room, furniture, obj_category), objs in grouped.items():
+            config_items.append({
+                "number": len(objs),
+                "object_classes": [obj_category],
+                "allowed_regions": [room],
+                "furniture_names": [furniture]
+            })
+        
+        # Create the full config structure for NEW objects ONLY
+        config = {
+            "_comment": "This is a NEW file containing ONLY the added objects. It does NOT modify the original episode config.",
+            "file_type": "added_objects_only",
+            "original_episode_id": episode_id,
+            "new_episode_id": f"{episode_id}_with_additions",
+            "added_objects": {
+                "initial_state": config_items
+            },
+            "metadata": {
+                "description": "Contains ONLY objects added via the visualizer UI",
+                "original_episode_config": f"See original episode {episode_id} config for base objects",
+                "total_objects_added": len(added_objs),
+                "timestamp": "2026-02-26",
+                "usage": "Append these objects to the original episode's initial_state array",
+                "objects_detail": added_objs
+            }
+        }
+        
+        print(f"✓ Exported NEW config file for episode {episode_id} with {len(added_objs)} added objects")
+        print(f"  (Original episode config remains unchanged)")
+        
+        return jsonify(config)
+        
+    except Exception as e:
+        import traceback
+        print(f"ERROR exporting config:")
+        print(traceback.format_exc())
+        return jsonify({'error': str(e)}), 500
+
+
 if __name__ == '__main__':
     print("\n" + "="*80)
     print("Starting Episode Visualizer App")
