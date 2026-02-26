@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Episode Visualizer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .controls {
+            padding: 30px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .main-layout {
+            display: flex;
+            min-height: calc(100vh - 250px);
+        }
+
+        .add-object-section {
+            width: 350px;
+            background: white;
+            padding: 20px;
+            border-right: 2px solid #e9ecef;
+            position: sticky;
+            top: 0;
+            height: fit-content;
+            max-height: 100vh;
+            overflow-y: auto;
+        }
+
+        .add-object-section h3 {
+            margin-bottom: 15px;
+            color: #495057;
+            font-size: 1.1em;
+        }
+
+        .content-area {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #495057;
+            font-size: 0.9em;
+        }
+
+        select, .searchable-select {
+            width: 100%;
+            padding: 8px;
+            border: 2px solid #dee2e6;
+            border-radius: 6px;
+            font-size: 13px;
+            background: white;
+        }
+
+        select:focus, .searchable-select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn-add {
+            background: linear-gradient(135deg, #52b788 0%, #2d6a4f 100%);
+        }
+
+        .btn-refresh {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .btn-refresh {
+            background: linear-gradient(135deg, #f77f00 0%, #d62828 100%);
+            width: 100%
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 12px 20px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .episode-info {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 5px solid #2196F3;
+        }
+
+        .episode-info h3 {
+            color: #1976D2;
+            margin-bottom: 10px;
+        }
+
+        .rooms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .room-card {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .room-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .room-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: -20px -20px 20px -20px;
+            font-size: 1.3em;
+            font-weight: bold;
+            text-transform: capitalize;
+        }
+
+        .furniture-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 15px;
+        }
+
+        .furniture-item {
+            text-align: center;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .furniture-item:hover {
+            background: #e9ecef;
+        }
+
+        .furniture-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 8px;
+            display: block;
+            object-fit: contain;
+        }
+
+        .furniture-label {
+            font-size: 0.85em;
+            color: #495057;
+            word-wrap: break-word;
+        }
+
+        .object-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin: 5px;
+            padding: 8px 12px;
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
+        .object-square {
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+            display: inline-block;
+        }
+
+        .objects-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e9ecef;
+        }
+
+        .objects-title {
+            font-weight: bold;
+            color: #495057;
+            margin-bottom: 10px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.2em;
+            color: #6c757d;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 5px solid #f5c6cb;
+        }
+
+        .empty-room {
+            color: #6c757d;
+            font-style: italic;
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏠 Episode Visualizer</h1>
+            <p>Explore rooms, furniture, and objects in PARTNR episodes</p>
+        </div>
+
+        <div class="controls">
+            <div class="input-group">
+                <input type="text" id="episodeInput" placeholder="Enter Episode ID (e.g., 100)" value="100">
+        </div>
+
+        <div class="main-layout">
+            <div class="add-object-section">
+                <h3>➕ Add New Object</h3>
+                
+                <div class="form-group">
+                    <label for="objectCategory">Object Category</label>
+                    <input type="text" id="objectCategorySearch" placeholder="Search..." 
+                           oninput="filterObjectCategories()" class="searchable-select">
+                    <select id="objectCategory" size="5" style="margin-top: 5px;">
+                        <option value="">Loading...</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="roomSelect">Room</label>
+                    <select id="roomSelect" onchange="updateFurnitureList()">
+                        <option value="">Select a room</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="furnitureSelect">Furniture</label>
+                    <select id="furnitureSelect">
+                        <option value="">Select furniture</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <button onclick="addObject()" class="btn-add">Add Object</button>
+                    <button onclick="refreshEpisode()" class="btn-refresh">Refresh View</button>
+                </div>
+                
+                <div id="addObjectMessage"></div>
+            </div>
+
+            <div class="content-area">
+                <div id="content">
+                    <div class="loading">Enter an episode ID to begin</div>
+                </div>
+            
+        <div class="content" id="content">
+            <div class="loading">Enter an episode ID to begin</div>
+        </div>
+    </div>
+
+    <script>
+        const objectColors = [
+            '#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8',
+            '#F7DC6F', '#BB8FCE', '#85C1E2', '#F8B739', '#52B788'
+        ];
+
+        let currentEpisodeData = null;
+        let allObjectCategories = [];
+
+        function getObjectColor(objectName) {
+            let hash = 0;
+            for (let i = 0; i < objectName.length; i++) {
+                hash = objectName.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            return objectColors[Math.abs(hash) % objectColors.length];
+        }
+
+        function getFurnitureIcon(furnitureName) {
+            // Extract furniture type from name (e.g., "table_36" -> "table")
+            const type = furnitureName.split('_')[0];
+            const iconPath = `/static/receptacles_icons/${type}@2x.png`;
+            return iconPath;
+        }
+
+        function loadObjectCategories() {
+            fetch('/api/object-categories')
+                .then(response => response.json())
+                .then(data => {
+                    allObjectCategories = data.categories;
+                    const select = document.getElementById('objectCategory');
+                    select.innerHTML = allObjectCategories.map(cat => 
+                        `<option value="${cat.category}">${cat.category}</option>`
+                    ).join('');
+                })
+                .catch(error => {
+                    console.error('Error loading object categories:', error);
+                });
+        }
+
+        function filterObjectCategories() {
+            const searchTerm = document.getElementById('objectCategorySearch').value.toLowerCase();
+            const select = document.getElementById('objectCategory');
+            
+            const filtered = allObjectCategories.filter(cat => 
+                cat.category.toLowerCase().includes(searchTerm)
+            );
+            
+            select.innerHTML = filtered.map(cat => 
+                `<option value="${cat.category}">${cat.category}</option>`
+            ).join('');
+        }
+
+        function updateFurnitureList() {
+            const room = document.getElementById('roomSelect').value;
+            const furnitureSelect = document.getElementById('furnitureSelect');
+            
+            if (!room || !currentEpisodeData) {
+                furnitureSelect.innerHTML = '<option value="">Select furniture</option>';
+                return;
+            }
+            
+            const furniture = currentEpisodeData.furniture_by_room[room] || [];
+            furnitureSelect.innerHTML = '<option value="">Select furniture</option>' + 
+                furniture.map(f => `<option value="${f}">${f}</option>`).join('');
+        }
+
+        function addObject() {
+            const episodeId = document.getElementById('episodeInput').value;
+            const category = document.getElementById('objectCategory').value;
+            const room = document.getElementById('roomSelect').value;
+            const furniture = document.getElementById('furnitureSelect').value;
+            const messageDiv = document.getElementById('addObjectMessage');
+            
+            if (!category || !room || !furniture) {
+                messageDiv.innerHTML = '<div class="message error">Please select all fields</div>';
+                return;
+            }
+            
+            messageDiv.innerHTML = '<div class="message">Adding object...</div>';
+            
+            fetch(`/api/episode/${episodeId}/add-object`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    object_category: category,
+                    room: room,
+                    furniture: furniture
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    messageDiv.innerHTML = `<div class="message success">${data.message}</div>`;
+                    setTimeout(() => {
+                        messageDiv.innerHTML = '';
+                    }, 3000);
+                } else {
+                    messageDiv.innerHTML = `<div class="message error">Error: ${data.error}</div>`;
+                }
+            })
+            .catch(error => {
+                messageDiv.innerHTML = `<div class="message error">Error: ${error.message}</div>`;
+            });
+        }
+
+        function refreshEpisode() {
+            loadEpisode();
+        }
+
+        function loadEpisode() {
+            const episodeId = document.getElementById('episodeInput').value;
+            const content = document.getElementById('content');
+            
+            if (!episodeId) {
+                content.innerHTML = '<div class="error">Please enter an episode ID</div>';
+                return;
+            }
+
+            content.innerHTML = '<div class="loading">Loading episode data...</div>';
+
+            fetch(`/api/episode/${episodeId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Episode not found or error loading data');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    currentEpisodeData = data;
+                    displayEpisode(data);
+                    updateRoomsList(data);
+                })
+                .catch(error => {
+                    content.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+                });
+        }
+
+        function updateRoomsList(data) {
+            const roomSelect = document.getElementById('roomSelect');
+            roomSelect.innerHTML = '<option value="">Select a room</option>' + 
+                data.rooms.map(room => `<option value="${room}">${room.replace(/_/g, ' ')}</option>`).join('');
+        }
+
+        function displayEpisode(data) {
+            const content = document.getElementById('content');
+            
+            let html = `
+                <div class="episode-info">
+                    <h3>Episode ${data.episode_id}</h3>
+                    <p><strong>Scene:</strong> ${data.scene_id}</p>
+                    <p><strong>Rooms:</strong> ${data.rooms.length} | <strong>Objects:</strong> ${Object.keys(data.object_locations).length}</p>
+                </div>
+
+                <div class="rooms-grid">
+            `;
+
+            // Display each room with its furniture and objects
+            for (const room of data.rooms) {
+                const furniture = data.furniture_by_room[room] || [];
+                
+                // Get objects in this room
+                const objectsInRoom = Object.entries(data.object_locations)
+                    .filter(([objName, loc]) => loc.room === room);
+
+                html += `
+                    <div class="room-card">
+                        <div class="room-header">${room.replace(/_/g, ' ')}</div>
+                `;
+
+                if (furniture.length > 0) {
+                    html += '<div class="furniture-list">';
+                    
+                    for (const furnitureItem of furniture) {
+                        const iconPath = getFurnitureIcon(furnitureItem);
+                        const furnitureType = furnitureItem.split('_')[0];
+                        
+                        // Check if this furniture has objects on it
+                        const objectsOnFurniture = objectsInRoom.filter(
+                            ([objName, loc]) => loc.furniture === furnitureItem
+                        );
+
+                        html += `
+                            <div class="furniture-item">
+                                <img src="${iconPath}" 
+                                     alt="${furnitureType}" 
+                                     class="furniture-icon"
+                                     onerror="this.src='/static/receptacles_icons/table@2x.png'">
+                                <div class="furniture-label">${furnitureItem}</div>
+                        `;
+
+                        // Show objects on this furniture as small colored squares
+                        if (objectsOnFurniture.length > 0) {
+                            for (const [objName, loc] of objectsOnFurniture) {
+                                const color = getObjectColor(objName);
+                                html += `<span class="object-square" style="background-color: ${color};" title="${objName}"></span>`;
+                            }
+                        }
+
+                        html += '</div>';
+                    }
+                    
+                    html += '</div>';
+                } else {
+                    html += '<div class="empty-room">No furniture in this room</div>';
+                }
+
+                // Show objects section if there are objects in this room
+                if (objectsInRoom.length > 0) {
+                    html += '<div class="objects-section">';
+                    html += '<div class="objects-title">Objects:</div>';
+                    
+                    for (const [objName, loc] of objectsInRoom) {
+                        const color = getObjectColor(objName);
+                        html += `
+                            <div class="object-item">
+                                <span class="object-square" style="background-color: ${color};"></span>
+                                <span>${objName} → ${loc.furniture}</span>
+                            </div>
+                        `;
+                    }
+                    
+                    html += '</div>';
+                }
+
+                html += '</div>';
+            }
+
+            html += '</div>';
+            content.innerHTML = html;
+        }
+
+        // Load episode on Enter key
+        document.getElementById('episodeInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                loadEpisode();
+            }
+        });
+
+        // Load default episode and object categories on page load
+        window.addEventListener('load', function() {
+            loadObjectCategories();
+            loadEpisode();
+        });
+    </script>
+</body>
+</html>
