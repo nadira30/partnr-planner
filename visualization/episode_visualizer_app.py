@@ -24,6 +24,22 @@ from flask import Flask, render_template, request, jsonify, send_file
 from typing import Dict, List, Optional
 from collections import defaultdict
 
+# Import scene furniture lookup utility
+try:
+    from scene_furniture_lookup import SceneFurnitureLookup
+    FURNITURE_LOOKUP_AVAILABLE = True
+except ImportError:
+    print("⚠ Warning: scene_furniture_lookup not available")
+    FURNITURE_LOOKUP_AVAILABLE = False
+
+# Import furniture handle lookup utility
+try:
+    from furniture_handle_lookup import FurnitureHandleLookup
+    FURNITURE_HANDLE_LOOKUP_AVAILABLE = True
+except ImportError:
+    print("⚠ Warning: furniture_handle_lookup not available")
+    FURNITURE_HANDLE_LOOKUP_AVAILABLE = False
+
 # Try to import habitat and scene utilities
 HABITAT_AVAILABLE = False
 SCENE_UTILS_AVAILABLE = False
@@ -31,6 +47,7 @@ SCENE_UTILS_AVAILABLE = False
 try:
     import habitat
     from habitat_llm.utils.sim import find_receptacles
+    from habitat_llm.world_model import WorldGraph
     HABITAT_AVAILABLE = True
 except ImportError:
     print("⚠ Warning: habitat not available, simulator validation disabled")
@@ -55,6 +72,37 @@ _added_objects = defaultdict(list)
 
 # Object database for validation
 object_database = []
+
+# Furniture lookup utility
+furniture_lookup = None
+if FURNITURE_LOOKUP_AVAILABLE:
+    try:
+        # Use absolute path from project root
+        project_root = Path(__file__).parent.parent
+        dataset_path = project_root / "data" / "datasets" / "partnr_episodes" / "v0_0" / "val_mini.json.gz"
+        furniture_lookup = SceneFurnitureLookup(dataset_path=str(dataset_path))
+        print("✓ SceneFurnitureLookup initialized successfully")
+    except Exception as e:
+        print(f"⚠ Warning: Could not initialize furniture lookup: {e}")
+
+# Furniture handle lookup utility
+furniture_handle_lookup = None
+if FURNITURE_HANDLE_LOOKUP_AVAILABLE:
+    try:
+        # Use absolute path from project root
+        project_root = Path(__file__).parent.parent
+        # Try sample file first for testing
+        mapping_file = project_root / "visualization" / "data" / "furniture_handles_val_sample.json"
+        if not mapping_file.exists():
+            mapping_file = project_root / "visualization" / "data" / "furniture_handles_val_mini.json"
+        
+        if mapping_file.exists():
+            furniture_handle_lookup = FurnitureHandleLookup(str(mapping_file))
+        else:
+            print(f"⚠ Warning: Furniture handle mapping file not found")
+            print(f"  Run: python visualization/episode_info/extract_all_furniture_handles.py")
+    except Exception as e:
+        print(f"⚠ Warning: Could not initialize furniture handle lookup: {e}")
 
 
 def quaternion_to_rotation_matrix(quat):
@@ -356,12 +404,25 @@ def add_object(episode_id):
         object_class = data.get("object_class") or data.get("object_category")
         room = data.get("room")
         furniture = data.get("furniture")
-        receptacle_handle = data.get("receptacle_handle")
         preposition = data.get("preposition", "on")
         position = data.get("position", {"x": 0, "y": 0.5, "z": 0})
         
         if not all([object_class, room, furniture]):
             return jsonify({"error": "Missing required fields"}), 400
+        
+        # Look up furniture handle from pre-extracted mapping based on episode_id and furniture name
+        receptacle_handle = None
+        if furniture != "floor" and furniture_handle_lookup and furniture_handle_lookup.has_episode(episode_id):
+            receptacle_handle = furniture_handle_lookup.get_furniture_handle(episode_id, furniture)
+            if receptacle_handle:
+                print(f"✓ Found furniture handle from mapping: {furniture} -> {receptacle_handle}")
+            else:
+                print(f"⚠ Furniture '{furniture}' not found in pre-extracted mapping for episode {episode_id}")
+        
+        # Allow override from request data
+        if data.get("receptacle_handle"):
+            receptacle_handle = data.get("receptacle_handle")
+            print(f"✓ Using receptacle_handle from request: {receptacle_handle}")
         
         # Load object database for validation and lookup
         load_object_database()
@@ -391,6 +452,148 @@ def add_object(episode_id):
         
         # Load full episode JSON
         ep = load_full_episode_json(episode_id)
+        
+        print(f"\n{'='*60}")
+        print(f"DEBUGGING ADD OBJECT:")
+        print(f"  episode_id: {episode_id}")
+        print(f"  furniture: {repr(furniture)}")
+        print(f"  receptacle_handle (from lookup): {repr(receptacle_handle)}")
+        print(f"  furniture_handle_lookup available: {furniture_handle_lookup is not None}")
+        print(f"  has_episode({episode_id}): {furniture_handle_lookup.has_episode(episode_id) if furniture_handle_lookup else 'N/A'}")
+        print(f"{'='*60}\n")
+        
+        # If receptacle_handle not provided, derive it from furniture name
+        furniture_handle = None
+        furniture_position = None
+        if not receptacle_handle and furniture != "floor":
+            try:
+                print(f"\n🔍 Looking up furniture handle for: {furniture}")
+                
+                # METHOD 1: Try pre-extracted furniture handle mapping (fastest, no simulator needed)
+                if furniture_handle_lookup and furniture_handle_lookup.has_episode(episode_id):
+                    furniture_handle = furniture_handle_lookup.get_furniture_handle(episode_id, furniture)
+                    if furniture_handle:
+                        print(f"✓ Found furniture handle from pre-extracted mapping: {furniture_handle}")
+                
+                # METHOD 2: Look through existing objects to find one on this furniture
+                if not furniture_handle:
+                    episode_data_viz = get_episode_data(episode_id)
+                    
+                    for obj_name, loc in episode_data_viz.get('object_locations', {}).items():
+                        if loc.get('furniture') == furniture:
+                            # Found an object on this furniture!
+                            # Now find its receptacle in name_to_receptacle
+                            for obj_handle, recep in ep.get('name_to_receptacle', {}).items():
+                                # Match by object name (handle may have instance suffix)
+                                obj_base_name = obj_name.split('_')[0]
+                                if obj_handle.startswith(obj_base_name):
+                                    # Extract furniture handle from receptacle
+                                    # Format: "FURNITURE_HANDLE_:0004|receptacle_mesh_..."
+                                    if '|' in recep and recep != "floor":
+                                        furniture_handle = recep.split('|')[0]
+                                        print(f"✓ Found furniture handle from existing object '{obj_name}': {furniture_handle}")
+                                        break
+                            if furniture_handle:
+                                break
+                    
+                    if furniture_handle:
+                        print(f"✓ Found furniture handle from existing objects: {furniture_handle}")
+                
+                # Get position from scene file if we have a handle
+                if furniture_handle and FURNITURE_LOOKUP_AVAILABLE and furniture_lookup:
+                    scene_id_clean = ep.get("scene_id", "").split('/')[-1].replace('.scene_instance.json', '')
+                    # Remove instance suffix for scene lookup
+                    furniture_handle_base = furniture_handle.split('_:')[0] if '_:' in furniture_handle else furniture_handle
+                    furniture_info = furniture_lookup.get_furniture_by_handle(scene_id_clean, furniture_handle_base)
+                    if furniture_info:
+                        furniture_position = furniture_info['position']
+                        print(f"✓ Found furniture position: {furniture_position}")
+                    else:
+                        print(f"⚠ Furniture handle found but no position in scene file")
+                
+                # FALLBACK: If no existing objects on this furniture, search scene file directly
+                if not furniture_handle and FURNITURE_LOOKUP_AVAILABLE and furniture_lookup:
+                    print(f"⚠ No existing objects found on '{furniture}', searching scene file...")
+                    scene_id_clean = ep.get("scene_id", "").split('/')[-1].replace('.scene_instance.json', '')
+                    
+                    # Get all furniture from scene
+                    all_furniture = furniture_lookup.get_all_furniture(scene_id_clean)
+                    
+                    # Extract furniture type and instance number from name
+                    # e.g., "table_36" -> type: "table", instance: 36
+                    if '_' in furniture:
+                        parts = furniture.rsplit('_', 1)
+                        if parts[-1].isdigit():
+                            furn_type = parts[0]
+                            furn_instance = int(parts[-1])
+                        else:
+                            furn_type = furniture
+                            furn_instance = None
+                    else:
+                        furn_type = furniture
+                        furn_instance = None
+                    
+                    # Search for matching furniture in scene
+                    # Match by type and if possible by instance number
+                    furn_type_normalized = furn_type.replace('_', '').lower()
+                    matching_furniture = []
+                    
+                    for furn_info in all_furniture:
+                        handle = furn_info['handle']
+                        obj_type = furn_info.get('object_type', '').lower()
+                        
+                        # Check if furniture type matches
+                        if furn_type in obj_type or furn_type_normalized in obj_type.replace('_', ''):
+                            matching_furniture.append(furn_info)
+                    
+                    if matching_furniture:
+                        # If we have an instance number, try to match it
+                        # Otherwise just use the first match
+                        selected_furn = matching_furniture[0]
+                        if furn_instance is not None and len(matching_furniture) > furn_instance:
+                            # Try to get the correct instance (furniture are usually ordered)
+                            selected_furn = matching_furniture[min(furn_instance, len(matching_furniture) - 1)]
+                        
+                        furniture_handle = selected_furn['handle']
+                        furniture_position = selected_furn['position']
+                        print(f"✓ Found furniture in scene file: {furniture_handle}")
+                        print(f"✓ Position: {furniture_position}")
+                        print(f"  (Found {len(matching_furniture)} matching '{furn_type}' furniture)")
+                    else:
+                        print(f"⚠ No furniture matching '{furn_type}' found in scene file")
+                
+                if not furniture_handle:
+                    print(f"⚠ Could not determine furniture handle for '{furniture}'")
+                    
+            except Exception as e:
+                import traceback
+                print(f"⚠ Could not get furniture handle from episode data: {e}")
+                print(traceback.format_exc())
+        
+        # ALWAYS retrieve furniture position if we have any handle (receptacle_handle OR furniture_handle)
+        # This ensures position is retrieved regardless of where the handle came from
+        if furniture != "floor" and not furniture_position:
+            # Determine which handle to use
+            handle_to_use = furniture_handle if furniture_handle else receptacle_handle
+            
+            if handle_to_use and FURNITURE_LOOKUP_AVAILABLE and furniture_lookup:
+                try:
+                    print(f"\n🔍 Retrieving furniture position for handle: {handle_to_use}")
+                    scene_id_clean = ep.get("scene_id", "").split('/')[-1].replace('.scene_instance.json', '')
+                    
+                    # Extract base handle (remove instance suffix and mesh part if present)
+                    if '|' in handle_to_use:
+                        handle_to_use = handle_to_use.split('|')[0]
+                    handle_base = handle_to_use.split('_:')[0] if '_:' in handle_to_use else handle_to_use
+                    
+                    furniture_info = furniture_lookup.get_furniture_by_handle(scene_id_clean, handle_base)
+                    if furniture_info:
+                        furniture_position = furniture_info['position']
+                        print(f"✓ Retrieved furniture position: {furniture_position}")
+                    else:
+                        print(f"⚠ Handle '{handle_base}' not found in scene file")
+                except Exception as e:
+                    print(f"⚠ Could not retrieve furniture position: {e}")
         
         # Count explicit objects from initial_state (excludes clutter/template entries)
         explicit_object_count = 0
@@ -429,48 +632,53 @@ def add_object(episode_id):
         print(f"{'='*60}\n")
         
         # 2. Calculate proper object position and rotation based on furniture
-        scene_id = ep.get("scene_id", "")
-        
-        # Get furniture position and rotation from scene file
+        # furniture_position was already retrieved above if available
         furniture_info = None
         rotation_matrix = np.eye(3)  # Default to identity rotation
         
-        if receptacle_handle and furniture != "floor" and SCENE_UTILS_AVAILABLE and scene_id:
-            try:
-                # Extract the parent furniture handle from receptacle_handle
-                furniture_handle = receptacle_handle.split('|')[0] if '|' in receptacle_handle else receptacle_handle
-                furniture_handle_base = furniture_handle.split('_:')[0] if '_:' in furniture_handle else furniture_handle
-                
-                print(f"Getting furniture position/rotation from scene file using handle: {furniture_handle_base}")
-                furniture_info = scene_utils.get_object_position(scene_id, furniture_handle_base)
-                if furniture_info:
-                    print(f"✓ Found furniture in scene file:")
-                    print(f"  Template: {furniture_info['template_name']}")
-                    print(f"  Position: {furniture_info['position']}")
-                    print(f"  Rotation (quaternion): {furniture_info['rotation']}")
-                    
-                    # Convert quaternion to rotation matrix
-                    rotation_matrix = quaternion_to_rotation_matrix(furniture_info['rotation'])
-                    print(f"  Rotation matrix extracted")
-                else:
-                    print(f"⚠ Could not find furniture with handle '{furniture_handle_base}' in scene file")
-            except Exception as e:
-                print(f"⚠ Warning: Could not get furniture info from scene file: {e}")
+        if furniture_position:
+            # We already have the position - just get rotation if available
+            if furniture_handle and FURNITURE_LOOKUP_AVAILABLE and furniture_lookup:
+                try:
+                    scene_id = ep.get("scene_id", "").split('/')[-1].replace('.scene_instance.json', '')
+                    furniture_handle_base = furniture_handle.split('_:')[0] if '_:' in furniture_handle else furniture_handle
+                    furniture_info = furniture_lookup.get_furniture_by_handle(scene_id, furniture_handle_base)
+                    if furniture_info:
+                        # Convert quaternion to rotation matrix
+                        quat = furniture_info['rotation']  # [qx, qy, qz, qw]
+                        rotation_matrix = quaternion_to_rotation_matrix(quat)
+                        print(f"✓ Using furniture rotation: {furniture_info['rotation']}")
+                except Exception as e:
+                    print(f"⚠ Warning: Could not get furniture rotation: {e}")
         
         # Calculate object position
         obj_position = None
-        if furniture_info and furniture != "floor":
-            # Use furniture position with height offset for top surface
-            base_pos = furniture_info['position']
-            if abs(base_pos[1]) < 0.1:  # Ground level furniture
-                surface_y = base_pos[1]
-            else:  # Already elevated
-                surface_y = base_pos[1]
-            obj_position = (base_pos[0], surface_y, base_pos[2])
-            print(f"Using furniture position with surface offset: {obj_position}")
+        
+        # IMPORTANT: The name_to_receptacle mapping is what habitat uses for actual placement
+        # The rigid_objs position is just an initial approximation
+        # Habitat's physics will snap objects to receptacles at runtime
+        
+        if furniture_position and furniture != "floor":
+            # Use the position we already retrieved
+            # Add small vertical offset to place on top (habitat will adjust this)
+            surface_y = furniture_position[1] + 0.1  # Small offset above furniture base
+            
+            # Add small random offset to avoid exact overlap
+            import random
+            random_x_offset = random.uniform(-0.05, 0.05)
+            random_z_offset = random.uniform(-0.05, 0.05)
+            
+            obj_position = (
+                furniture_position[0] + random_x_offset, 
+                surface_y, 
+                furniture_position[2] + random_z_offset
+            )
+            print(f"✓ Using furniture position: {obj_position}")
         else:
+            # Fallback: use provided position or default
+            # NOTE: This position is approximate - habitat uses name_to_receptacle for actual placement
             obj_position = (position.get("x", 0.0), position.get("y", 0.5), position.get("z", 0.0))
-            print(f"Using default/provided position: {obj_position}")
+            print(f"⚠ Using default position (habitat will adjust based on receptacle): {obj_position}")
         
         # 3. Add to rigid_objs BEFORE clutter objects
         transform_matrix = [
@@ -489,54 +697,46 @@ def add_object(episode_id):
         
         # 4. Add to name_to_receptacle BEFORE clutter objects
         recep_value = None
-        if receptacle_handle and furniture != "floor" and HABITAT_AVAILABLE:
-            # Try to get receptacle from simulator first (most reliable)
-            try:
-                temp_sim = create_sim_for_episode(ep)
-                if temp_sim is not None:
-                    receptacles = find_receptacles(temp_sim, filter_receptacles=False)
-                    
-                    parent_handle = receptacle_handle.split('|')[0] if '|' in receptacle_handle else receptacle_handle
-                    
-                    # Find matching receptacles
-                    matching_receptacles = []
-                    for rec in receptacles:
-                        if rec.parent_object_handle == parent_handle or parent_handle in rec.parent_object_handle:
-                            matching_receptacles.append(rec)
-                    
-                    if matching_receptacles:
-                        rec = matching_receptacles[0]
-                        parent_handle_actual = rec.parent_object_handle
-                        if "_:" not in parent_handle_actual:
-                            parent_handle_actual = f"{parent_handle_actual}_:0000"
-                        recep_value = f"{parent_handle_actual}|{rec.name}"
-                        print(f"✓ Validated receptacle exists in simulator: {recep_value}")
-                    else:
-                        print(f"⚠ Receptacle not found in simulator for handle: {parent_handle}")
-                    
-                    temp_sim.close()
-            except Exception as e:
-                print(f"⚠ Could not validate receptacle: {e}")
         
-        # If simulator validation failed, try URDF fallback
-        if recep_value is None and receptacle_handle and furniture != "floor":
+        # PRIORITY 1: If we have furniture_handle from world graph, use it directly
+        if furniture_handle and furniture != "floor":
+            parent_handle = furniture_handle
+            parent_handle_with_suffix = parent_handle if "_:" in parent_handle else f"{parent_handle}_:0000"
+            
+            # Try to find receptacle mesh name from URDF
+            receptacle_mesh_name = find_receptacle_mesh_name(parent_handle)
+            if receptacle_mesh_name:
+                recep_value = f"{parent_handle_with_suffix}|{receptacle_mesh_name}.0000"
+                print(f"✓ Using receptacle from furniture handle: {recep_value}")
+            else:
+                # Construct generic receptacle_mesh name
+                parent_handle_base = parent_handle.split('_:')[0] if '_:' in parent_handle else parent_handle
+                recep_value = f"{parent_handle_with_suffix}|receptacle_mesh_{parent_handle_base}.0000"
+                print(f"✓ Using constructed receptacle from furniture handle: {recep_value}")
+        
+        # PRIORITY 2: If receptacle_handle was explicitly provided
+        elif receptacle_handle and furniture != "floor":
             parent_handle = receptacle_handle.split('|')[0] if '|' in receptacle_handle else receptacle_handle
             parent_handle_with_suffix = parent_handle if "_:" in parent_handle else f"{parent_handle}_:0000"
             
             receptacle_mesh_name = find_receptacle_mesh_name(parent_handle)
             if receptacle_mesh_name:
                 recep_value = f"{parent_handle_with_suffix}|{receptacle_mesh_name}.0000"
-                print(f"⚠ Using receptacle from URDF (not validated): {recep_value}")
+                print(f"✓ Using receptacle from provided handle: {recep_value}")
             else:
-                # Last resort: construct generic receptacle_mesh name
                 parent_handle_base = parent_handle.split('_:')[0] if '_:' in parent_handle else parent_handle
                 recep_value = f"{parent_handle_with_suffix}|receptacle_mesh_{parent_handle_base}.0000"
-                print(f"⚠ WARNING: Could not validate receptacle, using constructed name: {recep_value}")
+                print(f"✓ Using constructed receptacle from provided handle: {recep_value}")
         
-        # Only use floor if explicitly requested
+        # PRIORITY 3: Only use floor if explicitly requested or no furniture info available
         if recep_value is None:
-            recep_value = "floor"
-            print(f"✓ Using 'floor' as receptacle")
+            if furniture == "floor":
+                recep_value = "floor"
+                print(f"✓ Using 'floor' as receptacle (explicitly requested)")
+            else:
+                # This shouldn't happen if world graph worked, but fallback to floor
+                recep_value = "floor"
+                print(f"⚠ WARNING: No furniture handle found, falling back to floor")
         
         # Insert at position equal to number of explicit objects (before clutter)
         recep_items = list(ep["name_to_receptacle"].items())
@@ -761,6 +961,20 @@ def export_data(episode_id):
             return jsonify({"error": "No modifications found"}), 404
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/debug/status', methods=['GET'])
+def debug_status():
+    """Debug endpoint to check system status."""
+    return jsonify({
+        "HABITAT_AVAILABLE": HABITAT_AVAILABLE,
+        "SCENE_UTILS_AVAILABLE": SCENE_UTILS_AVAILABLE,
+        "FURNITURE_LOOKUP_AVAILABLE": FURNITURE_LOOKUP_AVAILABLE,
+        "furniture_lookup_initialized": furniture_lookup is not None,
+        "furniture_lookup_dataset": str(furniture_lookup.dataset_path) if furniture_lookup else None,
+        "furniture_lookup_scene_dir": str(furniture_lookup.scene_dir) if furniture_lookup else None,
+        "scene_dir_exists": furniture_lookup.scene_dir.exists() if furniture_lookup else None
+    })
 
 
 if __name__ == '__main__':
