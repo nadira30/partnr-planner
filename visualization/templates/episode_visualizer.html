@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #95c4d6 0%, #1375d1 100%);
             min-height: 100vh;
             padding: 20px;
         }
@@ -28,7 +28,7 @@
         }
 
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #95c4d6 0%, #1375d1 100%);
             color: white;
             padding: 30px;
             text-align: center;
@@ -104,7 +104,7 @@
 
         select:focus, .searchable-select:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #d5acd6;
         }
 
         .btn-add {
@@ -147,12 +147,12 @@
 
         input[type="text"]:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #d5acd6;
         }
 
         button {
             padding: 12px 30px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #95c4d6 0%, #0988d1 100%);
             color: white;
             border: none;
             border-radius: 8px;
@@ -207,7 +207,7 @@
         }
 
         .room-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #95c4d6 0%, #1375d1 100%);
             color: white;
             padding: 15px;
             border-radius: 8px;
@@ -348,15 +348,39 @@
                 </div>
                 
                 <div id="addObjectMessage"></div>
+
+                <div class="save-section">
+                    <h4>💾 Save Modified Episode</h4>
+                    <p style="font-size: 0.85em; color: #6c757d; margin-bottom: 10px;">
+                        Download the complete episode JSON with all your added objects.
+                    </p>
+                    
+                    <div class="form-group" style="margin-bottom: 8px;">
+                        <label style="font-size: 0.85em;">Format:</label>
+                        <select id="exportFormat" style="font-size: 0.85em; padding: 5px;">
+                            <option value="json">JSON (.json)</option>
+                            <option value="gz">Compressed (.json.gz)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group" style="margin-bottom: 8px;">
+                        <label style="font-size: 0.85em;">Method:</label>
+                        <select id="exportMethod" style="font-size: 0.85em; padding: 5px;">
+                            <option value="client">Client-side download</option>
+                            <option value="direct">Direct download</option>
+                            <option value="server">Save to server disk</option>
+                        </select>
+                    </div>
+                    
+                    <button onclick="saveConfig()" class="btn-save">Download Modified Episode</button>
+                </div>
             </div>
 
             <div class="content-area">
                 <div id="content">
                     <div class="loading">Enter an episode ID to begin</div>
                 </div>
-            
-        <div class="content" id="content">
-            <div class="loading">Enter an episode ID to begin</div>
+            </div>
         </div>
     </div>
 
@@ -379,7 +403,25 @@
 
         function getFurnitureIcon(furnitureName) {
             // Extract furniture type from name (e.g., "table_36" -> "table")
-            const type = furnitureName.split('_')[0];
+            let type = furnitureName.split('_')[0];
+            
+            // Handle special furniture type mappings
+            const typeMapping = {
+                'washer': 'washer_dryer',
+                'chest': 'chest_of_drawers',
+                'floor': null  // Don't show icon for floor
+            };
+            
+            // Apply mapping if it exists
+            if (type in typeMapping) {
+                type = typeMapping[type];
+            }
+            
+            // Return null for floor (no icon)
+            if (type === null) {
+                return null;
+            }
+            
             const iconPath = `/static/receptacles_icons/${type}@2x.png`;
             return iconPath;
         }
@@ -471,6 +513,87 @@
             loadEpisode();
         }
 
+        function saveConfig() {
+            const episodeId = document.getElementById('episodeInput').value;
+            const format = document.getElementById('exportFormat').value;
+            const method = document.getElementById('exportMethod').value;
+            
+            if (!episodeId) {
+                alert('Please load an episode first');
+                return;
+            }
+
+            // Build URL with query parameters
+            const url = `/api/episode/${episodeId}/export-config?format=${format}&download=${method}`;
+            
+            // DIRECT METHOD: Browser handles download automatically
+            if (method === 'direct') {
+                // Create a temporary link and click it
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = '';  // Browser will use filename from server
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                
+                alert(`Downloading modified episode as .${format} file...`);
+                return;
+            }
+            
+            // CLIENT & SERVER METHODS: Fetch JSON response
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('No objects to export or error occurred');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (method === 'server') {
+                        // Server saved the files, show paths
+                        const paths = data.paths || {};
+                        const metadata = data.metadata || {};
+                        alert(`Files saved to server!\n\nJSON: ${paths.json}\nGZ: ${paths.gz}\n\nObjects added: ${metadata.total_objects_added}`);
+                    } else {
+                        // Client method: create blob and download
+                        const episodeData = data.episode || data;
+                        const metadata = data.metadata || { total_objects_added: 0 };
+                        
+                        let blob, filename;
+                        if (format === 'gz') {
+                            // For gz format with client method, need to compress
+                            const jsonStr = JSON.stringify(episodeData, null, 2);
+                            // Note: Browser can't easily create .gz, so we download as JSON
+                            blob = new Blob([jsonStr], { type: 'application/json' });
+                            filename = `episode_${episodeId}_modified.json`;
+                            alert('Note: Client-side .gz compression not supported in browser.\nDownloading as .json instead.\nUse "Direct download" for .gz format.');
+                        } else {
+                            // JSON format
+                            const jsonStr = JSON.stringify(episodeData, null, 2);
+                            blob = new Blob([jsonStr], { type: 'application/json' });
+                            filename = `episode_${episodeId}_modified.json`;
+                        }
+                        
+                        // Create download link
+                        const blobUrl = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = blobUrl;
+                        a.download = filename;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(blobUrl);
+                        
+                        if (format !== 'gz') {
+                            alert(`Episode file saved with ${metadata.total_objects_added} added objects!\n\nThis file contains the complete modified episode.`);
+                        }
+                    }
+                })
+                .catch(error => {
+                    alert(`Error: ${error.message}`);
+                });
+        }
+
         function loadEpisode() {
             const episodeId = document.getElementById('episodeInput').value;
             const content = document.getElementById('content');
@@ -537,6 +660,11 @@
                     for (const furnitureItem of furniture) {
                         const iconPath = getFurnitureIcon(furnitureItem);
                         const furnitureType = furnitureItem.split('_')[0];
+                        
+                        // Skip floor items (no icon)
+                        if (iconPath === null) {
+                            continue;
+                        }
                         
                         // Check if this furniture has objects on it
                         const objectsOnFurniture = objectsInRoom.filter(
