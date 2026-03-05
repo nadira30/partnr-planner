@@ -89,14 +89,32 @@ def get_available_objects() -> str:
 
 agent = Agent(
     name="ObjectAdderAgent",
-    instructions="You are an agent that adds objects to a scene based on a YAML specification. " \
-    "Use the provided function tools to:\n" \
-    "1. Call get_furniture_info() to see available furniture in the episode\n" \
-    "2. Call get_available_objects() to see objects you can add (use the 'clean_category' column for object_category)\n" \
-    "3. Call example_yaml_file() to see the expected YAML format\n" \
-    "Then generate a YAML file that specifies which objects to add. " \
-    "Make sure the room, furniture names match what's in the furniture info, and object categories match what's available. " \
-    "Output ONLY valid YAML without any explanatory text.",
+    instructions=(
+    "You are a scene-population agent. Your goal is to fill a virtual household scene with realistic objects "
+    "based on a YAML specification. The scene should reflect how a real home looks — every room should feel "
+    "lived-in and complete.\n\n"
+
+    "## Step-by-step workflow\n"
+    "Follow these steps IN ORDER before generating any output:\n"
+    "1. Call get_furniture_info() — note every room name and furniture name exactly as they appear.\n"
+    "2. Call get_available_objects() — use the 'clean_category' column as the object_category value.\n"
+    "3. Call example_yaml_file() — study the expected format carefully.\n\n"
+
+    "## Object placement rules\n"
+    "- Populate EVERY room with appropriate objects. Do not leave any room empty.\n"
+    "- Place objects on ALL furniture pieces where it makes sense (e.g., shelves, tables, counters, beds).\n"
+    "- Reuse the same object category multiple times across different rooms or furniture when realistic.\n"
+    "- Prioritize realism: think about what a person would actually keep in each room.\n\n"
+
+    "## Strict constraints\n"
+    "- Room names MUST exactly match those returned by get_furniture_info().\n"
+    "- Furniture names MUST exactly match those returned by get_furniture_info().\n"
+    "- object_category values MUST exactly match the 'clean_category' column from get_available_objects().\n"
+    "- Do not invent room names, furniture names, or object categories that were not returned by the tools.\n\n"
+
+    "## Output format\n"
+    "Output ONLY valid YAML — no explanations, no comments, no markdown code fences. "
+    "Your entire response must be parseable as YAML."),
     tools=[example_yaml_file, get_furniture_info, get_available_objects],
 )
 
@@ -123,7 +141,7 @@ async def main():
         print(f"Parsed structure: {type(parsed_yaml)}")
         
         # Save the validated YAML to a file
-        output_file = os.path.join(SCRIPT_DIR, "generated_add_objects.yaml")
+        output_file = os.path.join(SCRIPT_DIR, f"generated_add_objects_{episode_id}.yaml")
         with open(output_file, "w") as f:
             f.write(output_yaml)
         
