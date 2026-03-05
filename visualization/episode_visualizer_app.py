@@ -18,6 +18,7 @@ import csv
 import numpy as np
 import io
 import os
+import yaml
 from datetime import datetime
 from pathlib import Path
 from flask import Flask, render_template, request, jsonify, send_file
@@ -475,7 +476,80 @@ def add_object(episode_id):
                     if furniture_handle:
                         print(f"✓ Found furniture handle from pre-extracted mapping: {furniture_handle}")
                 
-                # METHOD 2: Look through existing objects to find one on this furniture
+                # METHOD 2: Use initial_state to map furniture names to handles (works without simulator!)
+                if not furniture_handle:
+                    print(f"🔍 Trying to find furniture handle from initial_state...")
+                    # Look through initial_state to find objects on this furniture
+                    for state in ep.get('info', {}).get('initial_state', []):
+                        if state.get('furniture_names') and furniture in state.get('furniture_names', []):
+                            # Found an object that should be on this furniture
+                            # Now find any of those objects in name_to_receptacle
+                            object_classes = state.get('object_classes', [])
+                            if object_classes:
+                                obj_class = object_classes[0].lower()
+                                # Search for this object type in name_to_receptacle
+                                for obj_handle, recep in ep.get('name_to_receptacle', {}).items():
+                                    if recep !='floor' and obj_class in obj_handle.lower():
+                                        # Extract the furniture handle from the receptacle
+                                        furniture_handle = recep.split('|')[0] if '|' in recep else recep
+                                        furniture_handle = furniture_handle.split('_:')[0] if '_:' in furniture_handle else furniture_handle
+                                        print(f"✓ Found furniture handle from initial_state: {furniture_handle}")
+                                        break
+                            if furniture_handle:
+                                break
+                
+                # METHOD 3: FALLBACK - Search scene file directly by furniture type and instance
+                if not furniture_handle and FURNITURE_LOOKUP_AVAILABLE and furniture_lookup:
+                    print(f"⚠ No existing objects  found on '{furniture}', searching scene file...")
+                    scene_id_clean = ep.get("scene_id", "").split('/')[-1].replace('.scene_instance.json', '')
+                    
+                    # Get all furniture from scene
+                    all_furniture = furniture_lookup.get_all_furniture(scene_id_clean)
+                    
+                    # Extract furniture type and instance number from name
+                    # e.g., "counter_19" -> type: "counter", instance: 19
+                    if '_' in furniture:
+                        parts = furniture.rsplit('_', 1)
+                        if parts[-1].isdigit():
+                            furn_type = parts[0]
+                            furn_instance = int(parts[-1])
+                        else:
+                            furn_type = furniture
+                            furn_instance = None
+                    else:
+                        furn_type = furniture
+                        furn_instance = None
+                    
+                    # Search for matching furniture in scene
+                    # Match by type and if possible by instance number
+                    furn_type_normalized = furn_type.replace('_', '').lower()
+                    matching_furniture = []
+                    
+                    for furn_info in all_furniture:
+                        handle = furn_info['handle']
+                        obj_type = furn_info.get('object_type', '').lower()
+                        
+                        # Check if furniture type matches
+                        if furn_type in obj_type or furn_type_normalized in obj_type.replace('_', ''):
+                            matching_furniture.append(furn_info)
+                    
+                    if matching_furniture:
+                        # If we have an instance number, try to match it
+                        # Otherwise just use the first match
+                        selected_furn = matching_furniture[0]
+                        if furn_instance is not None and len(matching_furniture) > furn_instance:
+                            # Try to get the correct instance (furniture are usually ordered)
+                            selected_furn = matching_furniture[min(furn_instance, len(matching_furniture) - 1)]
+                        
+                        furniture_handle = selected_furn['handle']
+                        furniture_position = selected_furn['position']
+                        print(f"✓ Found furniture in scene file: {furniture_handle}")
+                        print(f"✓ Position: {furniture_position}")
+                        print(f"  (Found {len(matching_furniture)} matching '{furn_type}' furniture)")
+                    else:
+                        print(f"⚠ No furniture matching '{furn_type}' found in scene file")
+                
+                # METHOD 4: Look through existing objects to find one on this furniture (original METHOD 2)
                 if not furniture_handle:
                     episode_data_viz = get_episode_data(episode_id)
                     
@@ -657,11 +731,88 @@ def add_object(episode_id):
         # IMPORTANT: The name_to_receptacle mapping is what habitat uses for actual placement
         # The rigid_objs position is just an initial approximation
         # Habitat's physics will snap objects to receptacles at runtime
+        # HOWEVER: The initial Y position must be reasonably close to the surface height
+        # or the kinematic relationship manager won't establish the parent-child relationship!
+        
+        print(f"\n🔧 Position Calculation Debug:")
+        print(f"  furniture_position: {furniture_position}")
+        print(f"  furniture_handle: {furniture_handle}")
+        print(f"  furniture: {furniture}")
+        print(f"  FURNITURE_LOOKUP_AVAILABLE: {FURNITURE_LOOKUP_AVAILABLE}")
         
         if furniture_position and furniture != "floor":
-            # Use the position we already retrieved
-            # Add small vertical offset to place on top (habitat will adjust this)
-            surface_y = furniture_position[1] + 0.1  # Small offset above furniture base
+            # STEP 1: Try to find existing objects on the same furniture to get actual surface height
+            surface_y = None
+            
+            # Use furniture_handle to find existing objects (furniture_handle is already available)
+            if furniture_handle:
+                # Extract base handle without instance suffix
+                furniture_handle_base = furniture_handle.split('_:')[0] if '_:' in furniture_handle else furniture_handle
+                
+                print(f"🔍 Looking for existing objects on furniture handle: {furniture_handle_base}")
+                
+                # Look for existing objects on this furniture
+                for obj_handle, obj_receptacle in ep.get('name_to_receptacle', {}).items():
+                    # Check if this object is on our target furniture
+                    # The receptacle format is: "FURNITURE_HANDLE_:0000|receptacle_mesh_..."
+                    if obj_receptacle != "floor" and furniture_handle_base in obj_receptacle:
+                        # Find this object's Y position in rigid_objs
+                        for rigid_obj in ep.get('rigid_objs', []):
+                            obj_config_name = rigid_obj[0].replace('.object_config.json', '')
+                            if obj_config_name in obj_handle or obj_handle.startswith(obj_config_name):
+                                # Found an object on this furniture! Use its Y coordinate
+                                existing_y = rigid_obj[1][1][3]  # transformation matrix [1][3] is Y
+                                surface_y = existing_y
+                                print(f"✓ Found existing object '{obj_handle}' on furniture with Y={surface_y:.3f}m")
+                                break
+                    if surface_y is not None:
+                        break
+            
+            # STEP 2: If no existing objects found, use furniture-type-based heuristics
+            if surface_y is None:
+                # Extract furniture type from name (e.g., "table_25" -> "table")
+                furniture_type = furniture.rsplit('_', 1)[0] if '_' in furniture else furniture
+                
+                # Furniture type to typical surface height mapping (in meters)
+                furniture_heights = {
+                    'table': 0.75,
+                    'desk': 0.85,
+                    'counter': 0.90,
+                    'kitchen_counter': 0.90,
+                    'countertop': 0.90,
+                    'bureau': 0.85,
+                    'nightstand': 0.60,
+                    'bedsidetable': 0.60,
+                    'bed': 0.55,
+                    'chair': 0.45,
+                    'stool': 0.45,
+                    'bench': 0.45,
+                    'shelf': 1.20,
+                    'shelves': 1.20,
+                    'bookshelf': 1.20,
+                    'cabinet': 0.80,
+                    'chest': 0.80,
+                    'chest_of_drawers': 0.80,
+                    'dresser': 0.80,
+                    'fridge': 1.00,
+                    'refrigerator': 1.00,
+                    'washer': 0.90,
+                    'dryer': 0.90,
+                    'washer_dryer': 0.90,
+                }
+                
+                # Try to match furniture type
+                furniture_type_lower = furniture_type.lower().replace('_', '')
+                for ftype, height in furniture_heights.items():
+                    if ftype.replace('_', '') in furniture_type_lower:
+                        surface_y = furniture_position[1] + height
+                        print(f"✓ Using furniture type '{ftype}' height heuristic: Y={surface_y:.3f}m")
+                        break
+                
+                # Final fallback: use generic table height
+                if surface_y is None:
+                    surface_y = furniture_position[1] + 0.85
+                    print(f"⚠ Using default table height heuristic: Y={surface_y:.3f}m")
             
             # Add small random offset to avoid exact overlap
             import random
@@ -673,7 +824,7 @@ def add_object(episode_id):
                 surface_y, 
                 furniture_position[2] + random_z_offset
             )
-            print(f"✓ Using furniture position: {obj_position}")
+            print(f"✓ Final object position: ({obj_position[0]:.3f}, {obj_position[1]:.3f}, {obj_position[2]:.3f})")
         else:
             # Fallback: use provided position or default
             # NOTE: This position is approximate - habitat uses name_to_receptacle for actual placement
@@ -794,6 +945,201 @@ def add_object(episode_id):
     except Exception as e:
         import traceback
         print(f"ERROR adding object:")
+        print(traceback.format_exc())
+        return jsonify({'error': str(e), 'traceback': traceback.format_exc()}), 500
+
+
+@app.route('/api/episode/<episode_id>/add-objects-batch', methods=['POST'])
+def add_objects_batch(episode_id):
+    """
+    Add multiple objects from a YAML configuration.
+    
+    Accepts either:
+    - YAML file upload (multipart/form-data with 'file' field)
+    - Raw YAML in request body (Content-Type: application/x-yaml or text/yaml)
+    - JSON with 'yaml_content' field (Content-Type: application/json)
+    
+    YAML Format:
+    ```yaml
+    objects:
+      - object_category: "laptop"
+        room: "office_1"
+        furniture: "table_36"
+        object_id: "Laptop_10"  # optional, will be looked up if not provided
+        position: {x: 0, y: 0, z: 0}  # optional, will be calculated
+      - object_category: "book"
+        room: "bedroom_1"
+        furniture: "table_25"
+    ```
+    
+    Returns:
+        JSON with results for each object (success/failure)
+    """
+    try:
+        yaml_content = None
+        
+        # Method 1: File upload
+        if 'file' in request.files:
+            file = request.files['file']
+            if file and file.filename:
+                yaml_content = file.read().decode('utf-8')
+                print(f"✓ Received YAML file: {file.filename}")
+        
+        # Method 2: Raw YAML in body
+        elif request.content_type and ('yaml' in request.content_type.lower() or request.content_type == 'text/plain'):
+            yaml_content = request.data.decode('utf-8')
+            print(f"✓ Received raw YAML content")
+        
+        # Method 3: JSON with yaml_content field
+        elif request.is_json:
+            data = request.get_json()
+            yaml_content = data.get('yaml_content')
+            if yaml_content:
+                print(f"✓ Received YAML content in JSON")
+        
+        if not yaml_content:
+            return jsonify({
+                'error': 'No YAML content provided. Send as file upload, raw YAML body, or JSON with yaml_content field.'
+            }), 400
+        
+        # Parse YAML
+        try:
+            config = yaml.safe_load(yaml_content)
+        except yaml.YAMLError as e:
+            return jsonify({
+                'error': f'Invalid YAML format: {str(e)}'
+            }), 400
+        
+        if not config or 'objects' not in config:
+            return jsonify({
+                'error': 'YAML must contain an "objects" list'
+            }), 400
+        
+        objects_to_add = config['objects']
+        if not isinstance(objects_to_add, list):
+            return jsonify({
+                'error': '"objects" must be a list'
+            }), 400
+        
+        print(f"\n{'='*60}")
+        print(f"BATCH ADD: Processing {len(objects_to_add)} objects for episode {episode_id}")
+        print(f"{'='*60}\n")
+        
+        # Process each object
+        results = []
+        success_count = 0
+        failure_count = 0
+        
+        for idx, obj_spec in enumerate(objects_to_add):
+            print(f"\n[{idx+1}/{len(objects_to_add)}] Processing: {obj_spec.get('object_category', 'unknown')}")
+            
+            # Validate required fields
+            if 'object_category' not in obj_spec:
+                results.append({
+                    'index': idx,
+                    'success': False,
+                    'error': 'Missing required field: object_category'
+                })
+                failure_count += 1
+                continue
+            
+            if 'room' not in obj_spec:
+                results.append({
+                    'index': idx,
+                    'object_category': obj_spec['object_category'],
+                    'success': False,
+                    'error': 'Missing required field: room'
+                })
+                failure_count += 1
+                continue
+            
+            if 'furniture' not in obj_spec:
+                results.append({
+                    'index': idx,
+                    'object_category': obj_spec['object_category'],
+                    'success': False,
+                    'error': 'Missing required field: furniture'
+                })
+                failure_count += 1
+                continue
+            
+            # Build request data
+            obj_data = {
+                'object_category': obj_spec['object_category'],
+                'room': obj_spec['room'],
+                'furniture': obj_spec['furniture'],
+            }
+            
+            # Optional fields
+            if 'object_id' in obj_spec:
+                obj_data['object_id'] = obj_spec['object_id']
+            if 'position' in obj_spec:
+                obj_data['position'] = obj_spec['position']
+            if 'receptacle_handle' in obj_spec:
+                obj_data['receptacle_handle'] = obj_spec['receptacle_handle']
+            
+            # Call the add_object endpoint internally
+            try:
+                # Create a mock request context with the object data
+                with app.test_request_context(
+                    f'/api/episode/{episode_id}/add-object',
+                    method='POST',
+                    json=obj_data
+                ):
+                    response = add_object(episode_id)
+                    response_data = response.get_json() if hasattr(response, 'get_json') else response[0].get_json()
+                    
+                    if response_data.get('success'):
+                        results.append({
+                            'index': idx,
+                            'success': True,
+                            'object_category': obj_spec['object_category'],
+                            'object_name': response_data.get('object_name'),
+                            'message': response_data.get('message')
+                        })
+                        success_count += 1
+                        print(f"  ✓ Success: {response_data.get('object_name')}")
+                    else:
+                        results.append({
+                            'index': idx,
+                            'success': False,
+                            'object_category': obj_spec['object_category'],
+                            'error': response_data.get('error', 'Unknown error')
+                        })
+                        failure_count += 1
+                        print(f"  ✗ Failed: {response_data.get('error', 'Unknown error')}")
+            
+            except Exception as e:
+                import traceback
+                error_msg = str(e)
+                results.append({
+                    'index': idx,
+                    'success': False,
+                    'object_category': obj_spec['object_category'],
+                    'error': error_msg,
+                    'traceback': traceback.format_exc()
+                })
+                failure_count += 1
+                print(f"  ✗ Exception: {error_msg}")
+        
+        print(f"\n{'='*60}")
+        print(f"BATCH ADD COMPLETE:")
+        print(f"  Total: {len(objects_to_add)}")
+        print(f"  Success: {success_count}")
+        print(f"  Failed: {failure_count}")
+        print(f"{'='*60}\n")
+        
+        return jsonify({
+            'success': failure_count == 0,
+            'total': len(objects_to_add),
+            'success_count': success_count,
+            'failure_count': failure_count,
+            'results': results
+        })
+    
+    except Exception as e:
+        import traceback
+        print(f"ERROR in batch add:")
         print(traceback.format_exc())
         return jsonify({'error': str(e), 'traceback': traceback.format_exc()}), 500
 

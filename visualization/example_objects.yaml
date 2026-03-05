@@ -1,0 +1,42 @@
+# Example YAML file for adding multiple objects to an episode
+# Usage:
+#   curl -X POST http://localhost:5002/api/episode/100/add-objects-batch \
+#     -F "file=@example_objects.yaml"
+#
+# Or with raw YAML content:
+#   curl -X POST http://localhost:5002/api/episode/100/add-objects-batch \
+#     -H "Content-Type: application/x-yaml" \
+#     --data-binary @example_objects.yaml
+
+objects:
+  # Add a laptop to the office
+  - object_category: "laptop"
+    room: "office_1"
+    furniture: "table_36"
+    # object_id: "Laptop_10"  # Optional: specific object ID (will be looked up if not provided)
+    # position: {x: 0, y: 0, z: 0}  # Optional: manual position (will be calculated if not provided)
+
+  # Add a book to the bedroom
+  - object_category: "book"
+    room: "bedroom_1"
+    furniture: "table_25"
+
+  # Add a mug to the kitchen counter
+  - object_category: "mug"
+    room: "kitchen_1"
+    furniture: "counter_19"
+
+  # Add a vase to the living room
+  - object_category: "vase"
+    room: "living_room_1"
+    furniture: "table_30"
+
+  # Add items to a cabinet (if articulated furniture)
+  - object_category: "bowl"
+    room: "kitchen_1"
+    furniture: "cabinet_40"
+
+  # Add objects to floor
+  - object_category: "cushion"
+    room: "bedroom_1"
+    furniture: "floor"

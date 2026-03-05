@@ -1,0 +1,12 @@
+objects:
+  - object_category: "pen"
+    room: "office_0"
+    furniture: "table_5"
+  
+  - object_category: "notebook"
+    room: "bedroom_1"
+    furniture: "table_25"
+  
+  - object_category: "plate"
+    room: "kitchen_1"
+    furniture: "counter_19"
