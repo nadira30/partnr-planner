@@ -2,7 +2,12 @@ import asyncio
 import json
 import os
 import yaml
+import warnings
 from agents import Agent, Runner, function_tool
+
+# Suppress async cleanup warnings (Python 3.13 compatibility)
+warnings.filterwarnings("ignore", category=RuntimeWarning, message=".*coroutine.*was never awaited.*")
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 # Use absolute paths relative to the script location
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -47,14 +52,24 @@ def example_yaml_file() -> str:
 
 @function_tool
 def get_furniture_info() -> str:
-    """Read and return the furniture information from the furniture handles JSON file."""
+    """Read and return the furniture information for the current episode only."""
+    print("currently in get_furniture_info() tool")  # Debug log to confirm function is called
     try:
         with open(furnitures_path, 'r') as f:
             furniture_data = json.load(f)
-        # Format the furniture data nicely for the agent
+        
+        # Filter to current episode only
+        episode_key = str(episode_id)  # ensure string key lookup
+        if episode_key not in furniture_data:
+            return f"Error: Episode ID '{episode_id}' not found in furniture data. Available IDs: {list(furniture_data.keys())}"
+        
+        episode_data = furniture_data[episode_key]
+        
         formatted = f"Furniture information for episode {episode_id}:\n"
-        formatted += json.dumps(furniture_data, indent=2)
+        formatted += json.dumps(episode_data, indent=2)
+        print(formatted)  # Log the furniture info for debugging
         return formatted
+        
     except FileNotFoundError:
         return f"Error: Furniture file not found at {furnitures_path}"
     except json.JSONDecodeError as e:
@@ -112,6 +127,10 @@ agent = Agent(
     "- object_category values MUST exactly match the 'clean_category' column from get_available_objects().\n"
     "- Do not invent room names, furniture names, or object categories that were not returned by the tools.\n\n"
 
+    "CRITICAL: You MUST call get_furniture_info() before generating any YAML. "
+    "Do NOT generate any output until all three tools have been called. "
+    "Generating YAML without first calling the tools is a failure."
+
     "## Output format\n"
     "Output ONLY valid YAML — no explanations, no comments, no markdown code fences. "
     "Your entire response must be parseable as YAML."),
@@ -130,7 +149,7 @@ async def main():
     
     output_yaml = result.final_output
     print("Agent Output:")
-    print(output_yaml)
+    # print(output_yaml)
     print("\n" + "="*60 + "\n")
     
     # Validate the YAML before saving
@@ -161,4 +180,7 @@ async def main():
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except (SystemExit, KeyboardInterrupt):
+        pass  # Suppress cleanup errors
