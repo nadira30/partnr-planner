@@ -6,3 +6,6 @@ HYDRA_FULL_ERROR=1 /home/nadira/miniconda3/envs/habitat/bin/python -m habitat_ll
 
 This will automatically run all commends in the txt file andd save the resulting video. 
 
+# remap command skill before excuting 
+the generated skill command assign objects id in order for each category. However, in the skill runner, the objects are renamed by assign an id for all the objects in aorder. 
+To-Do: include this step directly in the skill command generator. 
