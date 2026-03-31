@@ -8,7 +8,7 @@
 import sys
 import re
 from pathlib import Path
-from typing import List, Tuple, Any
+from typing import List, Tuple, Any, Dict
 
 
 # append the path of the
@@ -86,6 +86,50 @@ def _load_commands_from_file(
     return commands
 
 
+def _should_follow_human_navigate(
+    human_command: str, human_agent_uid: int = 1
+) -> bool:
+    """
+    Return True when command is a human Navigate command.
+
+    :param human_command: The human's skill command (e.g. "Navigate 1 floor_bedroom_1")
+    :param human_agent_uid: The UID of the human agent (default 1)
+    :return: True iff command is human Navigate
+    """
+    components = human_command.split()
+    if len(components) < 3:
+        return False
+
+    skill_name = components[0]
+    try:
+        agent_uid = int(components[1])
+    except (ValueError, IndexError):
+        return False
+
+    return skill_name == "Navigate" and agent_uid == human_agent_uid
+
+
+def _get_robot_room_anchor_from_human_location(
+    env_interface: EnvironmentInterface,
+    human_agent_uid: int = 1,
+) -> str:
+    """
+    Resolve predefined robot target anchor in the human's current room.
+
+    Uses room of human agent in world graph and maps it to floor anchor:
+    <room_name> -> floor_<room_name>
+    """
+    try:
+        human_wg = env_interface.world_graph[human_agent_uid]
+        human_node = human_wg.get_human()
+        room_node = human_wg.get_room_for_entity(human_node)
+        anchor_name = f"floor_{room_node.name}"
+        human_wg.get_node_from_name(anchor_name)
+        return anchor_name
+    except Exception:
+        return ""
+
+
 # Method to load agent planner from the config
 @hydra.main(
     config_path="../conf", config_name="examples/skill_runner_default_config.yaml"
@@ -161,13 +205,36 @@ def run_skills(config: omegaconf.DictConfig) -> None:
     env_interface.reset_environment()
     ###########################################
 
-    # Initialize the planner
-    planner_conf = config.evaluation.planner
-    planner = instantiate(planner_conf)
-    planner = planner(env_interface=env_interface)
+    # Initialize planner(s)
     agent_config = config.evaluation.agents
-    planner.agents = init_agents(agent_config, env_interface)
-    planner.reset()
+    initialized_agents = init_agents(agent_config, env_interface)
+    agents_by_uid = {agent.uid: agent for agent in initialized_agents}
+
+    planner = None
+    planners_by_uid = {}
+    if hasattr(config.evaluation, "planner"):
+        # Centralized setup
+        planner_conf = config.evaluation.planner
+        planner = instantiate(planner_conf)
+        planner = planner(env_interface=env_interface)
+        planner.agents = initialized_agents
+        planner.reset()
+    else:
+        # Decentralized setup: each agent has its own planner config
+        for agent_name, agent_eval_conf in config.evaluation.agents.items():
+            if not hasattr(agent_eval_conf, "planner"):
+                raise ValueError(
+                    f"Missing planner config for {agent_name} in decentralized evaluation setup."
+                )
+            planner_conf = agent_eval_conf.planner
+            agent_planner = instantiate(planner_conf)
+            agent_planner = agent_planner(env_interface=env_interface)
+            agent_uid = int(agent_eval_conf.uid)
+            if agent_uid not in agents_by_uid:
+                raise ValueError(f"No initialized agent found for uid {agent_uid}.")
+            agent_planner.agents = [agents_by_uid[agent_uid]]
+            agent_planner.reset()
+            planners_by_uid[agent_uid] = agent_planner
 
     sim = env_interface.sim
 
@@ -313,6 +380,7 @@ def run_skills(config: omegaconf.DictConfig) -> None:
             _print_history()
             return
 
+        high_level_skill_actions = {}  # Reset for each command
         if len(scripted_commands) > command_index:
             user_input = scripted_commands[command_index]
             print(user_input)
@@ -352,8 +420,12 @@ def run_skills(config: omegaconf.DictConfig) -> None:
             agent_ix = input("Agent Index (0=robot, 1=human) = ")
             if agent_ix not in ["0", "1"]:
                 cprint("... invalid Agent Index, aborting.", "red")
+                command_index += 1
                 continue
             target_entity_name = input("Target Entity = ")
+            high_level_skill_actions = {
+                int(agent_ix): (selected_skill, target_entity_name, None)
+            }
         elif user_input.split(" ")[0] in skills:
             # attempt to parse full skill definition from string
             skill_components = user_input.split(" ")
@@ -361,34 +433,93 @@ def run_skills(config: omegaconf.DictConfig) -> None:
             agent_ix = skill_components[1]
             if agent_ix not in ["0", "1"]:
                 cprint("... invalid Agent Index, aborting.", "red")
+                command_index += 1
                 continue
             target_entity_name = skill_components[2]
-        else:
-            cprint("... invalid command.", "red")
-
-        # configure and run the skill
-        if selected_skill is not None:
             high_level_skill_actions = {
                 int(agent_ix): (selected_skill, target_entity_name, None)
             }
+        else:
+            cprint("... invalid command.", "red")
+            command_index += 1
+            continue
+
+        # configure and run the skill
+        if high_level_skill_actions:
 
             ############################
             # run the skill
             try:
+                # Get the agent for this command
+                agent_idx = list(high_level_skill_actions.keys())[0]
+                skill_name = high_level_skill_actions[agent_idx][0]
+                should_follow_human = _should_follow_human_navigate(
+                    user_input, human_agent_uid=1
+                )
+
+                # Step 1: Execute the human/user command first
+                # For decentralized planning, route through the agent's own planner
+                if planners_by_uid:
+                    if agent_idx not in planners_by_uid:
+                        cprint(
+                            f"... no planner found for agent {agent_idx}, aborting.",
+                            "red",
+                        )
+                        command_index += 1
+                        continue
+                    active_planner = planners_by_uid[agent_idx]
+                else:
+                    # Centralized planner
+                    active_planner = planner
+
                 responses, _, frames = execute_skill(
                     high_level_skill_actions,
-                    planner,
+                    active_planner,
                     vid_postfix=f"{command_index}_",
                     make_video=make_video,
                     play_video=interactive_playback,
                     write_video=write_individual_skill_videos,
                 )
-                command_history.append((user_input, responses[int(agent_ix)]))
-                skill_name = high_level_skill_actions[int(agent_ix)][0]
+                command_history.append((user_input, responses[agent_idx]))
+                skill_name = high_level_skill_actions[agent_idx][0]
                 print(
-                    f"{skill_name} completed. Response = '{responses[int(agent_ix)]}'"
+                    f"{skill_name} completed. Response = '{responses[agent_idx]}'"
                 )
                 cumulative_frames.extend(frames)
+
+                # After human Navigate, send robot to predefined anchor in human's room.
+                if should_follow_human:
+                    robot_anchor = _get_robot_room_anchor_from_human_location(
+                        env_interface, human_agent_uid=1
+                    )
+                    if robot_anchor:
+                        cprint(
+                            f"Auto-navigating robot to room anchor: Navigate 0 {robot_anchor}",
+                            "yellow",
+                        )
+                        robot_nav_actions = {0: ("Navigate", robot_anchor, None)}
+                        robot_planner = (
+                            planners_by_uid.get(0) if planners_by_uid else planner
+                        )
+                        if robot_planner:
+                            robot_responses, _, robot_frames = execute_skill(
+                                robot_nav_actions,
+                                robot_planner,
+                                vid_postfix=f"{command_index}_robot_anchor_nav_",
+                                make_video=make_video,
+                                play_video=False,
+                                write_video=False,
+                            )
+                            cumulative_frames.extend(robot_frames)
+                            if 0 in robot_responses:
+                                print(
+                                    f"Robot anchor navigate completed. Response = '{robot_responses[0]}'"
+                                )
+                    else:
+                        cprint(
+                            "Could not resolve human room anchor for robot navigation.",
+                            "yellow",
+                        )
             except Exception as e:
                 failure_string = f"Failed to execute skill with exception: {str(e)}"
                 print(failure_string)
@@ -403,6 +534,7 @@ def run_skills(config: omegaconf.DictConfig) -> None:
 # python habitat_llm/examples/skill_runner.py
 #
 # NOTE: conf/examples/skill_runner_default_config.yaml is consumed to initialize parameters
+# NOTE: use --config-name examples/skill_runner_decentralized_config.yaml to run decentralized planner setup
 ##########################################
 # Script Specific CLI overrides:
 #

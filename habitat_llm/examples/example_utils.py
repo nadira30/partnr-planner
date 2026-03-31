@@ -191,6 +191,7 @@ def execute_skill(
     vid_postfix: str = "",
     play_video: bool = True,
     write_video: bool = True,
+    decentralized_planners: Dict[int, Any] = None,
 ) -> Tuple[Dict[Any, Any], Dict[Any, Any], List[Any]]:
     """
     Execute a high-level skill from a string (e.g. as produced by the planner).
@@ -202,6 +203,7 @@ def execute_skill(
     :param vid_postfix: An optional postfix for the video file. For example, the action name.
     :param play_video: Whether or not to immediately play the generated video.
     :param write_video: Whether or not to write a per-skill video file. Frame collection is still controlled by make_video.
+    :param decentralized_planners: Optional map of agent uid -> planner for decentralized multi-agent stepping.
     :return: A tuple with two dict(the first contains responses per-agent skill, the second contains the number of skill steps taken) and a list of frames.
     """
     dvu = DebugVideoUtil(
@@ -212,6 +214,7 @@ def execute_skill(
     observations = llm_env.env_interface.get_observations()
     agent_idx = list(high_level_skill_actions.keys())[0]
     skill_name = high_level_skill_actions[agent_idx][0]
+    assigned_agent_ids = list(high_level_skill_actions.keys())
 
     # Set up the variables
     skill_steps = 0
@@ -226,17 +229,33 @@ def execute_skill(
         ), f"Maximum number of steps reached: {skill_name} skill fails."
 
         # Get low level actions and responses
-        low_level_actions, responses = llm_env.process_high_level_actions(
-            high_level_skill_actions, observations
-        )
+        if decentralized_planners:
+            low_level_actions = {}
+            responses = {}
+            for agent_id, agent_action in high_level_skill_actions.items():
+                if agent_id not in decentralized_planners:
+                    responses[agent_id] = "No planner found for this agent"
+                    continue
+                agent_planner = decentralized_planners[agent_id]
+                agent_low_level_actions, agent_responses = (
+                    agent_planner.process_high_level_actions(
+                        {agent_id: agent_action}, observations
+                    )
+                )
+                low_level_actions.update(agent_low_level_actions)
+                responses.update(agent_responses)
+        else:
+            low_level_actions, responses = llm_env.process_high_level_actions(
+                high_level_skill_actions, observations
+            )
 
-        assert (
-            len(low_level_actions) > 0
-        ), f"No low level actions returned. Response: {responses.values()}"
-
-        # Check if the agent finishes
-        if any(responses.values()):
+        # Check if all targeted agents are done
+        if all(responses.get(agent_id) for agent_id in assigned_agent_ids):
             skill_done = True
+
+        if len(low_level_actions) == 0:
+            assert skill_done, f"No low level actions returned. Response: {responses.values()}"
+            break
 
         # Get the observations
         obs, reward, done, info = llm_env.env_interface.step(low_level_actions)
