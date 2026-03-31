@@ -68,6 +68,12 @@ _episode_cache = {}
 # Storage for full episode JSON per episode
 _episode_json_cache = {}
 
+# Storage for simulator-discovered receptacles per episode
+_episode_receptacle_cache = {}
+
+# Cache for available object template IDs
+_available_object_template_ids = None
+
 # Storage for added objects per episode
 _added_objects = defaultdict(list)
 
@@ -200,6 +206,174 @@ def load_full_episode_json(episode_id: str, dataset_path: str = None) -> Dict:
         raise Exception(f"Error loading episode JSON: {e}")
 
 
+def _base_handle(handle: str) -> str:
+    """Normalize handle by removing instance suffix (e.g. _:\\d+)."""
+    return handle.split('_:')[0] if '_:' in handle else handle
+
+
+def _select_sim_receptacle_for_parent(receptacle_data: Dict, parent_handle: str) -> Optional[str]:
+    """Select a simulator-discovered receptacle unique_name for a parent handle."""
+    if not receptacle_data or not parent_handle:
+        return None
+
+    parent_handle = parent_handle.split('|')[0]
+    parent_base = _base_handle(parent_handle)
+
+    by_parent_handle = receptacle_data.get('by_parent_handle', {})
+    by_parent_base = receptacle_data.get('by_parent_base', {})
+
+    # Try exact and normalized variants against parent-handle map
+    parent_candidates = [
+        parent_handle,
+        parent_base,
+        f"{parent_base}_:0000",
+    ]
+
+    for key in parent_candidates:
+        recs = by_parent_handle.get(key, [])
+        if recs:
+            return recs[0]
+
+    # Try base-handle map
+    recs = by_parent_base.get(parent_base, [])
+    if recs:
+        return recs[0]
+
+    return None
+
+
+def load_sim_receptacles(episode_id: str, dataset_path: str = None) -> Dict:
+    """Load simulator-discovered receptacles for an episode via helper script."""
+    if dataset_path is None:
+        dataset_path = "data/datasets/partnr_episodes/v0_0/val_mini.json.gz"
+
+    cache_key = f"{dataset_path}:{episode_id}"
+    if cache_key in _episode_receptacle_cache:
+        return _episode_receptacle_cache[cache_key]
+
+    try:
+        project_root = Path(__file__).parent.parent
+        script_path = project_root / "visualization" / "episode_info" / "get_episode_receptacles.py"
+        output_file = project_root / "visualization" / f"temp_episode_{episode_id}_receptacles.json"
+
+        cmd = [
+            sys.executable,
+            str(script_path),
+            f"+episode_id={episode_id}",
+            f"+dataset_path={dataset_path}",
+            f"+output_file={output_file}",
+            "hydra.run.dir=.",
+        ]
+
+        result = subprocess.run(
+            cmd,
+            cwd=str(project_root),
+            capture_output=True,
+            text=True,
+            timeout=180,
+        )
+
+        if result.returncode != 0:
+            print(f"⚠ Simulator receptacle discovery failed for episode {episode_id}")
+            print(result.stderr)
+            return {}
+
+        if not output_file.exists():
+            print(f"⚠ Simulator receptacle output file missing: {output_file}")
+            return {}
+
+        with open(output_file, 'r') as f:
+            payload = json.load(f)
+
+        try:
+            output_file.unlink()
+        except Exception:
+            pass
+
+        receptacle_data = payload.get('receptacles', {})
+        _episode_receptacle_cache[cache_key] = receptacle_data
+        return receptacle_data
+    except Exception as e:
+        print(f"⚠ Error loading simulator receptacles for episode {episode_id}: {e}")
+        return {}
+
+
+def repair_episode_receptacle_mappings(episode: Dict, episode_id: str, dataset_path: str = None) -> Dict:
+    """Repair invalid name_to_receptacle mappings using simulator-discovered active receptacles."""
+    if dataset_path is None:
+        dataset_path = "data/datasets/partnr_episodes/v0_0/val_mini.json.gz"
+
+    mapping = episode.get("name_to_receptacle", {})
+    if not isinstance(mapping, dict) or not mapping:
+        return {
+            "applied": False,
+            "reason": "no_mapping",
+            "total": 0,
+            "repaired": 0,
+            "invalid_before": 0,
+            "invalid_after": 0,
+        }
+
+    sim_receptacle_data = load_sim_receptacles(episode_id, dataset_path)
+    active_receptacles = set(sim_receptacle_data.get("all", []))
+
+    if not active_receptacles:
+        return {
+            "applied": False,
+            "reason": "no_sim_receptacles",
+            "total": len(mapping),
+            "repaired": 0,
+            "invalid_before": 0,
+            "invalid_after": 0,
+        }
+
+    repaired_mapping = {}
+    repaired_count = 0
+    invalid_before = 0
+    floor_normalized = 0
+
+    for obj_handle, recep_value in mapping.items():
+        # Normalize any floor-encoded receptacle variants to literal 'floor'
+        # e.g. floor_:0000|receptacle_mesh_floor.0000
+        if recep_value == "floor" or str(recep_value).startswith("floor"):
+            repaired_mapping[obj_handle] = "floor"
+            if recep_value != "floor":
+                floor_normalized += 1
+            continue
+
+        if recep_value in active_receptacles:
+            repaired_mapping[obj_handle] = recep_value
+            continue
+
+        invalid_before += 1
+        parent_handle = recep_value.split('|')[0] if '|' in recep_value else recep_value
+        replacement = _select_sim_receptacle_for_parent(sim_receptacle_data, parent_handle)
+
+        if replacement:
+            repaired_mapping[obj_handle] = replacement
+            repaired_count += 1
+        else:
+            repaired_mapping[obj_handle] = recep_value
+
+    invalid_after = sum(
+        1
+        for value in repaired_mapping.values()
+        if value != "floor" and value not in active_receptacles
+    )
+
+    episode["name_to_receptacle"] = repaired_mapping
+    return {
+        "applied": True,
+        "reason": "ok",
+        "total": len(mapping),
+        "repaired": repaired_count,
+        "floor_normalized": floor_normalized,
+        "invalid_before": invalid_before,
+        "invalid_after": invalid_after,
+        "active_receptacles": len(active_receptacles),
+    }
+
+
 def load_object_database():
     """Load object database from CSV files for validation."""
     global object_database
@@ -230,6 +404,263 @@ def load_object_database():
                 print(f"Warning: Could not load {csv_path}: {e}")
     
     return object_database
+
+
+def build_object_category_map() -> Dict[str, str]:
+    """Build object-id to category mapping from loaded metadata CSVs."""
+    load_object_database()
+    category_map = {}
+    for row in object_database:
+        obj_id = (row.get('id') or '').strip()
+        category = (row.get('category') or '').strip()
+        if obj_id and category and obj_id not in category_map:
+            category_map[obj_id] = category
+    return category_map
+
+
+def normalize_object_id(raw_object_id: str) -> str:
+    """Normalize object id by removing path/config/suffix tokens."""
+    obj_id = raw_object_id.split('/')[-1]
+    obj_id = obj_id.replace('.object_config.json', '')
+    if '_:' in obj_id:
+        obj_id = obj_id.split('_:')[0]
+    return obj_id
+
+
+def load_available_object_template_ids() -> set:
+    """Load all available object template IDs from local object config files."""
+    global _available_object_template_ids
+
+    if _available_object_template_ids is not None:
+        return _available_object_template_ids
+
+    project_root = Path(__file__).parent.parent
+    object_dirs = [
+        project_root / "data" / "hssd-hab" / "objects",
+        project_root / "data" / "objects",
+        project_root / "data" / "objects_ovmm",
+    ]
+
+    template_ids = set()
+    for obj_dir in object_dirs:
+        if not obj_dir.exists():
+            continue
+        for config_file in obj_dir.rglob("*.object_config.json"):
+            template_ids.add(config_file.stem.replace('.object_config', ''))
+
+    _available_object_template_ids = template_ids
+    return _available_object_template_ids
+
+
+def _split_handle_instance(handle: str) -> tuple:
+    """Split handle into base and numeric instance suffix."""
+    if '_:' not in handle:
+        return handle, 0
+    base, suffix = handle.split('_:', 1)
+    try:
+        return base, int(suffix)
+    except ValueError:
+        return base, 0
+
+
+def repair_episode_object_templates(episode: Dict) -> Dict:
+    """Repair missing object template handles and corresponding mapping keys."""
+    available_templates = load_available_object_template_ids()
+
+    # Known problematic categories from visualizer input -> valid template IDs
+    fallback_template_map = {
+        "alarm_clock": "Alarm_Clock_4",
+        "toothbrush": "Sonicare_2_Series_Toothbrush_Plaque_Control",
+        "water_bottle": "ce33c1228cfca3da78e22645019258d7a92af3a9",
+    }
+
+    rigid_objs = episode.get('rigid_objs', [])
+    old_to_new_base = {}
+    rigid_repaired = 0
+
+    for rigid_obj in rigid_objs:
+        if not rigid_obj:
+            continue
+        template_path = rigid_obj[0]
+        base = template_path.replace('.object_config.json', '')
+        if base in available_templates:
+            continue
+
+        replacement = fallback_template_map.get(base)
+        if replacement and replacement in available_templates:
+            rigid_obj[0] = f"{replacement}.object_config.json"
+            old_to_new_base[base] = replacement
+            rigid_repaired += 1
+
+    # Repair name_to_receptacle keys if object base names changed
+    key_repaired = 0
+    mapping = episode.get('name_to_receptacle', {})
+    if isinstance(mapping, dict) and old_to_new_base:
+        remapped = {}
+
+        def next_instance(base_name: str) -> int:
+            prefix = f"{base_name}_:"
+            nums = []
+            for key in list(mapping.keys()) + list(remapped.keys()):
+                if key.startswith(prefix):
+                    _, inst = _split_handle_instance(key)
+                    nums.append(inst)
+            return max(nums) + 1 if nums else 0
+
+        for key, value in mapping.items():
+            base, inst = _split_handle_instance(key)
+            if base not in old_to_new_base:
+                remapped[key] = value
+                continue
+
+            new_base = old_to_new_base[base]
+            new_key = f"{new_base}_:{inst:04d}"
+            if new_key in remapped:
+                new_key = f"{new_base}_:{next_instance(new_base):04d}"
+
+            remapped[new_key] = value
+            key_repaired += 1
+
+        episode['name_to_receptacle'] = remapped
+
+    return {
+        "applied": rigid_repaired > 0 or key_repaired > 0,
+        "rigid_templates_repaired": rigid_repaired,
+        "name_to_receptacle_keys_repaired": key_repaired,
+        "replacements": old_to_new_base,
+    }
+
+
+def get_skill_runner_object_nodes_from_episode(episode: Dict) -> List[Dict]:
+    """Compute skill-runner-style object node names from episode rigid object ordering."""
+    category_map = build_object_category_map()
+    object_nodes = []
+
+    for idx, rigid_obj in enumerate(episode.get('rigid_objs', [])):
+        raw_id = rigid_obj[0] if rigid_obj else ''
+        normalized_id = normalize_object_id(raw_id)
+        category = category_map.get(normalized_id, normalized_id.lower())
+
+        object_nodes.append({
+            'node_name': f"{category}_{idx}",
+            'category': category,
+            'object_id': normalized_id,
+            'rigid_obj_index': idx,
+        })
+
+    return object_nodes
+
+
+def _build_skill_command_alias_map(object_nodes: List[Dict]) -> Dict[str, str]:
+    """Build aliases from category-index references to actual graph node names."""
+    alias_map: Dict[str, str] = {}
+    by_category: Dict[str, List[Dict]] = {}
+
+    for node in object_nodes:
+        node_name = node['node_name']
+        alias_map[node_name] = node_name
+
+        if '_' not in node_name:
+            continue
+        category, idx_str = node_name.rsplit('_', 1)
+        if idx_str.isdigit():
+            by_category.setdefault(category, []).append({
+                'index': int(idx_str),
+                'node_name': node_name,
+            })
+
+    for category, entries in by_category.items():
+        ordered = sorted(entries, key=lambda x: x['index'])
+
+        # one-based alias expected in many handwritten command files
+        for one_based, entry in enumerate(ordered, start=1):
+            alias_map[f"{category}_{one_based}"] = entry['node_name']
+
+        # zero-based alias fallback
+        for zero_based, entry in enumerate(ordered):
+            alias_map[f"{category}_{zero_based}"] = entry['node_name']
+
+    return alias_map
+
+
+def _remap_skill_command_line(line: str, alias_map: Dict[str, str]) -> str:
+    """Remap object references in one skill command line."""
+    stripped = line.strip()
+    if not stripped:
+        return line
+
+    parts = stripped.split()
+    if len(parts) < 3:
+        return line
+
+    command = parts[0]
+
+    def _map_token(token: str) -> str:
+        if token in {"None", "none", "null", "NULL", ""}:
+            return token
+        return alias_map.get(token, token)
+
+    if command in {"Pick", "Navigate", "Open", "Close"}:
+        old_entity = parts[2]
+        new_entity = _map_token(old_entity)
+        if new_entity != old_entity:
+            return line.replace(old_entity, new_entity, 1)
+        return line
+
+    if command == "Place":
+        payload = " ".join(parts[2:])
+        chunks = payload.split(',')
+        if len(chunks) >= 5:
+            chunks[0] = _map_token(chunks[0])
+            chunks[2] = _map_token(chunks[2])
+            chunks[4] = _map_token(chunks[4])
+            new_payload = ','.join(chunks)
+            prefix = " ".join(parts[:2])
+            suffix = "\n" if line.endswith("\n") else ""
+            return f"{prefix} {new_payload}{suffix}"
+
+    return line
+
+
+def create_mapped_skill_runner_commands_file(
+    episode: Dict,
+    input_commands_file: Path,
+    output_commands_file: Path,
+) -> Dict:
+    """Create mapped skill_runner command file for current episode object names."""
+    object_nodes = get_skill_runner_object_nodes_from_episode(episode)
+    alias_map = _build_skill_command_alias_map(object_nodes)
+
+    if not input_commands_file.exists():
+        return {
+            'created': False,
+            'reason': f'input_not_found:{input_commands_file}',
+            'mapped_lines': 0,
+            'output_file': str(output_commands_file),
+        }
+
+    input_lines = input_commands_file.read_text(encoding='utf-8').splitlines(keepends=True)
+    output_lines = []
+    mapped_lines = 0
+
+    for line in input_lines:
+        new_line = _remap_skill_command_line(line, alias_map)
+        if new_line != line:
+            mapped_lines += 1
+        output_lines.append(new_line)
+
+    output_commands_file.parent.mkdir(parents=True, exist_ok=True)
+    output_commands_file.write_text(''.join(output_lines), encoding='utf-8')
+
+    return {
+        'created': True,
+        'reason': 'ok',
+        'mapped_lines': mapped_lines,
+        'output_file': str(output_commands_file),
+        'input_file': str(input_commands_file),
+        'object_nodes': len(object_nodes),
+        'alias_count': len(alias_map),
+    }
 
 
 def get_episode_data(episode_id: str, dataset_path: str = None) -> Dict:
@@ -704,6 +1135,14 @@ def add_object(episode_id):
         print(f"  Receptacle handle: {receptacle_handle}")
         print(f"  Position in arrays: {explicit_object_count} (before clutter)")
         print(f"{'='*60}\n")
+
+        # Discover active simulator receptacles for this episode (source of truth)
+        dataset_path_for_episode = request.args.get('dataset', 'data/datasets/partnr_episodes/v0_0/val_mini.json.gz')
+        sim_receptacle_data = load_sim_receptacles(episode_id, dataset_path_for_episode)
+        if sim_receptacle_data:
+            print(f"✓ Loaded {sim_receptacle_data.get('count', 0)} simulator-discovered receptacles")
+        else:
+            print("⚠ No simulator receptacles available; falling back to heuristic receptacle construction")
         
         # 2. Calculate proper object position and rotation based on furniture
         # furniture_position was already retrieved above if available
@@ -853,31 +1292,45 @@ def add_object(episode_id):
         if furniture_handle and furniture != "floor":
             parent_handle = furniture_handle
             parent_handle_with_suffix = parent_handle if "_:" in parent_handle else f"{parent_handle}_:0000"
+
+            # Prefer simulator-discovered receptacle unique_name for this parent
+            discovered_receptacle = _select_sim_receptacle_for_parent(sim_receptacle_data, parent_handle)
+            if discovered_receptacle:
+                recep_value = discovered_receptacle
+                print(f"✓ Using simulator-discovered receptacle: {recep_value}")
             
-            # Try to find receptacle mesh name from URDF
-            receptacle_mesh_name = find_receptacle_mesh_name(parent_handle)
-            if receptacle_mesh_name:
-                recep_value = f"{parent_handle_with_suffix}|{receptacle_mesh_name}.0000"
-                print(f"✓ Using receptacle from furniture handle: {recep_value}")
-            else:
-                # Construct generic receptacle_mesh name
-                parent_handle_base = parent_handle.split('_:')[0] if '_:' in parent_handle else parent_handle
-                recep_value = f"{parent_handle_with_suffix}|receptacle_mesh_{parent_handle_base}.0000"
-                print(f"✓ Using constructed receptacle from furniture handle: {recep_value}")
+            # Fallback: legacy heuristic receptacle construction
+            if recep_value is None:
+                receptacle_mesh_name = find_receptacle_mesh_name(parent_handle)
+                if receptacle_mesh_name:
+                    recep_value = f"{parent_handle_with_suffix}|{receptacle_mesh_name}.0000"
+                    print(f"✓ Using receptacle from furniture handle: {recep_value}")
+                else:
+                    parent_handle_base = parent_handle.split('_:')[0] if '_:' in parent_handle else parent_handle
+                    recep_value = f"{parent_handle_with_suffix}|receptacle_mesh_{parent_handle_base}.0000"
+                    print(f"✓ Using constructed receptacle from furniture handle: {recep_value}")
         
         # PRIORITY 2: If receptacle_handle was explicitly provided
         elif receptacle_handle and furniture != "floor":
             parent_handle = receptacle_handle.split('|')[0] if '|' in receptacle_handle else receptacle_handle
             parent_handle_with_suffix = parent_handle if "_:" in parent_handle else f"{parent_handle}_:0000"
+
+            # Prefer simulator-discovered receptacle unique_name for this parent
+            discovered_receptacle = _select_sim_receptacle_for_parent(sim_receptacle_data, parent_handle)
+            if discovered_receptacle:
+                recep_value = discovered_receptacle
+                print(f"✓ Using simulator-discovered receptacle: {recep_value}")
             
-            receptacle_mesh_name = find_receptacle_mesh_name(parent_handle)
-            if receptacle_mesh_name:
-                recep_value = f"{parent_handle_with_suffix}|{receptacle_mesh_name}.0000"
-                print(f"✓ Using receptacle from provided handle: {recep_value}")
-            else:
-                parent_handle_base = parent_handle.split('_:')[0] if '_:' in parent_handle else parent_handle
-                recep_value = f"{parent_handle_with_suffix}|receptacle_mesh_{parent_handle_base}.0000"
-                print(f"✓ Using constructed receptacle from provided handle: {recep_value}")
+            # Fallback: legacy heuristic receptacle construction
+            if recep_value is None:
+                receptacle_mesh_name = find_receptacle_mesh_name(parent_handle)
+                if receptacle_mesh_name:
+                    recep_value = f"{parent_handle_with_suffix}|{receptacle_mesh_name}.0000"
+                    print(f"✓ Using receptacle from provided handle: {recep_value}")
+                else:
+                    parent_handle_base = parent_handle.split('_:')[0] if '_:' in parent_handle else parent_handle
+                    recep_value = f"{parent_handle_with_suffix}|receptacle_mesh_{parent_handle_base}.0000"
+                    print(f"✓ Using constructed receptacle from provided handle: {recep_value}")
         
         # PRIORITY 3: Only use floor if explicitly requested or no furniture info available
         if recep_value is None:
@@ -1168,6 +1621,10 @@ def export_config(episode_id):
         download: 'client' (default) or 'server' or 'direct' - download method
         path: custom save path (only for server download)
         wrap: 'true' (default) or 'false' - wrap in dataset format
+        repair_receptacles: 'true' (default) or 'false' - auto-repair mappings to active simulator receptacles
+        repair_templates: 'true' (default) or 'false' - auto-repair missing object template handles
+        map_skill_commands: 'true' (default) or 'false' - auto-generate mapped skill_runner commands for current object names
+        skill_commands_file: input command file path (default: skill_runner_commands.txt)
     
     Download Methods:
         - client: Returns JSON with metadata (client handles download via JavaScript)
@@ -1180,6 +1637,10 @@ def export_config(episode_id):
         download_method = request.args.get('download', 'client')  # 'client', 'server', or 'direct'
         custom_path = request.args.get('path', '')
         wrap_dataset = request.args.get('wrap', 'true').lower() == 'true'  # Wrap in dataset format by default
+        repair_receptacles = request.args.get('repair_receptacles', 'true').lower() == 'true'
+        repair_templates = request.args.get('repair_templates', 'true').lower() == 'true'
+        map_skill_commands = request.args.get('map_skill_commands', 'true').lower() == 'true'
+        skill_commands_file = request.args.get('skill_commands_file', 'skill_runner_commands.txt')
         
         # Load the modified episode from cache
         cache_key = f"data/datasets/partnr_episodes/v0_0/val_mini.json.gz:{episode_id}"
@@ -1191,6 +1652,45 @@ def export_config(episode_id):
         
         modified_ep = _episode_json_cache[cache_key]
         num_added = len(_added_objects.get(episode_id, []))
+
+        # Optionally repair invalid receptacle mappings before export
+        template_repair_summary = {
+            "applied": False,
+            "rigid_templates_repaired": 0,
+            "name_to_receptacle_keys_repaired": 0,
+            "replacements": {},
+        }
+        repair_summary = {
+            "applied": False,
+            "reason": "disabled",
+            "total": 0,
+            "repaired": 0,
+            "invalid_before": 0,
+            "invalid_after": 0,
+        }
+        if repair_templates or repair_receptacles:
+            modified_ep = json.loads(json.dumps(modified_ep))
+
+        if repair_templates:
+            template_repair_summary = repair_episode_object_templates(modified_ep)
+            print(
+                "✓ Template repair summary: "
+                f"templates={template_repair_summary.get('rigid_templates_repaired', 0)}, "
+                f"keys={template_repair_summary.get('name_to_receptacle_keys_repaired', 0)}"
+            )
+
+        if repair_receptacles:
+            repair_summary = repair_episode_receptacle_mappings(
+                modified_ep,
+                episode_id,
+                dataset_path="data/datasets/partnr_episodes/v0_0/val_mini.json.gz",
+            )
+            print(
+                "✓ Receptacle repair summary: "
+                f"repaired={repair_summary.get('repaired', 0)}, "
+                f"invalid_before={repair_summary.get('invalid_before', 0)}, "
+                f"invalid_after={repair_summary.get('invalid_after', 0)}"
+            )
         
         # Wrap episode in PARTNR dataset format if requested
         if wrap_dataset:
@@ -1206,7 +1706,9 @@ def export_config(episode_id):
                     "total_objects_added": num_added,
                     "episode_id": episode_id,
                     "has_modifications": True,
-                    "wrapped_in_dataset_format": wrap_dataset
+                    "wrapped_in_dataset_format": wrap_dataset,
+                    "template_repair": template_repair_summary,
+                    "receptacle_repair": repair_summary,
                 }
             }
             print(f"✓ Exported modified episode {episode_id} with {num_added} added objects (client download)")
@@ -1235,21 +1737,55 @@ def export_config(episode_id):
             
             # Save compressed JSON.gz
             save_episode_to_gz(gz_path, export_data)
+
+            # Optionally create mapped skill command file for this export
+            commands_map_summary = {
+                'created': False,
+                'reason': 'disabled',
+                'mapped_lines': 0,
+            }
+            mapped_commands_path = None
+            if map_skill_commands:
+                project_root = Path(__file__).parent.parent
+                input_commands_path = Path(skill_commands_file)
+                if not input_commands_path.is_absolute():
+                    input_commands_path = project_root / input_commands_path
+
+                mapped_commands_path = Path(json_path).with_suffix('').as_posix() + '_skill_runner_commands_mapped.txt'
+                commands_map_summary = create_mapped_skill_runner_commands_file(
+                    modified_ep,
+                    input_commands_file=input_commands_path,
+                    output_commands_file=Path(mapped_commands_path),
+                )
+                print(
+                    "✓ Skill command mapping summary: "
+                    f"created={commands_map_summary.get('created')}, "
+                    f"mapped_lines={commands_map_summary.get('mapped_lines', 0)}"
+                )
             
             print(f"✓ Saved modified episode {episode_id} to server:")
             print(f"  JSON: {json_path}")
             print(f"  GZ: {gz_path}")
+            if mapped_commands_path:
+                print(f"  Mapped commands: {mapped_commands_path}")
             
+            response_paths = {
+                "json": json_path,
+                "gz": gz_path,
+            }
+            if mapped_commands_path:
+                response_paths["skill_commands_mapped"] = mapped_commands_path
+
             return jsonify({
                 "success": True,
-                "paths": {
-                    "json": json_path,
-                    "gz": gz_path
-                },
+                "paths": response_paths,
                 "metadata": {
                     "total_objects_added": num_added,
                     "episode_id": episode_id,
-                    "wrapped_in_dataset_format": wrap_dataset
+                    "wrapped_in_dataset_format": wrap_dataset,
+                    "template_repair": template_repair_summary,
+                    "receptacle_repair": repair_summary,
+                    "skill_command_mapping": commands_map_summary,
                 }
             })
         
@@ -1307,6 +1843,44 @@ def export_data(episode_id):
             return jsonify({"error": "No modifications found"}), 404
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/episode/<episode_id>/skill-runner-object-names', methods=['GET'])
+def get_skill_runner_object_names(episode_id):
+    """Return valid object node names for skill runner (e.g. soap_dispenser_25)."""
+    try:
+        dataset_path = request.args.get('dataset', 'data/datasets/partnr_episodes/v0_0/val_mini.json.gz')
+        cache_key = f"{dataset_path}:{episode_id}"
+
+        # Prefer modified in-memory episode if available, else load original episode
+        if cache_key in _episode_json_cache:
+            episode = _episode_json_cache[cache_key]
+            source = 'modified_cache'
+        else:
+            episode = load_full_episode_json(episode_id, dataset_path=dataset_path)
+            source = 'dataset'
+
+        object_nodes = get_skill_runner_object_nodes_from_episode(episode)
+
+        # Optional substring filter for quick lookup
+        query = request.args.get('query', '').strip().lower()
+        if query:
+            object_nodes = [
+                node for node in object_nodes
+                if query in node['node_name'].lower()
+                or query in node['category'].lower()
+                or query in node['object_id'].lower()
+            ]
+
+        return jsonify({
+            'episode_id': str(episode_id),
+            'source': source,
+            'count': len(object_nodes),
+            'objects': object_nodes,
+        })
+    except Exception as e:
+        import traceback
+        return jsonify({'error': str(e), 'traceback': traceback.format_exc()}), 500
 
 
 @app.route('/api/debug/status', methods=['GET'])

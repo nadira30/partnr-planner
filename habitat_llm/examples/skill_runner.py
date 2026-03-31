@@ -6,6 +6,8 @@
 # LICENSE file in the root directory of this source tree.
 
 import sys
+import re
+from pathlib import Path
 from typing import List, Tuple, Any
 
 
@@ -37,6 +39,51 @@ from habitat_llm.utils.world_graph import (
     print_furniture_entity_handles,
     print_object_entity_handles,
 )
+
+
+def _load_commands_from_file(
+    commands_file: str,
+    valid_skill_names: List[str],
+    valid_control_commands: List[str],
+) -> List[str]:
+    """Load scripted commands from a text file and skip non-command lines."""
+    commands_path = Path(commands_file).expanduser()
+    if not commands_path.exists():
+        raise FileNotFoundError(f"Command file not found: {commands_path}")
+
+    valid_skill_set = set(valid_skill_names)
+    valid_control_set = set(valid_control_commands)
+
+    commands: List[str] = []
+    skipped_line_count = 0
+    for line in commands_path.read_text(encoding="utf-8").splitlines():
+        stripped_line = line.strip()
+        if not stripped_line or stripped_line.startswith("#"):
+            continue
+
+        # support bullets/numbered lists (e.g., "- Navigate ..." or "1. Navigate ...")
+        normalized_line = re.sub(r"^([-*]\s+|\d+[.)]\s+)", "", stripped_line).strip()
+        if not normalized_line:
+            continue
+
+        first_token = normalized_line.split(" ")[0]
+
+        if first_token in valid_control_set and " " not in normalized_line:
+            commands.append(normalized_line)
+            continue
+
+        if first_token in valid_skill_set:
+            commands.append(normalized_line)
+            continue
+
+        skipped_line_count += 1
+
+    if skipped_line_count > 0:
+        print(
+            f"Skipped {skipped_line_count} non-command lines while reading command file: {commands_path}"
+        )
+
+    return commands
 
 
 # Method to load agent planner from the config
@@ -124,19 +171,6 @@ def run_skills(config: omegaconf.DictConfig) -> None:
 
     sim = env_interface.sim
 
-    # show the topdown map if requested
-    if hasattr(config, "skill_runner_show_topdown"):
-        dbv = DebugVisualizer(sim, config.paths.results_dir)
-        dbv.create_dbv_agent(resolution=(1000, 1000))
-        top_down_map = dbv.peek("stage")
-        if show_command_videos:
-            top_down_map.show()
-        if config.evaluation.save_video:
-            top_down_map.save(output_path=config.paths.results_dir, prefix="topdown")
-        dbv.remove_dbv_agent()
-        dbv.create_dbv_agent()
-        dbv.remove_dbv_agent()
-
     ############################
     # done with setup, prompt the user and start running skills
 
@@ -155,6 +189,13 @@ def run_skills(config: omegaconf.DictConfig) -> None:
     entity_skill = "entities"
     pdb_skill = "debug"
     cumulative_video_skill = "make_video"
+    control_commands = [
+        exit_skill,
+        help_skill,
+        entity_skill,
+        pdb_skill,
+        cumulative_video_skill,
+    ]
 
     cprint("Welcome to skill_runner!", "green")
     cprint(
@@ -171,6 +212,22 @@ def run_skills(config: omegaconf.DictConfig) -> None:
 
     # setup a sequence of commands to run immediately without manual input
     scripted_commands: List[str] = []
+    has_scripted_command_list = hasattr(config, "skill_runner_scripted_commands")
+    has_scripted_command_file = hasattr(config, "skill_runner_commands_file")
+    assert not (
+        has_scripted_command_list and has_scripted_command_file
+    ), "skill_runner_scripted_commands and skill_runner_commands_file are mutually exclusive."
+
+    if has_scripted_command_file:
+        scripted_commands = _load_commands_from_file(
+            config.skill_runner_commands_file,
+            valid_skill_names=list(skills.keys()),
+            valid_control_commands=control_commands,
+        )
+        print(
+            f"Loaded {len(scripted_commands)} scripted commands from file: {config.skill_runner_commands_file}"
+        )
+
     if hasattr(config, "skill_runner_scripted_commands"):
         scripted_commands = config.skill_runner_scripted_commands
         # we need special handling for "Place" skill because arguements are comma separated and need to be joined
@@ -188,14 +245,74 @@ def run_skills(config: omegaconf.DictConfig) -> None:
             )
     print(scripted_commands)
 
+    scripted_commands_from_file = has_scripted_command_file
+    interactive_playback = show_command_videos and not scripted_commands_from_file
+    write_individual_skill_videos = make_video and not scripted_commands_from_file
+    if scripted_commands_from_file and show_command_videos:
+        cprint(
+            "skill_runner_commands_file detected: disabling interactive video playback for non-interactive run.",
+            "yellow",
+        )
+    if scripted_commands_from_file and make_video:
+        cprint(
+            "skill_runner_commands_file detected: deferring video encoding to final cumulative output.",
+            "yellow",
+        )
+
+    # show the topdown map if requested
+    if hasattr(config, "skill_runner_show_topdown"):
+        dbv = DebugVisualizer(sim, config.paths.results_dir)
+        dbv.create_dbv_agent(resolution=(1000, 1000))
+        top_down_map = dbv.peek("stage")
+        if interactive_playback:
+            top_down_map.show()
+        if config.evaluation.save_video:
+            top_down_map.save(output_path=config.paths.results_dir, prefix="topdown")
+        dbv.remove_dbv_agent()
+        dbv.create_dbv_agent()
+        dbv.remove_dbv_agent()
+
+    auto_save_scripted_video = (
+        config.skill_runner_auto_save_scripted_video
+        if hasattr(config, "skill_runner_auto_save_scripted_video")
+        else True
+    )
+
     # collect debug frames to create a final video
     cumulative_frames: List[Any] = []
 
     command_index = 0
     # history of skill commands and their responses
     command_history: List[Tuple[str, str]] = []
+
+    def _print_history() -> None:
+        print("==========================")
+        print("Exiting. Command History:")
+        for ix, t in enumerate(command_history):
+            print(f" [{ix}]: '{t[0]}' -> '{t[1]}'")
+        print("==========================")
+
+    def _maybe_save_cumulative_video() -> None:
+        if not auto_save_scripted_video:
+            return
+        if len(cumulative_frames) == 0:
+            print("No cumulative frames recorded; skipping final video generation.")
+            return
+        dvu = DebugVideoUtil(env_interface, env_interface.conf.paths.results_dir)
+        dvu.frames = cumulative_frames
+        dvu._make_video(postfix="cumulative", play=interactive_playback)
+
     while True:
         cprint("Enter Command", "blue")
+        if scripted_commands_from_file and len(scripted_commands) <= command_index:
+            cprint(
+                "Reached end of scripted command file. Saving final cumulative video and exiting.",
+                "green",
+            )
+            _maybe_save_cumulative_video()
+            _print_history()
+            return
+
         if len(scripted_commands) > command_index:
             user_input = scripted_commands[command_index]
             print(user_input)
@@ -205,12 +322,9 @@ def run_skills(config: omegaconf.DictConfig) -> None:
         selected_skill = None
 
         if user_input == exit_skill:
-            print("==========================")
-            print("Exiting. Command History:")
-            for ix, t in enumerate(command_history):
-                print(f" [{ix}]: '{t[0]}' -> '{t[1]}'")
-            print("==========================")
-            exit()
+            _maybe_save_cumulative_video()
+            _print_history()
+            return
         elif user_input == help_skill:
             cprint(help_text, "green")
         elif user_input == entity_skill:
@@ -230,7 +344,7 @@ def run_skills(config: omegaconf.DictConfig) -> None:
                     env_interface, env_interface.conf.paths.results_dir
                 )
                 dvu.frames = cumulative_frames
-                dvu._make_video(postfix="cumulative", play=show_command_videos)
+                dvu._make_video(postfix="cumulative", play=interactive_playback)
         elif user_input in skills:
             # fill information piece by piece
             selected_skill = user_input
@@ -266,7 +380,8 @@ def run_skills(config: omegaconf.DictConfig) -> None:
                     planner,
                     vid_postfix=f"{command_index}_",
                     make_video=make_video,
-                    play_video=show_command_videos,
+                    play_video=interactive_playback,
+                    write_video=write_individual_skill_videos,
                 )
                 command_history.append((user_input, responses[int(agent_ix)]))
                 skill_name = high_level_skill_actions[int(agent_ix)][0]
@@ -302,6 +417,11 @@ def run_skills(config: omegaconf.DictConfig) -> None:
 # - 'evaluation.save_video=False' - (default True) option to save videos to files. Also affects cumulative videos produced with "make_video" command.
 # NOTE: videos are made only if either of the above options are True
 # - 'paths.results_dir=<relative_path>' (default './results/') relative path to desired output directory for evaluation
+# - '+skill_runner_auto_save_scripted_video=False' - (default True) disable automatic cumulative video generation when scripted commands complete
+#
+# (scripted input options)
+# - '+skill_runner_commands_file=<path_to_text_file>' - run one command per line from a file (ignores empty lines and lines starting with '#').
+#   At the end of the file, skill_runner automatically saves a cumulative video and exits.
 #
 ##########################################
 # Other useful CLI overrides:

@@ -110,16 +110,45 @@ class DebugVideoUtil:
         :param play: Whether or not to play the video immediately.
         :param postfix: An optional postfix for the video file name.
         """
+        if len(self.frames) == 0:
+            print("No frames available for video generation, skipping.")
+            return
+
         out_file = f"{self.output_dir}/videos/video.mp4"  # -{postfix}
         print(f"Saving video to {out_file}")
         os.makedirs(f"{self.output_dir}/videos", exist_ok=True)
+
+        # Ensure every frame has consistent shape and dtype before writing.
+        reference_frame = np.asarray(self.frames[0])
+        if reference_frame.ndim == 2:
+            reference_frame = cv2.cvtColor(reference_frame, cv2.COLOR_GRAY2RGB)
+        if reference_frame.ndim == 3 and reference_frame.shape[2] > 3:
+            reference_frame = reference_frame[:, :, :3]
+        reference_h, reference_w = reference_frame.shape[:2]
+
         writer = imageio.get_writer(
             out_file,
             fps=30,
             quality=4,
         )
         for frame in self.frames:
-            writer.append_data(frame)
+            processed_frame = np.asarray(frame)
+            if processed_frame.ndim == 2:
+                processed_frame = cv2.cvtColor(processed_frame, cv2.COLOR_GRAY2RGB)
+            if processed_frame.ndim != 3:
+                continue
+            if processed_frame.shape[2] > 3:
+                processed_frame = processed_frame[:, :, :3]
+            if processed_frame.shape[:2] != (reference_h, reference_w):
+                processed_frame = cv2.resize(
+                    processed_frame,
+                    (reference_w, reference_h),
+                    interpolation=cv2.INTER_AREA,
+                )
+            if processed_frame.dtype != np.uint8:
+                processed_frame = np.clip(processed_frame, 0, 255).astype(np.uint8)
+            processed_frame = np.ascontiguousarray(processed_frame)
+            writer.append_data(processed_frame)
 
         writer.close()
         if play:
@@ -161,6 +190,7 @@ def execute_skill(
     make_video: bool = True,
     vid_postfix: str = "",
     play_video: bool = True,
+    write_video: bool = True,
 ) -> Tuple[Dict[Any, Any], Dict[Any, Any], List[Any]]:
     """
     Execute a high-level skill from a string (e.g. as produced by the planner).
@@ -171,6 +201,7 @@ def execute_skill(
     :param make_video: whether or not to create, save, and display a video of the skill.
     :param vid_postfix: An optional postfix for the video file. For example, the action name.
     :param play_video: Whether or not to immediately play the generated video.
+    :param write_video: Whether or not to write a per-skill video file. Frame collection is still controlled by make_video.
     :return: A tuple with two dict(the first contains responses per-agent skill, the second contains the number of skill steps taken) and a list of frames.
     """
     dvu = DebugVideoUtil(
@@ -217,7 +248,7 @@ def execute_skill(
         # Increase steps
         skill_steps += 1
 
-    if make_video and skill_steps > 1:
+    if make_video and write_video and skill_steps > 1:
         dvu._make_video(postfix=vid_postfix, play=play_video)
 
     return responses, {"skill_steps": skill_steps}, dvu.frames

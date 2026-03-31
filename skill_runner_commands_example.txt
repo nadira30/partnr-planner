@@ -1,0 +1,131 @@
+Monday:
+06:15 - 06:20, bedroom: wake_up
+
+Navigate 1 floor_bedroom_1
+Navigate 1 bed_16
+Wait 1 5
+Navigate 1 chest_of_drawers_33
+Pick 1 clock_1
+Wait 1 5
+Navigate 1 bed_16
+Place 1 clock_1,on,bed_16,None,None
+
+06:20 - 06:27, bathroom: brushing_teeth
+
+Navigate 1 floor_bathroom_1
+Navigate 1 cabinet_12
+Open 1 cabinet_12
+Pick 1 soap_dispenser_1
+Wait 1 15
+Place 1 soap_dispenser_1,on,cabinet_12,None,None
+Close 1 cabinet_12
+Navigate 1 floor_bathroom_1
+Navigate 1 cabinet_34
+Open 1 cabinet_34
+Navigate 1 cabinet_12
+Pick 1 bath_towel_1
+Wait 1 10
+Navigate 1 cabinet_34
+Place 1 bath_towel_1,on,cabinet_34,None,None
+Close 1 cabinet_34
+Navigate 1 floor_bathroom_1
+Navigate 1 toilet_28
+Wait 1 2
+Navigate 1 floor_bathroom_1
+Navigate 1 cabinet_12
+Open 1 cabinet_12
+Navigate 1 cabinet_34
+Pick 1 hand_towel_1
+Wait 1 5
+Navigate 1 cabinet_12
+Place 1 hand_towel_1,on,cabinet_12,None,None
+Close 1 cabinet_12
+Navigate 1 floor_bathroom_1
+
+06:27 - 06:56, workout: yoga_practice
+
+Navigate 1 floor_workout_1
+Wait 1 5
+Place 1 None,None,floor_workout_1,on,basketball_1
+Wait 1 5
+Navigate 1 floor_workout_1
+Navigate 1 bench_10
+Pick 1 bottle_2
+Wait 1 5
+Navigate 1 floor_workout_1
+Place 1 bottle_2,on,floor_workout_1,None,None
+Wait 1 5
+Navigate 1 floor_workout_1
+Navigate 1 bench_10
+Pick 1 dumbbell_1
+Wait 1 5
+Navigate 1 floor_workout_1
+Place 1 dumbbell_1,on,floor_workout_1,None,None
+Wait 1 5
+
+06:56 - 07:15, bathroom: showering
+
+Navigate 1 floor_bathroom_1
+Navigate 1 cabinet_12
+Open 1 cabinet_12
+Pick 1 bath_towel_1
+Wait 1 15
+Place 1 bath_towel_1,on,cabinet_12,None,None
+Close 1 cabinet_12
+Navigate 1 floor_bathroom_1
+Navigate 1 cabinet_12
+Pick 1 soap_dispenser_1
+Wait 1 15
+Place 1 soap_dispenser_1,on,cabinet_12,None,None
+
+07:15 - 07:45, kitchen: breakfast
+
+Navigate 1 floor_kitchen_1
+Navigate 1 fridge_32
+Open 1 fridge_32
+Pick 1 bottle_1
+Wait 1 5
+Navigate 1 table_14
+Place 1 bottle_1,on,table_14,None,None
+Navigate 1 fridge_32
+Close 1 fridge_32
+Navigate 1 cabinet_12
+Open 1 cabinet_12
+Navigate 1 table_14
+Pick 1 bowl_1
+Wait 1 5
+Navigate 1 table_14
+Place 1 bowl_1,on,table_14,None,None
+Navigate 1 cabinet_12
+Close 1 cabinet_12
+Navigate 1 fridge_32
+Open 1 fridge_32
+Navigate 1 cabinet_12
+Pick 1 cup_1
+Wait 1 5
+Navigate 1 table_14
+Place 1 cup_1,on,table_14,None,None
+Navigate 1 fridge_32
+Close 1 fridge_32
+Navigate 1 table_14
+Navigate 1 fridge_32
+Pick 1 bottle_1
+Wait 1 5
+Navigate 1 cabinet_12
+Pick 1 cup_1
+Wait 1 5
+
+18:05 - 18:12, bathroom: going_to_the_bathroom
+
+Navigate 1 floor_bathroom_1
+Navigate 1 toilet_28
+Wait 1 7
+Navigate 1 floor_bathroom_1
+Navigate 1 cabinet_12
+Open 1 cabinet_12
+Navigate 1 cabinet_34
+Pick 1 hand_towel_1
+Wait 1 5
+Navigate 1 cabinet_12
+Place 1 hand_towel_1,on,cabinet_12,None,None
+Close 1 cabinet_12

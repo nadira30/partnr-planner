@@ -1,0 +1,63 @@
+Monday:
+06:15 - 06:20, bedroom: wake_up
+
+Navigate 1 floor_bedroom_1
+Navigate 1 chest_of_drawers_39
+Pick 1 alarm_clock_1
+Wait 1 5
+Navigate 1 bed_16
+Place 1 alarm_clock_1,on,bed_16,None,None
+Navigate 1 floor_bedroom_1
+Navigate 1 chest_of_drawers_33
+Pick 1 lamp_1
+Navigate 1 bed_16
+Place 1 lamp_1,next_to,bed_16,None,None
+Navigate 1 floor_bedroom_1
+Navigate 1 chest_of_drawers_33
+Pick 1 book_2
+Place 1 book_2,on,chest_of_drawers_33,None,None
+
+06:20 - 06:27, bathroom: brushing_teeth
+
+Navigate 1 floor_bathroom_1
+Navigate 1 unknown_18
+Pick 1 toothbrush_1
+Wait 1 5
+Navigate 1 soap_dish_1
+Place 1 toothbrush_1,in,soap_dish_1,None,None
+Wait 1 2
+Navigate 1 cabinet_34
+Pick 1 soap_dispenser_1
+Wait 1 5
+Place 1 soap_dispenser_1,on,cabinet_34,None,None
+Wait 1 2
+Pick 1 hand_towel_1
+Wait 1 5
+Place 1 hand_towel_1,on,cabinet_34,None,None
+
+06:27 - 06:56, workout: yoga_practice
+
+Navigate 1 floor_workout_1
+Wait 1 5
+Pick 1 water_bottle_1
+Wait 1 5
+Place 1 water_bottle_1,in,floor_workout_1,None,None
+Wait 1 5
+
+06:56 - 07:15, bathroom: showering
+
+Navigate 1 floor_bathroom_1
+Navigate 1 cabinet_34
+Pick 1 soap_dish_1
+Wait 1 5
+Place 1 soap_dish_1,on,cabinet_34,None,None
+Navigate 1 floor_bathroom_1
+Navigate 1 cabinet_34
+Pick 1 hand_towel_1
+Wait 1 5
+Place 1 hand_towel_1,on,cabinet_34,None,None
+Navigate 1 floor_bathroom_1
+Navigate 1 unknown_18
+Pick 1 bath_towel_1
+Wait 1 5
+Place 1 bath_towel_1,on,unknown_18,None,None
