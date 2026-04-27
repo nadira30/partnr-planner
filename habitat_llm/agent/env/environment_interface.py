@@ -169,7 +169,7 @@ class EnvironmentInterface:
             }
         else:
             self.world_graph = {
-                self.robot_agent_uid: WorldGraph(),
+                self.robot_agent_uid: DynamicWorldGraph(), # initial WorldGraph
                 self.human_agent_uid: WorldGraph(),
             }
 

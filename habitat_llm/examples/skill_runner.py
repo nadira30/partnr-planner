@@ -7,6 +7,7 @@
 
 import sys
 import re
+import numpy as np
 from pathlib import Path
 from typing import List, Tuple, Any, Dict
 
@@ -128,6 +129,75 @@ def _get_robot_room_anchor_from_human_location(
         return anchor_name
     except Exception:
         return ""
+
+
+def _orient_robot_toward_human(
+    env_interface: EnvironmentInterface,
+    robot_agent_uid: int = 0,
+    human_agent_uid: int = 1,
+) -> bool:
+    """Rotate robot base in-place to face the human's current position."""
+    try:
+        robot_agent = env_interface.sim.agents_mgr[robot_agent_uid].articulated_agent
+        human_agent = env_interface.sim.agents_mgr[human_agent_uid].articulated_agent
+
+        robot_pos = np.array(robot_agent.base_pos)
+        human_pos = np.array(human_agent.base_pos)
+        delta = human_pos - robot_pos
+        delta_xz = delta[[0, 2]]
+        norm = np.linalg.norm(delta_xz)
+        if norm < 1e-6:
+            return False
+
+        unit_dir = delta_xz / norm
+        target_yaw = float(np.arctan2(-unit_dir[1], unit_dir[0]))
+        robot_agent.base_rot = target_yaw
+        return True
+    except Exception:
+        return False
+
+
+def _enforce_robot_human_separation(
+    env_interface: EnvironmentInterface,
+    min_distance: float,
+    robot_agent_uid: int = 0,
+    human_agent_uid: int = 1,
+) -> bool:
+    """Ensure robot and human keep at least min_distance in the XZ plane."""
+    try:
+        robot_agent = env_interface.sim.agents_mgr[robot_agent_uid].articulated_agent
+        human_agent = env_interface.sim.agents_mgr[human_agent_uid].articulated_agent
+
+        robot_pos = np.array(robot_agent.base_pos, dtype=float)
+        human_pos = np.array(human_agent.base_pos, dtype=float)
+
+        delta = robot_pos - human_pos
+        delta_xz = delta[[0, 2]]
+        cur_dist = float(np.linalg.norm(delta_xz))
+
+        if cur_dist >= min_distance:
+            return False
+
+        if cur_dist < 1e-6:
+            direction_xz = np.array([1.0, 0.0], dtype=float)
+        else:
+            direction_xz = delta_xz / cur_dist
+
+        new_robot_pos = robot_pos.copy()
+        new_robot_pos[0] = human_pos[0] + direction_xz[0] * min_distance
+        new_robot_pos[2] = human_pos[2] + direction_xz[1] * min_distance
+
+        try:
+            snapped = env_interface.sim.pathfinder.snap_point(new_robot_pos)
+            if snapped is not None and np.all(np.isfinite(snapped)):
+                new_robot_pos = np.array(snapped, dtype=float)
+        except Exception:
+            pass
+
+        robot_agent.base_pos = new_robot_pos
+        return True
+    except Exception:
+        return False
 
 
 # Method to load agent planner from the config
@@ -345,6 +415,12 @@ def run_skills(config: omegaconf.DictConfig) -> None:
         else True
     )
 
+    robot_human_min_distance = (
+        float(config.skill_runner_robot_human_min_distance)
+        if hasattr(config, "skill_runner_robot_human_min_distance")
+        else 1.0
+    )
+
     # collect debug frames to create a final video
     cumulative_frames: List[Any] = []
 
@@ -514,6 +590,29 @@ def run_skills(config: omegaconf.DictConfig) -> None:
                             if 0 in robot_responses:
                                 print(
                                     f"Robot anchor navigate completed. Response = '{robot_responses[0]}'"
+                                )
+
+                            separated = _enforce_robot_human_separation(
+                                env_interface,
+                                min_distance=robot_human_min_distance,
+                                robot_agent_uid=0,
+                                human_agent_uid=1,
+                            )
+                            if separated:
+                                cprint(
+                                    f"Adjusted robot position to keep distance >= {robot_human_min_distance:.2f}m from human.",
+                                    "yellow",
+                                )
+
+                            oriented = _orient_robot_toward_human(
+                                env_interface, robot_agent_uid=0, human_agent_uid=1
+                            )
+                            if oriented:
+                                cprint("Auto-oriented robot to face human.", "yellow")
+                            else:
+                                cprint(
+                                    "Could not orient robot toward human at this step.",
+                                    "yellow",
                                 )
                     else:
                         cprint(
