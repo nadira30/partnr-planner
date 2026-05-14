@@ -143,3 +143,5 @@ skill_runner_commands_mapped.txt
 skill_runner_commands.txt
 human_room_trace.txt
 *.npy
+TDOST/files/dense_test/
+TDOST/tdost_file/
