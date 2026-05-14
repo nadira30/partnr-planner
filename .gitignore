@@ -145,3 +145,6 @@ human_room_trace.txt
 *.npy
 TDOST/files/dense_test/
 TDOST/tdost_file/
+TDOST/tdost_dense_test/
+TDOST/files/
+TDOST/test_temp/
