@@ -150,6 +150,20 @@ def remap_line(line: str, alias_map: Dict[str, str]) -> str:
         return line
 
     command = parts[0]
+    if command == "Wait":
+        if len(parts) >= 3:
+            wait_time = parts[2]
+            try:
+                scaled_wait = float(wait_time) / 5.0
+                if scaled_wait.is_integer():
+                    scaled_wait_text = str(int(scaled_wait))
+                else:
+                    scaled_wait_text = str(scaled_wait)
+                new_line = line.replace(wait_time, scaled_wait_text, 1)
+                return new_line
+            except ValueError:
+                return line
+
     if command in {"Pick", "Navigate", "Open", "Close"}:
         entity = parts[2]
         new_entity = remap_entity_token(entity, alias_map)

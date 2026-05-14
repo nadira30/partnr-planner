@@ -102,38 +102,78 @@ def get_available_objects() -> str:
         return f"Error reading objects file: {str(e)}"
 
 
+# agent = Agent(
+#     name="ObjectAdderAgent",
+#     instructions=(
+#     "You are a scene-population agent. Your goal is to fill a virtual household scene with realistic objects "
+#     "based on a YAML specification. The scene should reflect how a real home looks — every room should feel "
+#     "lived-in and complete.\n\n"
+
+#     "## Step-by-step workflow\n"
+#     "Follow these steps IN ORDER before generating any output:\n"
+#     "1. Call get_furniture_info() — note every room name and furniture name exactly as they appear.\n"
+#     "2. Call get_available_objects() — use the 'clean_category' column as the object_category value.\n"
+#     "3. Call example_yaml_file() — study the expected format carefully.\n\n"
+
+#     "## Object placement rules\n"
+#     "- Populate EVERY room with appropriate objects. Do not leave any room empty.\n"
+#     "- Place objects on ALL furniture pieces where it makes sense (e.g., shelves, tables, counters, beds).\n"
+#     "- Reuse the same object category multiple times across different rooms or furniture when realistic.\n"
+#     "- Prioritize realism: think about what a person would actually keep in each room.\n\n"
+
+#     "## Strict constraints\n"
+#     "- Room names MUST exactly match those returned by get_furniture_info().\n"
+#     "- Furniture names MUST exactly match those returned by get_furniture_info().\n"
+#     "- object_category values MUST exactly match the 'clean_category' column from get_available_objects().\n"
+#     "- Do not invent room names, furniture names, or object categories that were not returned by the tools.\n\n"
+
+#     "CRITICAL: You MUST call get_furniture_info() before generating any YAML. "
+#     "Do NOT generate any output until all three tools have been called. "
+#     "Generating YAML without first calling the tools is a failure."
+
+#     "## Output format\n"
+#     "Output ONLY valid YAML — no explanations, no comments, no markdown code fences. "
+#     "Your entire response must be parseable as YAML."),
+#     tools=[example_yaml_file, get_furniture_info, get_available_objects],
+# )
+
 agent = Agent(
     name="ObjectAdderAgent",
     instructions=(
-    "You are a scene-population agent. Your goal is to fill a virtual household scene with realistic objects "
-    "based on a YAML specification. The scene should reflect how a real home looks — every room should feel "
-    "lived-in and complete.\n\n"
+        "You are a scene-population agent. Your goal is to fill a virtual household scene with realistic "
+        "objects based on a YAML specification. The scene should reflect how a real home looks — every "
+        "room should feel lived-in and complete.\n\n"
 
-    "## Step-by-step workflow\n"
-    "Follow these steps IN ORDER before generating any output:\n"
-    "1. Call get_furniture_info() — note every room name and furniture name exactly as they appear.\n"
-    "2. Call get_available_objects() — use the 'clean_category' column as the object_category value.\n"
-    "3. Call example_yaml_file() — study the expected format carefully.\n\n"
+        "## Workflow — follow IN ORDER, generate NO output until all 3 steps are done\n"
+        "1. Call get_furniture_info() — build a mental map of EXACTLY which furniture belongs to which room. Treat this as the only source of truth for room-furniture associations. Your world knowledge about what furniture typically appears in a room is irrelevant and must be ignored.\n"
+        "2. Call get_available_objects() — record every value in the 'clean_category' column exactly as returned.\n"
+        "3. Call example_yaml_file() — extract the following: top-level structure, key names, "
+        "nesting depth, and how rooms, furniture, and object_category are represented.\n\n"
 
-    "## Object placement rules\n"
-    "- Populate EVERY room with appropriate objects. Do not leave any room empty.\n"
-    "- Place objects on ALL furniture pieces where it makes sense (e.g., shelves, tables, counters, beds).\n"
-    "- Reuse the same object category multiple times across different rooms or furniture when realistic.\n"
-    "- Prioritize realism: think about what a person would actually keep in each room.\n\n"
+        "## Object placement rules\n"
+        "- Populate EVERY room returned by get_furniture_info(). No room may be left empty.\n"
+        "- Place objects on ALL furniture pieces where placement makes sense "
+        "(e.g., shelves, tables, counters, desks, beds).\n"
+        "- Aim for 3–7 objects per furniture piece. Prefer the higher end for storage furniture "
+        "(shelves, cabinets, drawers) and the lower end for surfaces (nightstands, coffee tables).\n"
+        "- Reuse the same object category across different rooms or furniture when realistic.\n"
+        "- Prioritize realism: think about what a person would actually keep in each room.\n\n"
 
-    "## Strict constraints\n"
-    "- Room names MUST exactly match those returned by get_furniture_info().\n"
-    "- Furniture names MUST exactly match those returned by get_furniture_info().\n"
-    "- object_category values MUST exactly match the 'clean_category' column from get_available_objects().\n"
-    "- Do not invent room names, furniture names, or object categories that were not returned by the tools.\n\n"
+        "## Strict constraints\n"
+        "- Room names MUST exactly match those returned by get_furniture_info().\n"
+        "- Furniture names MUST exactly match those returned by get_furniture_info().\n"
+        "- object_category values MUST exactly match the 'clean_category' column from get_available_objects().\n"
+        "- Do not invent room names, furniture names, or object categories not returned by the tools.\n"
+        "- If a tool returns an error or empty data, stop and report the error. Do not guess or proceed.\n"
+        "- Each furniture piece belongs to exactly one room as returned by get_furniture_info().\n" 
+        "- NEVER place objects on a furniture piece under a room it was not listed under.\n"
+        "- Before writing any furniture entry, verify: \"Did get_furniture_info() list this furniture under this room?\" If not, do not write it.\n\n"
 
-    "CRITICAL: You MUST call get_furniture_info() before generating any YAML. "
-    "Do NOT generate any output until all three tools have been called. "
-    "Generating YAML without first calling the tools is a failure."
-
-    "## Output format\n"
-    "Output ONLY valid YAML — no explanations, no comments, no markdown code fences. "
-    "Your entire response must be parseable as YAML."),
+        "## Output format\n"
+        "- Output ONLY valid YAML — no explanations, no comments, no markdown code fences.\n"
+        "- Your entire response must be parseable as YAML.\n"
+        "- Use the structure, key names, and nesting depth from example_yaml_file() exactly."
+    ),
     tools=[example_yaml_file, get_furniture_info, get_available_objects],
 )
 
@@ -146,7 +186,6 @@ async def main():
         "First, get the furniture info and available objects, then generate appropriate YAML. " \
         "Output ONLY the YAML content, no explanations."
     )
-    
     output_yaml = result.final_output
     print("Agent Output:")
     # print(output_yaml)

@@ -103,7 +103,7 @@ class DebugVideoUtil:
         self.frames.append(frames_concat)
         return
 
-    def _make_video(self, play: bool = True, postfix: str = "") -> None:
+    def _make_video(self, play: bool = False, postfix: str = "") -> None:
         """
         Makes a video from a pre-processed set of frames using imageio and saves it to the output directory.
 
@@ -192,6 +192,8 @@ def execute_skill(
     play_video: bool = True,
     write_video: bool = True,
     decentralized_planners: Dict[int, Any] = None,
+    blocking_agent_ids: List[int] = None,
+    step_callback: Any = None,
 ) -> Tuple[Dict[Any, Any], Dict[Any, Any], List[Any]]:
     """
     Execute a high-level skill from a string (e.g. as produced by the planner).
@@ -204,6 +206,8 @@ def execute_skill(
     :param play_video: Whether or not to immediately play the generated video.
     :param write_video: Whether or not to write a per-skill video file. Frame collection is still controlled by make_video.
     :param decentralized_planners: Optional map of agent uid -> planner for decentralized multi-agent stepping.
+    :param blocking_agent_ids: Optional list of agent ids whose completion controls loop termination.
+    :param step_callback: Optional callback called after each env step.
     :return: A tuple with two dict(the first contains responses per-agent skill, the second contains the number of skill steps taken) and a list of frames.
     """
     dvu = DebugVideoUtil(
@@ -215,10 +219,12 @@ def execute_skill(
     agent_idx = list(high_level_skill_actions.keys())[0]
     skill_name = high_level_skill_actions[agent_idx][0]
     assigned_agent_ids = list(high_level_skill_actions.keys())
+    if blocking_agent_ids is None:
+        blocking_agent_ids = assigned_agent_ids
 
     # Set up the variables
     skill_steps = 0
-    max_skill_steps = 1500
+    max_skill_steps = 1000000 # changed by nadi from 1500
     skill_done = None
 
     # While loop for executing skills
@@ -249,8 +255,8 @@ def execute_skill(
                 high_level_skill_actions, observations
             )
 
-        # Check if all targeted agents are done
-        if all(responses.get(agent_id) for agent_id in assigned_agent_ids):
+        # Check if all blocking agents are done
+        if all(responses.get(agent_id) for agent_id in blocking_agent_ids):
             skill_done = True
 
         if len(low_level_actions) == 0:
@@ -260,6 +266,14 @@ def execute_skill(
         # Get the observations
         obs, reward, done, info = llm_env.env_interface.step(low_level_actions)
         observations = llm_env.env_interface.parse_observations(obs)
+
+        if step_callback is not None:
+            step_callback(
+                llm_env.env_interface,
+                observations,
+                high_level_skill_actions,
+                skill_steps,
+            )
 
         if make_video:
             dvu._store_for_video(observations, high_level_skill_actions)

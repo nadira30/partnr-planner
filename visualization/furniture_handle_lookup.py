@@ -63,6 +63,19 @@ class FurnitureHandleLookup:
         
         return episode_data.get("furniture_handles", {})
     
+    def get_furniture_rooms_for_episode(self, episode_id: str) -> Dict[str, str]:
+        """
+        Get furniture name-to-room mappings for an episode.
+        
+        :param episode_id: Episode ID
+        :return: Dictionary mapping furniture names to room names
+        """
+        episode_data = self.data.get(str(episode_id))
+        if not episode_data:
+            return {}
+        
+        return episode_data.get("furniture_rooms", {})
+    
     def get_scene_id(self, episode_id: str) -> Optional[str]:
         """
         Get the scene ID for an episode.

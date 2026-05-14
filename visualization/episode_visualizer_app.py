@@ -844,10 +844,26 @@ def add_object(episode_id):
         
         # Look up furniture handle from pre-extracted mapping based on episode_id and furniture name
         receptacle_handle = None
+        furniture_handle_from_mapping = None
+        furniture_room_from_mapping = None
+        
         if furniture != "floor" and furniture_handle_lookup and furniture_handle_lookup.has_episode(episode_id):
             receptacle_handle = furniture_handle_lookup.get_furniture_handle(episode_id, furniture)
             if receptacle_handle:
                 print(f"✓ Found furniture handle from mapping: {furniture} -> {receptacle_handle}")
+                furniture_handle_from_mapping = receptacle_handle
+                
+                # Get room association for this furniture (NEW: validate room match)
+                furniture_rooms_map = furniture_handle_lookup.get_furniture_rooms_for_episode(episode_id)
+                furniture_room_from_mapping = furniture_rooms_map.get(furniture) if furniture_rooms_map else None
+                
+                if furniture_room_from_mapping:
+                    if furniture_room_from_mapping == room:
+                        print(f"✓ Furniture '{furniture}' is in the requested room '{room}'")
+                    else:
+                        print(f"⚠ WARNING: Furniture '{furniture}' is in room '{furniture_room_from_mapping}', not '{room}'")
+                        print(f"   Will fall back to scene file lookup to find matching furniture in '{room}'")
+                        receptacle_handle = None  # Force fallback to scene file lookup
             else:
                 print(f"⚠ Furniture '{furniture}' not found in pre-extracted mapping for episode {episode_id}")
         
@@ -897,6 +913,97 @@ def add_object(episode_id):
         # If receptacle_handle not provided, derive it from furniture name
         furniture_handle = None
         furniture_position = None
+        episode_furniture_rooms = {}
+
+        def _parse_furniture_instance(name: str) -> Optional[int]:
+            """Return trailing numeric instance from names like bench_48."""
+            if not name or '_' not in name:
+                return None
+            suffix = name.rsplit('_', 1)[-1]
+            return int(suffix) if suffix.isdigit() else None
+
+        def _normalize_instance_handle(handle: str) -> str:
+            """Normalize handles for robust matching across variants."""
+            return handle.split('|')[0] if '|' in handle else handle
+
+        def _select_best_matching_furniture(matching_furniture: List[Dict]) -> Optional[Dict]:
+            """Prefer candidates in target room, then closest instance index."""
+            if not matching_furniture:
+                return None
+
+            if not episode_furniture_rooms:
+                return matching_furniture[0]
+
+            handle_to_names = defaultdict(list)
+            if furniture_handle_lookup and furniture_handle_lookup.has_episode(episode_id):
+                per_episode_handles = furniture_handle_lookup.get_all_furniture_for_episode(episode_id)
+                for furn_name, furn_handle in per_episode_handles.items():
+                    if not furn_handle:
+                        continue
+                    handle_to_names[_normalize_instance_handle(str(furn_handle))].append(furn_name)
+
+            requested_instance = _parse_furniture_instance(furniture)
+            ranked = []
+
+            for idx, furn_info in enumerate(matching_furniture):
+                handle = _normalize_instance_handle(str(furn_info.get('handle', '')))
+                candidate_names = list(handle_to_names.get(handle, []))
+
+                # Fallback: match on base handle when instance suffix differs.
+                if not candidate_names and '_:' in handle:
+                    base_handle = handle.split('_:')[0]
+                    for mapped_handle, names in handle_to_names.items():
+                        if mapped_handle.split('_:')[0] == base_handle:
+                            candidate_names.extend(names)
+
+                room_matches = [name for name in candidate_names if episode_furniture_rooms.get(name) == room]
+                names_to_score = room_matches if room_matches else candidate_names
+
+                instance_distance = 10**9
+                if names_to_score:
+                    for name in names_to_score:
+                        candidate_instance = _parse_furniture_instance(name)
+                        if requested_instance is not None and candidate_instance is not None:
+                            instance_distance = min(instance_distance, abs(candidate_instance - requested_instance))
+                        elif requested_instance is None:
+                            instance_distance = min(instance_distance, 0)
+
+                ranked.append({
+                    'furn_info': furn_info,
+                    'room_priority': 0 if room_matches else 1,
+                    'instance_distance': instance_distance,
+                    'original_index': idx,
+                    'candidate_names': names_to_score,
+                })
+
+            ranked.sort(
+                key=lambda x: (
+                    x['room_priority'],
+                    x['instance_distance'],
+                    x['original_index'],
+                )
+            )
+
+            best = ranked[0]
+            if best['room_priority'] == 0:
+                print(
+                    f"✓ Room-aware fallback selected furniture in target room '{room}': "
+                    f"{best['candidate_names'][0] if best['candidate_names'] else 'unknown'}"
+                )
+            else:
+                print(f"⚠ No fallback furniture candidate found in room '{room}', using closest global match")
+
+            return best['furn_info']
+
+        # Build furniture->room map to keep fallback placement in the requested room.
+        try:
+            episode_data_viz = get_episode_data(episode_id)
+            for room_name, room_furniture in episode_data_viz.get('furniture_by_room', {}).items():
+                for furn_name in room_furniture:
+                    episode_furniture_rooms[furn_name] = room_name
+        except Exception as map_err:
+            print(f"⚠ Could not build furniture room map for episode {episode_id}: {map_err}")
+
         if not receptacle_handle and furniture != "floor":
             try:
                 print(f"\n🔍 Looking up furniture handle for: {furniture}")
@@ -965,12 +1072,10 @@ def add_object(episode_id):
                             matching_furniture.append(furn_info)
                     
                     if matching_furniture:
-                        # If we have an instance number, try to match it
-                        # Otherwise just use the first match
-                        selected_furn = matching_furniture[0]
-                        if furn_instance is not None and len(matching_furniture) > furn_instance:
-                            # Try to get the correct instance (furniture are usually ordered)
-                            selected_furn = matching_furniture[min(furn_instance, len(matching_furniture) - 1)]
+                        # Choose best candidate using target-room and closest-instance scoring.
+                        selected_furn = _select_best_matching_furniture(matching_furniture)
+                        if selected_furn is None:
+                            selected_furn = matching_furniture[0]
                         
                         furniture_handle = selected_furn['handle']
                         furniture_position = selected_furn['position']
@@ -1052,12 +1157,10 @@ def add_object(episode_id):
                             matching_furniture.append(furn_info)
                     
                     if matching_furniture:
-                        # If we have an instance number, try to match it
-                        # Otherwise just use the first match
-                        selected_furn = matching_furniture[0]
-                        if furn_instance is not None and len(matching_furniture) > furn_instance:
-                            # Try to get the correct instance (furniture are usually ordered)
-                            selected_furn = matching_furniture[min(furn_instance, len(matching_furniture) - 1)]
+                        # Choose best candidate using target-room and closest-instance scoring.
+                        selected_furn = _select_best_matching_furniture(matching_furniture)
+                        if selected_furn is None:
+                            selected_furn = matching_furniture[0]
                         
                         furniture_handle = selected_furn['handle']
                         furniture_position = selected_furn['position']

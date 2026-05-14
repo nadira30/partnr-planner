@@ -47,16 +47,29 @@ class WaitSkill(SkillPolicy):
                       If empty or "0", uses default 5 seconds
             env: Environment object
         """
+        requested_steps = int(self._config.sim_freq) * 5
         if wait_time and wait_time != "0":
             try:
                 duration_seconds = float(wait_time)
-                self.step_threshold = int(self._config.sim_freq * duration_seconds)
+                requested_steps = int(self._config.sim_freq * duration_seconds)
             except (ValueError, TypeError):
-                # Fallback to default if parsing fails
-                self.step_threshold = int(self._config.sim_freq) * 5
-        else:
-            # Default to 5 seconds
-            self.step_threshold = int(self._config.sim_freq) * 5
+                # Fallback to default if parsing fails.
+                requested_steps = int(self._config.sim_freq) * 5
+
+        # Keep the wait bounded by the remaining episode budget so the
+        # environment can finish the skill cleanly instead of aborting on the
+        # next step.
+        try:
+            habitat_env = self.env.env.env._env
+            max_episode_steps = int(getattr(habitat_env, "_max_episode_steps", 0))
+            elapsed_steps = int(getattr(habitat_env, "_elapsed_steps", 0))
+            if max_episode_steps > 0:
+                remaining_steps = max(0, max_episode_steps - elapsed_steps)
+                requested_steps = min(requested_steps, max(0, remaining_steps - 1))
+        except Exception:
+            pass
+
+        self.step_threshold = requested_steps
         return
 
     def get_number(self, string):

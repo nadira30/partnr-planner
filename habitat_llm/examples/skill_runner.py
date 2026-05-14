@@ -131,6 +131,23 @@ def _get_robot_room_anchor_from_human_location(
         return ""
 
 
+def _get_room_anchor_from_human_navigate_target(
+    env_interface: EnvironmentInterface,
+    navigate_target_name: str,
+    human_agent_uid: int = 1,
+) -> str:
+    """Resolve floor anchor for the room containing the human Navigate target entity."""
+    try:
+        human_wg = env_interface.world_graph[human_agent_uid]
+        target_node = human_wg.get_node_from_name(navigate_target_name)
+        room_node = human_wg.get_room_for_entity(target_node)
+        anchor_name = f"floor_{room_node.name}"
+        human_wg.get_node_from_name(anchor_name)
+        return anchor_name
+    except Exception:
+        return ""
+
+
 def _orient_robot_toward_human(
     env_interface: EnvironmentInterface,
     robot_agent_uid: int = 0,
@@ -196,6 +213,30 @@ def _enforce_robot_human_separation(
 
         robot_agent.base_pos = new_robot_pos
         return True
+    except Exception:
+        return False
+
+
+def _is_robot_at_anchor(
+    env_interface: EnvironmentInterface,
+    anchor_name: str,
+    robot_agent_uid: int = 0,
+    distance_thresh: float = 0.35,
+) -> bool:
+    """Return True when robot base is already close to the anchor in XZ plane."""
+    try:
+        robot_agent = env_interface.sim.agents_mgr[robot_agent_uid].articulated_agent
+        robot_pos = np.array(robot_agent.base_pos, dtype=float)
+
+        robot_wg = env_interface.world_graph[robot_agent_uid]
+        anchor_node = robot_wg.get_node_from_name(anchor_name)
+        anchor_translation = anchor_node.properties.get("translation", None)
+        if anchor_translation is None:
+            return False
+        anchor_pos = np.array(anchor_translation, dtype=float)
+
+        dist_xz = float(np.linalg.norm((robot_pos - anchor_pos)[[0, 2]]))
+        return dist_xz <= distance_thresh
     except Exception:
         return False
 
@@ -424,6 +465,9 @@ def run_skills(config: omegaconf.DictConfig) -> None:
     # collect debug frames to create a final video
     cumulative_frames: List[Any] = []
 
+    # Pending robot follow anchor; executed concurrently with human commands without blocking human completion
+    pending_robot_anchor: str = ""
+
     command_index = 0
     # history of skill commands and their responses
     command_history: List[Tuple[str, str]] = []
@@ -548,20 +592,131 @@ def run_skills(config: omegaconf.DictConfig) -> None:
                     # Centralized planner
                     active_planner = planner
 
+                actions_to_run = dict(high_level_skill_actions)
+                if agent_idx == 1 and pending_robot_anchor:
+                    if _is_robot_at_anchor(
+                        env_interface,
+                        pending_robot_anchor,
+                        robot_agent_uid=0,
+                        distance_thresh=0.35,
+                    ):
+                        cprint(
+                            f"Robot already at anchor {pending_robot_anchor}; clearing pending navigation.",
+                            "yellow",
+                        )
+                        separated = _enforce_robot_human_separation(
+                            env_interface,
+                            min_distance=robot_human_min_distance,
+                            robot_agent_uid=0,
+                            human_agent_uid=1,
+                        )
+                        if separated:
+                            cprint(
+                                f"Adjusted robot position to keep distance >= {robot_human_min_distance:.2f}m from human.",
+                                "yellow",
+                            )
+                        oriented = _orient_robot_toward_human(
+                            env_interface, robot_agent_uid=0, human_agent_uid=1
+                        )
+                        if oriented:
+                            cprint("Auto-oriented robot to face human.", "yellow")
+                        pending_robot_anchor = ""
+                    else:
+                        actions_to_run[0] = ("Navigate", pending_robot_anchor, None)
+                        cprint(
+                            f"Robot continuing non-blocking navigation to: {pending_robot_anchor}",
+                            "yellow",
+                        )
+
                 responses, _, frames = execute_skill(
-                    high_level_skill_actions,
+                    actions_to_run,
                     active_planner,
                     vid_postfix=f"{command_index}_",
                     make_video=make_video,
                     play_video=interactive_playback,
                     write_video=write_individual_skill_videos,
-                )
-                command_history.append((user_input, responses[agent_idx]))
-                skill_name = high_level_skill_actions[agent_idx][0]
-                print(
-                    f"{skill_name} completed. Response = '{responses[agent_idx]}'"
+                    decentralized_planners=planners_by_uid if planners_by_uid else None,
+                    blocking_agent_ids=[agent_idx],
                 )
                 cumulative_frames.extend(frames)
+
+                skill_name = high_level_skill_actions[agent_idx][0]
+                skill_response = responses.get(agent_idx, "")
+                target_entity_name = high_level_skill_actions[agent_idx][1]
+
+                pick_not_close_failure = (
+                    skill_name == "Pick"
+                    and isinstance(skill_response, str)
+                    and "Failed to pick" in skill_response
+                    and "Not close enough to the object" in skill_response
+                )
+
+                if pick_not_close_failure:
+                    cprint(
+                        f"Pick failed because agent is not close to {target_entity_name}. Auto-recovering with Navigate + Pick retry.",
+                        "yellow",
+                    )
+
+                    nav_actions = {agent_idx: ("Navigate", target_entity_name, None)}
+                    nav_responses, _, nav_frames = execute_skill(
+                        nav_actions,
+                        active_planner,
+                        vid_postfix=f"{command_index}_autonav_",
+                        make_video=make_video,
+                        play_video=interactive_playback,
+                        write_video=write_individual_skill_videos,
+                        decentralized_planners=planners_by_uid if planners_by_uid else None,
+                        blocking_agent_ids=[agent_idx],
+                    )
+                    cumulative_frames.extend(nav_frames)
+                    print(
+                        f"Auto Navigate completed. Response = '{nav_responses.get(agent_idx, '')}'"
+                    )
+
+                    retry_actions = {agent_idx: ("Pick", target_entity_name, None)}
+                    retry_responses, _, retry_frames = execute_skill(
+                        retry_actions,
+                        active_planner,
+                        vid_postfix=f"{command_index}_autoretry_pick_",
+                        make_video=make_video,
+                        play_video=interactive_playback,
+                        write_video=write_individual_skill_videos,
+                        decentralized_planners=planners_by_uid if planners_by_uid else None,
+                        blocking_agent_ids=[agent_idx],
+                    )
+                    cumulative_frames.extend(retry_frames)
+                    skill_response = retry_responses.get(agent_idx, skill_response)
+
+                command_history.append((user_input, skill_response))
+                print(f"{skill_name} completed. Response = '{skill_response}'")
+
+                if agent_idx == 1 and pending_robot_anchor and responses.get(0):
+                    print(
+                        f"Robot anchor navigate completed. Response = '{responses[0]}'"
+                    )
+                    separated = _enforce_robot_human_separation(
+                        env_interface,
+                        min_distance=robot_human_min_distance,
+                        robot_agent_uid=0,
+                        human_agent_uid=1,
+                    )
+                    if separated:
+                        cprint(
+                            f"Adjusted robot position to keep distance >= {robot_human_min_distance:.2f}m from human.",
+                            "yellow",
+                        )
+
+                    oriented = _orient_robot_toward_human(
+                        env_interface, robot_agent_uid=0, human_agent_uid=1
+                    )
+                    if oriented:
+                        cprint("Auto-oriented robot to face human.", "yellow")
+                    else:
+                        cprint(
+                            "Could not orient robot toward human at this step.",
+                            "yellow",
+                        )
+                    pending_robot_anchor = ""
 
                 # After human Navigate, send robot to predefined anchor in human's room.
                 if should_follow_human:
@@ -569,51 +724,11 @@ def run_skills(config: omegaconf.DictConfig) -> None:
                         env_interface, human_agent_uid=1
                     )
                     if robot_anchor:
+                        pending_robot_anchor = robot_anchor
                         cprint(
-                            f"Auto-navigating robot to room anchor: Navigate 0 {robot_anchor}",
+                            f"Queued robot room-anchor navigation (non-blocking): Navigate 0 {robot_anchor}",
                             "yellow",
                         )
-                        robot_nav_actions = {0: ("Navigate", robot_anchor, None)}
-                        robot_planner = (
-                            planners_by_uid.get(0) if planners_by_uid else planner
-                        )
-                        if robot_planner:
-                            robot_responses, _, robot_frames = execute_skill(
-                                robot_nav_actions,
-                                robot_planner,
-                                vid_postfix=f"{command_index}_robot_anchor_nav_",
-                                make_video=make_video,
-                                play_video=False,
-                                write_video=False,
-                            )
-                            cumulative_frames.extend(robot_frames)
-                            if 0 in robot_responses:
-                                print(
-                                    f"Robot anchor navigate completed. Response = '{robot_responses[0]}'"
-                                )
-
-                            separated = _enforce_robot_human_separation(
-                                env_interface,
-                                min_distance=robot_human_min_distance,
-                                robot_agent_uid=0,
-                                human_agent_uid=1,
-                            )
-                            if separated:
-                                cprint(
-                                    f"Adjusted robot position to keep distance >= {robot_human_min_distance:.2f}m from human.",
-                                    "yellow",
-                                )
-
-                            oriented = _orient_robot_toward_human(
-                                env_interface, robot_agent_uid=0, human_agent_uid=1
-                            )
-                            if oriented:
-                                cprint("Auto-oriented robot to face human.", "yellow")
-                            else:
-                                cprint(
-                                    "Could not orient robot toward human at this step.",
-                                    "yellow",
-                                )
                     else:
                         cprint(
                             "Could not resolve human room anchor for robot navigation.",
