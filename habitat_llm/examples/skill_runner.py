@@ -687,6 +687,60 @@ def run_skills(config: omegaconf.DictConfig) -> None:
                     cumulative_frames.extend(retry_frames)
                     skill_response = retry_responses.get(agent_idx, skill_response)
 
+                # Place skill recovery: navigate to furniture if not close enough, then retry place
+                place_not_close_failure = (
+                    skill_name == "Place"
+                    and isinstance(skill_response, str)
+                    and "Failed to place" in skill_response
+                    and "Not close enough to" in skill_response
+                )
+
+                if place_not_close_failure:
+                    # Extract furniture name from place command
+                    # Place command format: (Place, "object,on,furniture,spatial_relation,spatial_constraint")
+                    place_args = high_level_skill_actions[agent_idx][1]
+                    furniture_name = None
+                    if isinstance(place_args, str) and "," in place_args:
+                        parts = place_args.split(",")
+                        if len(parts) >= 3:
+                            furniture_name = parts[2]  # furniture is the 3rd element
+                    
+                    if furniture_name:
+                        cprint(
+                            f"Place failed because agent is not close to {furniture_name}. Auto-recovering with Navigate + Place retry.",
+                            "yellow",
+                        )
+
+                        nav_actions = {agent_idx: ("Navigate", furniture_name, None)}
+                        nav_responses, _, nav_frames = execute_skill(
+                            nav_actions,
+                            active_planner,
+                            vid_postfix=f"{command_index}_autonav_",
+                            make_video=make_video,
+                            play_video=interactive_playback,
+                            write_video=write_individual_skill_videos,
+                            decentralized_planners=planners_by_uid if planners_by_uid else None,
+                            blocking_agent_ids=[agent_idx],
+                        )
+                        cumulative_frames.extend(nav_frames)
+                        print(
+                            f"Auto Navigate completed. Response = '{nav_responses.get(agent_idx, '')}'"
+                        )
+
+                        retry_actions = {agent_idx: ("Place", place_args, None)}
+                        retry_responses, _, retry_frames = execute_skill(
+                            retry_actions,
+                            active_planner,
+                            vid_postfix=f"{command_index}_autoretry_place_",
+                            make_video=make_video,
+                            play_video=interactive_playback,
+                            write_video=write_individual_skill_videos,
+                            decentralized_planners=planners_by_uid if planners_by_uid else None,
+                            blocking_agent_ids=[agent_idx],
+                        )
+                        cumulative_frames.extend(retry_frames)
+                        skill_response = retry_responses.get(agent_idx, skill_response)
+
                 command_history.append((user_input, skill_response))
                 print(f"{skill_name} completed. Response = '{skill_response}'")
 

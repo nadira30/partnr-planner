@@ -1,4 +1,5 @@
 import asyncio
+import csv
 import json
 import os
 import yaml
@@ -16,6 +17,9 @@ VISUALIZATION_DIR = os.path.dirname(SCRIPT_DIR)
 episode_id = "100" 
 furnitures_path = os.path.join(VISUALIZATION_DIR, "data", "furniture_handles_val_mini.json")
 objects_list_file = os.path.join(VISUALIZATION_DIR, "objects", "object_categories_one_per_class.csv")
+OBJECT_CATEGORY_ALIASES = {
+    "alarm_clock": "clock",
+}
 
 
 @function_tool
@@ -100,6 +104,63 @@ def get_available_objects() -> str:
         return f"Error: Objects file not found at {objects_list_file}"
     except Exception as e:
         return f"Error reading objects file: {str(e)}"
+
+
+def load_object_category_lookup() -> tuple:
+    """Load valid clean categories and template-id aliases from the CSV."""
+    valid_categories = set()
+    template_to_category = {}
+
+    with open(objects_list_file, 'r') as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            clean_category = (row.get('clean_category') or '').strip()
+            template_id = (row.get('id') or '').strip()
+            if clean_category:
+                valid_categories.add(clean_category)
+            if template_id and clean_category and template_id not in template_to_category:
+                template_to_category[template_id.lower()] = clean_category
+
+    return valid_categories, template_to_category
+
+
+def normalize_generated_yaml(parsed_yaml: dict) -> tuple:
+    """Normalize object categories and drop entries that cannot be resolved."""
+    valid_categories, template_to_category = load_object_category_lookup()
+
+    objects = parsed_yaml.get('objects', [])
+    cleaned_objects = []
+    skipped_objects = []
+
+    for obj in objects:
+        if not isinstance(obj, dict):
+            skipped_objects.append(f"non-dict entry: {obj!r}")
+            continue
+
+        raw_category = str(obj.get('object_category', '')).strip()
+        normalized_category = raw_category
+        raw_category_lower = raw_category.lower()
+
+        if raw_category in valid_categories:
+            normalized_category = raw_category
+        elif raw_category_lower in template_to_category:
+            normalized_category = template_to_category[raw_category_lower]
+        else:
+            normalized_category = OBJECT_CATEGORY_ALIASES.get(raw_category_lower, raw_category)
+
+        if normalized_category not in valid_categories:
+            skipped_objects.append(
+                f"{raw_category!r} -> unresolved clean_category"
+            )
+            continue
+
+        cleaned_obj = dict(obj)
+        cleaned_obj['object_category'] = normalized_category
+        cleaned_objects.append(cleaned_obj)
+
+    cleaned_yaml = dict(parsed_yaml)
+    cleaned_yaml['objects'] = cleaned_objects
+    return cleaned_yaml, skipped_objects
 
 
 # agent = Agent(
@@ -195,6 +256,19 @@ async def main():
     try:
         # Try to parse the YAML to validate it
         parsed_yaml = yaml.safe_load(output_yaml)
+        if not isinstance(parsed_yaml, dict):
+            raise yaml.YAMLError("Top-level YAML must be a mapping with an 'objects' key")
+
+        parsed_yaml, skipped_objects = normalize_generated_yaml(parsed_yaml)
+        if skipped_objects:
+            print("⚠ Skipped invalid object categories:")
+            for item in skipped_objects:
+                print(f"  - {item}")
+
+        if not parsed_yaml.get('objects'):
+            raise yaml.YAMLError("No valid objects remained after normalization")
+
+        output_yaml = yaml.safe_dump(parsed_yaml, sort_keys=False, allow_unicode=False)
         print("✓ YAML validation successful")
         print(f"Parsed structure: {type(parsed_yaml)}")
         

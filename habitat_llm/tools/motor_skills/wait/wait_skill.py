@@ -10,6 +10,9 @@ import torch
 from habitat_llm.tools.motor_skills.skill import SkillPolicy
 
 
+MAX_WAIT_SECONDS = 120.0
+
+
 class WaitSkill(SkillPolicy):
     def __init__(
         self, config, observation_space, action_space, batch_size, env, agent_uid
@@ -24,7 +27,7 @@ class WaitSkill(SkillPolicy):
         self.env = env
         self.steps_elapsed = torch.zeros(self._batch_size)
         # Default wait time is 5 seconds if not specified
-        self.step_threshold = int(self._config.sim_freq) * 5
+        self.step_threshold = int(self._config.sim_freq) * 1
 
         # Get articulated agent
         self.articulated_agent = self.env.sim.agents_mgr[
@@ -35,8 +38,8 @@ class WaitSkill(SkillPolicy):
         super().reset(batch_idxs)
         self.steps = 0
         self.steps_elapsed = torch.zeros(self._batch_size)
-        # Reset to default 5 seconds
-        self.step_threshold = int(self._config.sim_freq) * 5
+        # Reset to default 1 second
+        self.step_threshold = int(self._config.sim_freq) * 1
         return
 
     def set_target(self, wait_time, env):
@@ -44,17 +47,18 @@ class WaitSkill(SkillPolicy):
         Set custom wait duration.
         Args:
             wait_time: String containing wait time in seconds (e.g., "10", "5", "3.5")
-                      If empty or "0", uses default 5 seconds
+                      If empty or "0", uses default 1 second
             env: Environment object
         """
-        requested_steps = int(self._config.sim_freq) * 5
+        requested_steps = int(self._config.sim_freq) * 1
         if wait_time and wait_time != "0":
             try:
-                duration_seconds = float(wait_time)
+                duration_seconds = float(wait_time) / 4
+                duration_seconds = min(duration_seconds, MAX_WAIT_SECONDS)
                 requested_steps = int(self._config.sim_freq * duration_seconds)
             except (ValueError, TypeError):
                 # Fallback to default if parsing fails.
-                requested_steps = int(self._config.sim_freq) * 5
+                requested_steps = int(self._config.sim_freq) * 1
 
         # Keep the wait bounded by the remaining episode budget so the
         # environment can finish the skill cleanly instead of aborting on the

@@ -154,7 +154,7 @@ def remap_line(line: str, alias_map: Dict[str, str]) -> str:
         if len(parts) >= 3:
             wait_time = parts[2]
             try:
-                scaled_wait = float(wait_time) / 5.0
+                scaled_wait = float(wait_time) #/ 4.0
                 if scaled_wait.is_integer():
                     scaled_wait_text = str(int(scaled_wait))
                 else:

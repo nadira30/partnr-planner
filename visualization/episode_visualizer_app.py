@@ -874,29 +874,42 @@ def add_object(episode_id):
         
         # Load object database for validation and lookup
         load_object_database()
+        available_template_ids = load_available_object_template_ids()
+
+        category_to_template_id = {}
+        for obj in object_database:
+            template_id = (obj.get('id') or '').strip()
+            category = (obj.get('category') or '').strip().lower()
+            if template_id and category and category not in category_to_template_id:
+                if template_id in available_template_ids:
+                    category_to_template_id[category] = template_id
         
-        # If object_id not provided, look up the actual object ID from the category
-        if not object_id:
-            # Find object ID from category in database
-            matching_objects = [obj for obj in object_database if obj['category'].lower() == object_class.lower()]
-            if matching_objects:
-                object_id = matching_objects[0]['id']
-                print(f"✓ Found object ID '{object_id}' for category '{object_class}'")
+        resolved_object_id = None
+        if object_id:
+            base_object_id = normalize_object_id(object_id)
+            if base_object_id in available_template_ids:
+                resolved_object_id = base_object_id
             else:
-                # Fallback: use category name as object ID
-                object_id = object_class
-                print(f"⚠ No object ID found for category '{object_class}', using category name")
-        
-        # Validate that object exists in metadata CSV
-        base_object_id = object_id.split('/')[-1].replace('.object_config.json', '')
-        if '_:' in base_object_id:
-            base_object_id = base_object_id.split('_:')[0]
-        
-        # Check if object is in database
-        object_found = any(obj['id'] == base_object_id for obj in object_database)
-        if not object_found:
-            print(f"WARNING: Object '{base_object_id}' not found in metadata CSV files!")
-            print(f"This object may fail to load or appear as 'unknown' in the scene.")
+                print(f"⚠ Provided object_id '{object_id}' is not a loadable template; trying category lookup")
+
+        if resolved_object_id is None:
+            resolved_object_id = category_to_template_id.get(object_class.lower())
+
+        if resolved_object_id is None:
+            return jsonify({
+                "error": (
+                    f"Unknown or non-loadable object category '{object_class}'. "
+                    "Use a clean_category value from the object database."
+                )
+            }), 400
+
+        object_id = resolved_object_id
+        base_object_id = normalize_object_id(object_id)
+
+        if base_object_id not in available_template_ids:
+            return jsonify({
+                "error": f"Template not found for object category '{object_class}' (resolved to '{base_object_id}')"
+            }), 400
         
         # Load full episode JSON
         ep = load_full_episode_json(episode_id)
